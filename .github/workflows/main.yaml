@@ -1,0 +1,82 @@
+name: Actions
+
+on:
+  push:
+    branches:
+      - main
+      - stage
+      - develop
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/develop'  # Restrict to specific branches
+    steps:
+      # Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true  # Enable Git LFS (Large File Storage) if needed
+
+      # Cache dependencies
+      - name: Load cache
+        uses: actions/cache@v3
+        with:
+          path: Library  # Path to cache
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}  # Cache key
+          restore-keys: |
+            Library-  # Restore key
+
+      # Run tests (only for main and stage branches)
+      - name: Run tests
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/stage'
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}  # Unity license
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}  # Unity email
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}  # Unity password
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}  # GitHub token
+
+      # Create build
+      - name: Create build
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}  # Unity license
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}  # Unity email
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}  # Unity password
+        with:
+          targetPlatform: WebGL  # Target platform
+
+      # Upload artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build  # Artifact name
+          path: build  # Path to the build directory
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build  # Ensure this job runs after the build job
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/stage'  # Only run deploy for main and stage branches
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'main' || github.ref == 'refs/heads/stage' && 'stage' || 'dev' }}
+    steps:
+      # Download artifact
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: Build  # Artifact name
+          path: build  # Path where the artifact will be downloaded
+
+      # Deploy to Azure Static Web Apps
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_DEPLOY }}  # Use the secret for the current environment
+          repo_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for integrations
+          action: "upload"
+          app_location: "build/WebGL/WebGL/"
+          output_location: "."
