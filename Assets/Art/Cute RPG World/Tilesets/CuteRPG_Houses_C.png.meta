@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,7 +108,532 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 416
+        width: 77
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7751c6af2888c0b499e6aff75831be94
+      internalID: 1198545145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_1
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 427
+        width: 74
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7332cf67bec66f74aa8701c4f69075d7
+      internalID: -2140737683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_2
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 416
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1976acc2fa93b624e84b4111219dcb8c
+      internalID: 1343944294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_3
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 443
+        width: 78
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2244030d71f486640899916f6804e9fa
+      internalID: -785629901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_4
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 320
+        width: 58
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d2e7d78d3b7f6043a6a463ad3e9bb42
+      internalID: -1099875346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_5
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 320
+        width: 62
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acd6d6094001bda4abae0a7472664780
+      internalID: -1693451645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_6
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 320
+        width: 58
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1023e9caa073d4840be0870052288f7e
+      internalID: 1842651466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_7
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 320
+        width: 62
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dff4317a4518bda4ba56048053cfd59d
+      internalID: 216325295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_8
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 331
+        width: 62
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b12b89313fb1d7c42b772308306382e7
+      internalID: 1006202165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_9
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 224
+        width: 74
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c95ece08baead784482cf006e72b392d
+      internalID: -2141356819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_10
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 235
+        width: 76
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45f0259a7b137fc4884f020dcdaa23d4
+      internalID: 431042959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_11
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 224
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99b8ae694b436d342ab3752db8300334
+      internalID: 1553800600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_12
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 224
+        width: 74
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c3f8dd524f68e44fa4e9a64f669f406
+      internalID: 14066713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_13
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 235
+        width: 76
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1dad8e4b5da143b45900e8814822a284
+      internalID: -2083836515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_14
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 224
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2f5bebcb8c586f489f363963d1ce06b
+      internalID: -1384705948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_15
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 128
+        width: 74
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41bab790240255e41aa8e0319ff0c20f
+      internalID: 47791898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_16
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 139
+        width: 76
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11e911c36749e4649a4214a17ae2dc1d
+      internalID: -2054337047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_17
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 128
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21c1f9b0928dfae42a7991892e1d0fa7
+      internalID: 1578868323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_18
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 128
+        width: 74
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a1cb9fc54e96a141b8fb7a82e8300be
+      internalID: -1715952051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_19
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 139
+        width: 76
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea4ae0749584ba1438f9f1e2bb592d76
+      internalID: -433686021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_20
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 128
+        width: 78
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40dd5b3e4ebdcc54fbb75c24655de261
+      internalID: 556975285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_21
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 0
+        width: 90
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92b1b058d2f50c64d817f7588be582fe
+      internalID: -859113495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_22
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 11
+        width: 94
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bf1639449d167e4ab2a852af0971ec2
+      internalID: 1701740372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_23
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 51
+        width: 62
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88501fc8869f172449dd041af93dbd89
+      internalID: -534068325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Houses_C_24
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 0
+        width: 94
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51bd54dac5c7a1749a93752f822a8655
+      internalID: 987070056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +644,32 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CuteRPG_Houses_C_0: 1198545145
+      CuteRPG_Houses_C_1: -2140737683
+      CuteRPG_Houses_C_10: 431042959
+      CuteRPG_Houses_C_11: 1553800600
+      CuteRPG_Houses_C_12: 14066713
+      CuteRPG_Houses_C_13: -2083836515
+      CuteRPG_Houses_C_14: -1384705948
+      CuteRPG_Houses_C_15: 47791898
+      CuteRPG_Houses_C_16: -2054337047
+      CuteRPG_Houses_C_17: 1578868323
+      CuteRPG_Houses_C_18: -1715952051
+      CuteRPG_Houses_C_19: -433686021
+      CuteRPG_Houses_C_2: 1343944294
+      CuteRPG_Houses_C_20: 556975285
+      CuteRPG_Houses_C_21: -859113495
+      CuteRPG_Houses_C_22: 1701740372
+      CuteRPG_Houses_C_23: -534068325
+      CuteRPG_Houses_C_24: 987070056
+      CuteRPG_Houses_C_3: -785629901
+      CuteRPG_Houses_C_4: -1099875346
+      CuteRPG_Houses_C_5: -1693451645
+      CuteRPG_Houses_C_6: 1842651466
+      CuteRPG_Houses_C_7: 216325295
+      CuteRPG_Houses_C_8: 1006202165
+      CuteRPG_Houses_C_9: -2141356819
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

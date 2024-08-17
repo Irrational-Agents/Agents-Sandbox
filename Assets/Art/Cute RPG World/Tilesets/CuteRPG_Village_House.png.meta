@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,7 +108,322 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_0
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 224
+        width: 74
+        height: 80
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 198b051102fbfb24db223a01e562bb7d
+      internalID: 1601407178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_1
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 224
+        width: 74
+        height: 80
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1b8f860707a49640abee7dd9b6cd3a5
+      internalID: -274284156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_2
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 224
+        width: 120
+        height: 96
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eba3e95a1532b5a42ab11762517c77b0
+      internalID: 1214308352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_3
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 224
+        width: 120
+        height: 96
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2ad1e6ddbe1b98458ab3c4cf5cae95d
+      internalID: -751243455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_4
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 224
+        width: 246
+        height: 104
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc1a2bd4dd911a44fa16ee7b8c2dc5a9
+      internalID: 212964082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_5
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 112
+        width: 74
+        height: 80
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f0cd642284246f4e8b28ff278a8daa1
+      internalID: -1829188387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_6
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 112
+        width: 74
+        height: 80
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 331393bcfb389c840911e2772915cb01
+      internalID: -642116950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_7
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 112
+        width: 120
+        height: 96
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9c0d3e167e74194d943004833aa50b1
+      internalID: 1378717531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_8
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 112
+        width: 120
+        height: 96
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4eeeaeeb1f522054397f889ed4eaedc4
+      internalID: -2050759481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_9
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 112
+        width: 246
+        height: 104
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03b6b8ea0705ea745b0ffc25a38f11fe
+      internalID: -1398701685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_10
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 0
+        width: 74
+        height: 80
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f14405d2c4cdff745aff5e40aba0a7ab
+      internalID: 100060100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_11
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 0
+        width: 74
+        height: 80
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04ff6f3e7eeaf5e488dadc24a349b3ee
+      internalID: -1411651219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_12
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 0
+        width: 120
+        height: 96
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07742e4ed3f339e48918e4047a8acf05
+      internalID: 448264026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_13
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 0
+        width: 120
+        height: 96
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e04aaff1a3036f04ca050ac0b5976e39
+      internalID: 1909669803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CuteRPG_Village_House_14
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 0
+        width: 246
+        height: 104
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6893a9e942ce2547a10784a540174ca
+      internalID: 1387550960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +434,22 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CuteRPG_Village_House_0: 1601407178
+      CuteRPG_Village_House_1: -274284156
+      CuteRPG_Village_House_10: 100060100
+      CuteRPG_Village_House_11: -1411651219
+      CuteRPG_Village_House_12: 448264026
+      CuteRPG_Village_House_13: 1909669803
+      CuteRPG_Village_House_14: 1387550960
+      CuteRPG_Village_House_2: 1214308352
+      CuteRPG_Village_House_3: -751243455
+      CuteRPG_Village_House_4: 212964082
+      CuteRPG_Village_House_5: -1829188387
+      CuteRPG_Village_House_6: -642116950
+      CuteRPG_Village_House_7: 1378717531
+      CuteRPG_Village_House_8: -2050759481
+      CuteRPG_Village_House_9: -1398701685
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
