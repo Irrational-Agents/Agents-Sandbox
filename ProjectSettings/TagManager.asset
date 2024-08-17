@@ -41,3 +41,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 343567787
+    locked: 0
+  - name: Hills
+    uniqueID: 4159754115
+    locked: 0
+  - name: Road
+    uniqueID: 2356953853
+    locked: 0
+  - name: Grass
+    uniqueID: 2120461543
+    locked: 0
+  - name: Trees
+    uniqueID: 496709561
+    locked: 0
+  - name: Floor
+    uniqueID: 524642005
+    locked: 0
+  - name: Walls
+    uniqueID: 889101617
+    locked: 0
