@@ -62,3 +62,9 @@ TagManager:
   - name: Walls
     uniqueID: 889101617
     locked: 0
+  - name: Interior
+    uniqueID: 3909590671
+    locked: 0
+  - name: Character
+    uniqueID: 2648922713
+    locked: 0
