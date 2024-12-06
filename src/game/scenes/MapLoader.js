@@ -81,6 +81,14 @@ export class MapLoader extends Scene
         this.registry.set('persona_names', Array.from(persona_names));
 
         this.load.image('speech_bubble', 'speech_bubble/v3.png');
+
+        this.load.json("map_meta", "the_ville/matrix/maze_meta_info.json")
+        this.load.text('building_info', 'the_ville/matrix/special_blocks/sector_blocks.csv');
+        // this.load.text('building_info', 'the_ville/matrix/special_blocks/game_object_blocks.csv');
+        // this.load.text('building_info', 'the_ville/matrix/special_blocks/world_blocks.csv');
+        // this.load.text('building_info', 'the_ville/matrix/special_blocks/spawning_location_blocks.csv');
+        // this.load.text('building_info', 'the_ville/matrix/special_blocks/spawning_location_blocks.csv');
+        
     }
 
     create () {

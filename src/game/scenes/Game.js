@@ -7,14 +7,150 @@ export class Game extends Scene
         super('Game');
         this.player = null; // Declare player as a class-level property
         this.cursors = null;
+        this.socket = null;
     }
 
     init() {
+      this.socket = new WebSocket('ws://127.0.0.1:8080');
+
+      this.socket.onopen = () => {
+        console.log('Connected to the WebSocket server!');
+      };
     }
 
     create () {
         const map = this.make.tilemap({ key: "map" });
 
+        this.socket.onmessage = (event) => {
+            try {
+                // Parse the incoming message
+                let msg = JSON.parse(event.data);
+            
+                // Extract the command
+                let command = msg['command'];
+                if (command) {
+                    console.log(`Received command: ${command}`);
+        
+                    // Switch case for handling different commands
+                    switch (command) {
+                        case "command.building.GetBuildings":
+                            // Handle the "command.building.GetBuildingInfo" command
+                            const building_info = this.cache.text.get("building_info")
+                            console.log("Retrieving info for building ID:", building_info);
+                            // Output: {"building_name": str, "NPCs": [npc]}
+                            break;
+        
+                        case "command.building.SpawnLocations":
+                            // Handle the "command.building.GetBuildings" command
+                            console.log("Retrieving all buildings...");
+                            // Output: {"buildings": [{"buildingID": int, "building_name": str}]}
+                            break;
+        
+                        case "command.chat.NPCChatUpdate":
+                            // Handle the "command.chat.NPCChatUpdate" command
+                            console.log("Updating NPC chat bubble...");
+                            // No output required
+                            break;
+        
+                        case "command.config.GetBuildingsConfig":
+                            // Handle the "command.config.GetBuildingsConfig" command
+                            console.log("Retrieving building configurations...");
+                            // Output: {"building_types": [{"type_id": int, "name": str}]}
+                            break;
+        
+                        case "command.config.GetEquipmentsConfig":
+                            // Handle the "command.config.GetEquipmentsConfig" command
+                            console.log("Retrieving equipment configurations...");
+                            // Output: {"equipments": [{"equipmentID": int, "name": str, "attributes": {}}]}
+                            break;
+        
+                        case "command.config.GetNPCsConfig":
+                            // Handle the "command.config.GetNPCsConfig" command
+                            console.log("Retrieving NPC configurations...");
+                            // Output: {"npc_types": [{"npcID": int, "npc_name": str}]}
+                            break;
+        
+                        case "command.map.GetMapScene":
+                            // Handle the "command.map.GetMapScene" command
+                            const mapSceneData = this.cache.json.get("map_meta");
+                            console.log("Retrieved map scene data:", mapSceneData);
+                            // Output: {"scene_name": str, "details": {}}
+                            break;
+        
+                        case "command.map.GetMapTown":
+                            // Handle the "command.map.GetMapTown" command
+                            console.log("Retrieving town map data...");
+                            // Output: {"town_map": {}}
+                            break;
+        
+                        case "command.map.UserNavigate":
+                            // Handle the "command.map.UserNavigate" command
+                            const { x, y } = msg.parameters;
+                            console.log(`Navigating user to coordinates: (${x}, ${y})`);
+                            // Output: None (just confirms navigation success/failure)
+                            break;
+        
+                        case "command.map.NPCNavigate":
+                            // Handle the "command.map.NPCNavigate" command
+                            const npcId = msg.parameters.npc_id;
+                            const npcX = msg.parameters.x;
+                            const npcY = msg.parameters.y;
+                            console.log(`Directing NPC ${npcId} to coordinates: (${npcX}, ${npcY})`);
+                            // Output: None
+                            break;
+        
+                        case "command.map.NPCNavigateTime":
+                            // Handle the "command.map.NPCNavigateTime" command
+                            const npcIdTime = msg.parameters.npc_id;
+                            const targetX = msg.parameters.x;
+                            const targetY = msg.parameters.y;
+                            console.log(`Calculating time for NPC ${npcIdTime} to reach: (${targetX}, ${targetY})`);
+                            // Output: {"distance": int, "time": int}
+                            break;
+        
+                        case "command.npc.GetNPCInfo":
+                            // Handle the "command.npc.GetNPCInfo" command
+                            const npcInfoId = msg.parameters.NPCID;
+                            console.log("Retrieving NPC info for NPC ID:", npcInfoId);
+                            // Output: {"npc_name": str, "bio": str, "status": {}}
+                            break;
+        
+                        case "command.npc.GetNPCs":
+                            // Handle the "command.npc.GetNPCs" command
+                            console.log("Retrieving all NPCs...");
+                            // Output: {"npcs": [{"NPCID": int, "npc_name": str}]}
+                            break;
+        
+                        case "command.player.GetPlayerInfo":
+                            // Handle the "command.player.GetPlayerInfo" command
+                            console.log("Retrieving player information...");
+                            // Output: {"player_name": str, "player_stats": {}}
+                            break;
+        
+                        case "command.timetick.Tick":
+                            // Handle the "command.timetick.Tick" command
+                            console.log("Advancing game time...");
+                            // Output: {"status": "ticked"}
+                            break;
+        
+                        case "command.Event.ProximityEvent":
+                            // Handle the "command.Event.ProximityEvent" command
+                            const { npc_a_id, npc_b_id } = msg.parameters;
+                            console.log(`Proximity event between NPCs: ${npc_a_id} and ${npc_b_id}`);
+                            // No output required
+                            break;
+        
+                        default:
+                            console.log("No specific command found for:", command);
+                            break;
+                    }
+                } else {
+                    console.log("No command in message:", msg);
+                }
+            } catch (error) {
+                console.error("Failed to process message:", event.data, error);
+            }
+        };
         // Persona related variables. This should have the name of the persona as its 
         // keys, and the instances of the Persona class as the values.
         var spawn_tile_loc = {};
@@ -294,5 +430,6 @@ export class Game extends Scene
             // Stop animation when no key is pressed
             this.player.anims.stop();
         }
+
     }
 }
