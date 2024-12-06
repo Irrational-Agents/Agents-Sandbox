@@ -12,6 +12,26 @@ jobs:
       name:  'dev'
 
     steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up Node.js (assuming you're using Node.js for Phaser project)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # Adjust the Node.js version as necessary
+
+      # Install dependencies (if you use npm or yarn)
+      - name: Install dependencies
+        run: |
+          npm install # or `yarn install` if you're using Yarn
+
+      # Build project (e.g., if using webpack or another build tool)
+      - name: Build project
+        run: |
+          npm run build  # Replace with your build script if different
+
       # Deploy to Azure Static Web Apps
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
