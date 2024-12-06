@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name:  'dev'
 
     steps:
       # Checkout the repository
