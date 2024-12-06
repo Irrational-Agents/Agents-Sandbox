@@ -3,9 +3,7 @@ name: Actions
 on:
   push:
     branches:
-      - main
-      - stage
-      - develop
+      - dev-phaser
 
 jobs:
   build:
