@@ -1,0 +1,22 @@
+{
+    "Klaus Mueller" : {
+        "description": "sleeping @ the Ville:Dorm for Oak Hill College:Klaus Mueller's room:bed",
+        "pronunciation": "\ud83d\udca4",
+        "spawn_point": { "x": 127, "y": 46 }
+    },
+   "Maria Lopez": {
+        "description": "sleeping @ the Ville:Dorm for Oak Hill College:Maria Lopez's room:bed",
+        "pronunciation": "\ud83d\ude34",
+        "spawn_point": { "x": 73, "y": 14 }
+    },
+    "Isabella Rodriguez": {
+        "description": "sleeping @ the Ville:Isabella Rodriguez's apartment:main room:bed",
+        "pronunciation": "\ud83d\ude34",
+        "spawn_point": { "x": 123, "y": 57 }
+    },
+    "Yuriko Yamamoto": {
+        "description": "sleeping @ the Ville:Isabella Rodriguez's apartment:main room:bed",
+        "pronunciation": "\ud83d\ude34",
+        "spawn_point": { "x": 75, "y": 14 }
+    }
+}
