@@ -1,10 +1,8 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
-import Phaser from 'phaser';
 import { PhaserGame } from './game/PhaserGame';
 
-function App ()
-{
+function App () {
 
     const phaserRef = useRef();
 

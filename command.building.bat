@@ -1,10 +1,16 @@
 
+UI address : https://orange-cliff-0b3a9151e.5.azurestaticapps.net/
+
+Websocket address: ws://localhost:8080/
+
 Request Format
 {
     "command": command_name,
     "parameters": "..."
 }
 
+
+Commands that are currently configured
 
 command.building.GetBuildings
 command.chat.NPCChatUpdate

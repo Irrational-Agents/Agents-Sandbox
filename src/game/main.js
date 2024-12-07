@@ -1,7 +1,7 @@
 import { Boot } from './scenes/Boot';
 import { Game } from './scenes/Game';
 import { MainMenu } from './scenes/MainMenu';
-import { MapLoader } from './scenes/MapLoader';
+import { Maploader } from './scenes/Maploader';
 import { Preloader } from './scenes/Preloader';
 
 import Phaser from 'phaser';
@@ -17,7 +17,7 @@ const config = {
     parent: 'game-container',
     backgroundColor: '#028af8',
     pixelArt: true,
-    scale: {zoom: 0.8},
+    scale: {zoom: 0.95},
     physics: {
 	    default: "arcade",
 	    arcade: {
@@ -28,7 +28,7 @@ const config = {
         Boot,
         Preloader,
         MainMenu,
-        MapLoader,
+        Maploader,
         Game
     ]
 };
