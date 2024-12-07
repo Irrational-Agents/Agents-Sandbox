@@ -94,7 +94,27 @@ export const setupSocketRoutes = (socket, scene) => {
     });
 
     socket.on("command.map.GetMapTown", () => {
-        map_meta = 
+        let map_meta = scene.cache.json.get('map_meta')
+        let arena_maze = scene.cache.text.get("arena_maze");
+        let collision_maze = scene.cache.text.get("collision_maze");
+        let game_object_maze = scene.cache.text.get("game_object_maze");
+        let sector_maze = scene.cache.text.get("sector_maze")
+        let spawning_location_maze = scene.cache.text.get("spawning_location_maze")
+
+        let map_data = {
+            "arena_maze": arena_maze,
+            "collision_maze": collision_maze,
+            "game_object_maze": game_object_maze,
+            "sector_maze": sector_maze,
+            "spawning_location_maze": spawning_location_maze
+        }
+
+        socket.emit("command.map.GetMapTown",JSON.stringify(map_data))
+    })
+
+    socket.on("command.map.GetMapScene", () => {
+        let map_meta = scene.cache.json.get('map_meta')
+        socket.emit("command.map.GetMapScene",JSON.stringify(map_data))
     })
     
 }

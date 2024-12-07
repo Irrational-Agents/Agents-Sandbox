@@ -14,6 +14,7 @@ export class Game extends Scene {
         this.player_name = null;
         this.npcs = {};
         this.cursors = null;
+        this.collisionsLayer = null;
     }
 
     init() {
@@ -53,11 +54,10 @@ export class Game extends Scene {
 
         const npcs_details = getNPCSDetails(this.npc_names, this);
 
-        // this.initializePlayer(player_details);
         this.initializeNPCs(npcs_details);
         this.setupCamera(map);
         this.setupInput();
-
+        
         EventBus.emit('current-scene-ready', this);
     }
 
@@ -188,11 +188,11 @@ export class Game extends Scene {
             map.createLayer(layer, tileset, 0, 0);
         });
 
-        const collisionsLayer = map.createLayer("Collisions", tilesets.blocks, 0, 0);
-        collisionsLayer.setCollisionByProperty({ collide: true });
+        this.collisionsLayer = map.createLayer("Collisions", tilesets.blocks, 0, 0);
+        this.collisionsLayer.setCollisionByProperty({ collide: true });
 
         // Adjust layer depths for proper rendering
-        collisionsLayer.setDepth(-1);
+        this.collisionsLayer.setDepth(-1);
         map.getLayer("Foreground L1").tilemapLayer.setDepth(2);
         map.getLayer("Foreground L2").tilemapLayer.setDepth(2);
     }

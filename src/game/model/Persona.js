@@ -48,6 +48,8 @@ export class Persona {
         // Set the display width and maintain the aspect ratio
         this.character.displayWidth = 40;
         this.character.scaleY = this.character.scaleX;
+        scene.physics.add.collider(this.character, scene.collisionsLayer);
+        this.character.body.setSize(20, 20);
     }
 
     createSpeechBubble(scene) {

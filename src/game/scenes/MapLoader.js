@@ -53,6 +53,11 @@ export class Maploader extends Scene
 
        // Meta Data
        this.load.json("map_meta", "the_ville/matrix/maze_meta_info.json")
+       this.load.text("arena_maze", "the_ville/matrix/maze/arena_maze.csv")
+       this.load.text("collision_maze", "the_ville/matrix/maze/collision_maze.csv")
+       this.load.text("game_object_maze", "the_ville/matrix/maze/game_object_maze.csv")
+       this.load.text("sector_maze", "the_ville/matrix/maze/sector_maze.csv")
+       this.load.text("spawning_location_maze", "the_ville/matrix/maze/spawning_location_maze.csv")
         
     }
 
