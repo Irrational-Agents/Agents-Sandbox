@@ -3,13 +3,15 @@ name: Actions
 on:
   push:
     branches:
-      - dev-phaser
+      - main
+      - stage
+      - develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name:  'dev'
+      name: ${{ github.ref == 'refs/heads/main' && 'main' || github.ref == 'refs/heads/stage' && 'stage' || 'dev' }}
 
     steps:
       # Checkout the repository

@@ -1,4 +1,13 @@
-# **API Documentation for Socket Routes**
+SOCKET PORT: 'http://localhost:8080'
+
+QA_SERVER: 
+https://orange-cliff-0b3a9151e.5.azurestaticapps.net/
+
+STAGE SERVER:
+https://agreeable-flower-0a1111710.5.azurestaticapps.net/
+
+
+## **API Documentation for Socket Routes (STAGE)**
 
 ## **Command List**
 1. **command.player.GetPlayerInfo**
