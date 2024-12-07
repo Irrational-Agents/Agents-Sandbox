@@ -17,7 +17,3 @@ export const getSimForkConfig = (fork_name, scene) => {
 export const getNPCSDetails = (npcs_name, scene) => {
     return scene.cache.json.get("npc")
 }
-
-export const getPlayerDetails = (player_name, scene) => {
-    return scene.cache.json.get("player")
-}

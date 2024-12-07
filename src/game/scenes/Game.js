@@ -1,4 +1,4 @@
-import { getNPCSDetails, getPlayerDetails, getSimForkConfig } from '../controllers/server_controller';
+import { getNPCSDetails, getSimForkConfig } from '../controllers/server_controller';
 import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
 import { Persona } from '../model/Persona';
@@ -8,7 +8,6 @@ export class Game extends Scene {
         super('Game');
         this.npc_names = null;
         this.player_name = null;
-        this.player_persona = null;
         this.npcs = {};
         this.cursors = null;
     }
@@ -37,9 +36,8 @@ export class Game extends Scene {
         this.addTileSet(map);
 
         const npcs_details = getNPCSDetails(this.npc_names, this);
-        const player_details = getPlayerDetails(this.player_name, this);
 
-        this.initializePlayer(player_details);
+        // this.initializePlayer(player_details);
         this.initializeNPCs(npcs_details);
         this.setupCamera(map);
         this.setupInput();
@@ -48,9 +46,39 @@ export class Game extends Scene {
     }
 
     update() {
-        // Add game logic for updates (e.g., player movement, NPC interactions)
+        const player_persona = this.npcs[this.player_name]
+        const player = player_persona.character;
+        const speed = player_persona.move_speed;
+        const cursors = this.cursors;
+    
+        // Reset velocity
+        player.setVelocity(0);
+    
+        // Movement logic
+        if (cursors.left.isDown) {
+            player.setVelocityX(-160 * speed);
+            player_persona.direction = "left";
+            player.anims.play(`${player_persona.name}-left-walk`, true);
+        } else if (cursors.right.isDown) {
+            player.setVelocityX(160 * speed);
+            player_persona.direction = "right";
+            player.anims.play(`${player_persona.name}-right-walk`, true);
+        } else if (cursors.up.isDown) {
+            player.setVelocityY(-160 * speed);
+            player_persona.direction = "up";
+            player.anims.play(`${player_persona.name}-up-walk`, true);
+        } else if (cursors.down.isDown) {
+            player.setVelocityY(160 * speed);
+            player_persona.direction = "down";
+            player.anims.play(`${player_persona.name}-down-walk`, true);
+        } else {
+            // Stop animation and set idle frame
+            player.anims.stop();
+            player.setFrame(`${player_persona.direction}-walk.001`);
+        }
     }
-
+    
+    
     // Set up base and relative paths for assets
     setupAssetPaths() {
         this.load.setBaseURL(window.location.origin);
@@ -62,24 +90,7 @@ export class Game extends Scene {
         this.load.atlas(characterName, `characters/${texturePath}`, 'characters/atlas.json');
     }
 
-    // Initialize the player persona
-    initializePlayer(player_details) {
-        const tile_width = 32;
-        const anims = this.anims;
-
-        this.player_persona = new Persona(
-            this.player_name,
-            null,
-            null,
-            player_details[this.player_name].spawn_point,
-            anims,
-            this,
-            tile_width
-        );
-    }
-
     initializeNPCs(npcs_details) {
-        const tile_width = 32;
         const anims = this.anims;
     
         for (const [npc_name, details] of Object.entries(npcs_details)) {
@@ -92,17 +103,18 @@ export class Game extends Scene {
                 pronunciation,
                 spawn_point,
                 anims,
-                this,
-                tile_width
+                this
             );
         }
+
+        this.npcs[this.player_name].disableSpeechBubble();
     }
     
 
     // Configure the camera to follow the player
     setupCamera(map) {
         const camera = this.cameras.main;
-        camera.startFollow(this.player_persona.character);
+        camera.startFollow(this.npcs[this.player_name].character);
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     }
 
@@ -150,7 +162,7 @@ export class Game extends Scene {
             "Interior Ground",
             "Wall",
             "Interior Furniture L1",
-            "Interior Furniture L2",
+            "Interior Furniture L2 ",
             "Foreground L1",
             "Foreground L2"
         ];

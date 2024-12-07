@@ -13,5 +13,10 @@
         "description": "sleeping @ the Ville:Isabella Rodriguez's apartment:main room:bed",
         "pronunciation": "\ud83d\ude34",
         "spawn_point": { "x": 123, "y": 57 }
+    },
+    "Yuriko Yamamoto": {
+        "description": "sleeping @ the Ville:Isabella Rodriguez's apartment:main room:bed",
+        "pronunciation": "\ud83d\ude34",
+        "spawn_point": { "x": 75, "y": 14 }
     }
 }

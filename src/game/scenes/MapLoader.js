@@ -25,7 +25,6 @@ export class Maploader extends Scene
         // Temp Data
         this.load.json(simCode, `storage/${simCode}/${simCode}.json`)
         this.load.json("npc", `storage/${simCode}/npc.json`)
-        this.load.json("player", `storage/${simCode}/player.json`)
 
        // Map-related assets
        this.load.image("blocks_1", "the_ville/visuals/map_assets/blocks/blocks_1.png");

@@ -1,10 +1,11 @@
 export class Persona {
-    constructor(name, description, pronunciation, spawn_point = { x: 0, y: 0 }, anims, scene, tile_width) {
+    constructor(name, description, pronunciation, spawn_point = { x: 0, y: 0 }, anims, scene, speech_bubble=true, tile_width=32, move_speed=3) {
         this.name = name;
         this.character = null;
         this.initial = this.generateInitials(name);
         this.description = description;
         this.pronunciation = pronunciation;
+        this.pronunciation_text = null
         this.spawn_point = spawn_point;
         this.x = spawn_point.x;
         this.y = spawn_point.y;
@@ -12,9 +13,16 @@ export class Persona {
         this.direction = "down";
         this.chat = null;
         this.anims = anims;
+        this.move_speed = move_speed;
+        this.speech_bubble = null
 
         this.createSprite(scene, tile_width);
         this.createWalkAnimations();
+
+        if (speech_bubble) {
+            this.createSpeechBubble(scene)
+        }
+
     }
 
     // Generate initials from the name (e.g., "John Doe" -> "JD")
@@ -28,7 +36,7 @@ export class Persona {
         const x_map = this.x * tile_width + tile_width / 2;
         const y_map = this.y * tile_width + tile_width;
         
-        console.log("Sprite coordinates:", x_map, y_map);
+        console.log(`${this.name} coordinates:`, x_map, y_map);
 
         this.character = scene.physics.add.sprite(
             x_map,
@@ -40,6 +48,56 @@ export class Persona {
         // Set the display width and maintain the aspect ratio
         this.character.displayWidth = 40;
         this.character.scaleY = this.character.scaleX;
+    }
+
+    createSpeechBubble(scene) {
+        // Create the speech bubble
+        this.speech_bubble = scene.add.image(
+            this.character.x, 
+            this.character.y - 30, 
+            'speech_bubble'
+        )
+        .setDepth(3)
+        .setDisplaySize(130, 58); // Set width and height
+    
+        // Create the text inside the speech bubble
+        this.pronunciation_text = scene.add.text(
+            this.character.x, 
+            this.character.y - 42, 
+            this.pronunciation, 
+            {
+                font: "24px monospace",
+                fill: "#000000",
+                align: "center"
+            }
+        ).setOrigin(0.5) // Center the text
+         .setDepth(3);
+    
+        // Attach the speech bubble and text to follow the character
+        scene.events.on('update', () => {
+            if (this.character) {
+                this.speech_bubble.setPosition(this.character.x, this.character.y - 30);
+                this.pronunciation_text.setPosition(this.character.x, this.character.y - 42);
+            }
+        });
+    }
+
+    disableSpeechBubble() {
+        if (this.speech_bubble) {
+            this.speech_bubble.setVisible(false); // Hide the speech bubble
+        }
+        if (this.pronunciation_text) {
+            this.pronunciation_text.setVisible(false); // Hide the text
+        }
+    }
+    
+    enableSpeechBubble() {
+        if (this.speech_bubble) {
+            this.speech_bubble.setVisible(true); // Show the speech bubble
+        }
+        if (this.pronunciation_text) {
+            this.pronunciation_text.setVisible(true); // Show the text
+        }
     }
 
     // Create walk animations for each direction (left, right, down, up)
