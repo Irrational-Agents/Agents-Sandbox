@@ -1,14 +1,14 @@
 // let commands = [
-// "command.building.GetBuildings"
+// X "command.building.GetBuildings" - GetBuildingsConfig
 // "command.chat.NPCChatUpdate"
 // "command.config.GetBuildingsConfig"
 // "command.config.GetEquipmentsConfig"
-// "command.config.GetNPCsConfig"
+// X "command.config.GetNPCsConfig" - GetNPCs can be used
 // "command.map.GetMapScene"
 // "command.map.GetMapTown"
-// "command.map.UserNavigate"
+//X "command.map.UserNavigate" - command.map.NPCNavigate can be used
 // "command.map.NPCNavigate"
-// "command.npc.GetNPCInfo"
+// "command.npc.GetNPCInfo" - single NPC
 // "command.npc.GetNPCs"
 // "command.player.GetPlayerInfo"
 // ]
@@ -94,7 +94,6 @@ export const setupSocketRoutes = (socket, scene) => {
     });
 
     socket.on("command.map.GetMapTown", () => {
-        let map_meta = scene.cache.json.get('map_meta')
         let arena_maze = scene.cache.text.get("arena_maze");
         let collision_maze = scene.cache.text.get("collision_maze");
         let game_object_maze = scene.cache.text.get("game_object_maze");
@@ -114,7 +113,54 @@ export const setupSocketRoutes = (socket, scene) => {
 
     socket.on("command.map.GetMapScene", () => {
         let map_meta = scene.cache.json.get('map_meta')
-        socket.emit("command.map.GetMapScene",JSON.stringify(map_data))
+        socket.emit("command.map.GetMapScene",JSON.stringify(map_meta))
     })
+
+    socket.on("command.config.GetEquipmentsConfig", () => {
+        let equipment_config = scene.cache.text.get('game_object_blocks')
+        socket.emit("GetEquipmentsConfig",equipment_config)
+    })
+
+    socket.on("command.config.GetBuildingsConfig", () => {
+        let arena_blocks = scene.cache.json.get("arena_blocks")
+        let game_object_blocks = scene.cache.json.get("game_object_blocks")
+        let sector_blocks = scene.cache.json.get("sector_blocks")
+        let spawning_location_blocks = scene.cache.json.get("spawning_location_blocks")
+        let world_blocks = scene.cache.json.get("world_blocks")
+
+        let block_data = {
+            "arena_blocks": arena_blocks,
+            "game_object_blocks": game_object_blocks,
+            "sector_blocks": sector_blocks,
+            "spawning_location_blocks": spawning_location_blocks,
+            "world_blocks": world_blocks
+        }
+
+        socket.emit("command.config.GetBuildingsConfig",JSON.stringify(block_data))
+    });
+
+    socket.on("command.chat.NPCChatUpdate", (payload) => {
+        try {
+            // Parse the incoming payload
+            const { npc_name, emoji_text } = JSON.parse(payload);
+    
+            // Validate payload properties
+            if (!npc_name || !emoji_text) {
+                throw new Error("Invalid payload structure: Missing npc_name or emoji_text");
+            }
+    
+            // Locate the NPC in the scene
+            const npc_persona = scene.npcs?.[npc_name];
+            if (!npc_persona) {
+                throw new Error(`NPC "${npc_name}" not found in the scene.`);
+            }
+    
+            // Update the NPC's pronunciation
+            npc_persona.pronunciation = emoji_text;
+    
+        } catch (error) {
+            console.error("Error processing NPC chat update:", error.message);
+        }
+    });
     
 }
