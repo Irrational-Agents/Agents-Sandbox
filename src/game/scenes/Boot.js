@@ -40,6 +40,8 @@ export class Boot extends Scene {
 
         // If validation fails or path doesn't match, transition to Preloader
         // this.scene.start('Preloader');
+
+        // Temp 
         const simType = "play"
         const simCode = "the_ville_test"
         const startTime = 1

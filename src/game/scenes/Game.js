@@ -2,7 +2,9 @@ import { getNPCSDetails, getSimForkConfig } from '../controllers/server_controll
 import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
 import { Persona } from '../model/Persona';
-import { setupWebSocketRoutes } from '../controllers/socket_controller';
+import { setupSocketRoutes } from '../controllers/socket_controller';
+
+import io from 'socket.io-client';
 
 
 export class Game extends Scene {
@@ -21,12 +23,17 @@ export class Game extends Scene {
         this.player_name = sim_config["player_name"];
         this.npc_names = sim_config["persona_names"];
 
-        this.socket = new WebSocket('ws://127.0.0.1:8080/');
+        this.socket = io('http://localhost:8080');
         
-        this.socket.onopen = () => {
-          console.log('Connected to the WebSocket server!');
-          setupWebSocketRoutes(this.socket)
-        };
+        this.socket.on('connect', () => {
+            console.log('Connected to the Socket.IO server!');
+            setupSocketRoutes(this.socket, this)
+        });
+  
+        this.socket.on('disconnect', () => {
+            console.log('Disconnected from the server');
+        });
+          
     }
 
     preload() {
