@@ -11,7 +11,8 @@ function App () {
     }
     return (
         <div id="app">
-            <PhaserGame ref={phaserRef} currentActiveScene={currentScene}/>
+            <h1>Hello</h1>
+            {/* <PhaserGame ref={phaserRef} currentActiveScene={currentScene}/> */}
         </div>
     )
 }
