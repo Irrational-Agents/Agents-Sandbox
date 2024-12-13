@@ -39,7 +39,7 @@ export class Game extends Scene {
         this.player_name = sim_config["player_name"];
         this.npc_names = sim_config["persona_names"];
 
-        this.socket = io('http://localhost:8080');
+        this.socket = io('http://127.0.0.1:8080');
         
         this.socket.on('connect', () => {
             console.log('Connected to the Socket.IO server!');
