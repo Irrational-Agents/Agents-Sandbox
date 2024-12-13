@@ -1,11 +1,29 @@
+/**
+ * Represents a character (Persona) in the game world with name, description, animations, and other properties.
+ * The character can be spawned at a given location and have walk animations, speech bubbles, and other actions.
+ */
 export class Persona {
-    constructor(name, description, pronunciation, spawn_point = { x: 0, y: 0 }, anims, scene, speech_bubble=true, tile_width=32, move_speed=3) {
+    /**
+     * Creates an instance of a Persona.
+     * 
+     * @constructor
+     * @param {string} name - The name of the persona.
+     * @param {string} description - A description of the persona.
+     * @param {string} pronunciation - The pronunciation text to display in the speech bubble.
+     * @param {Object} [spawn_point={x: 0, y: 0}] - The coordinates where the persona will spawn on the map (in tiles).
+     * @param {Phaser.Animations.AnimationManager} anims - The Phaser animations manager to create walk animations.
+     * @param {Phaser.Scene} scene - The Phaser scene where the persona will be placed.
+     * @param {boolean} [speech_bubble=true] - Whether the persona will have a speech bubble above them.
+     * @param {number} [tile_width=32] - The width of the tiles, used to calculate the position on the map.
+     * @param {number} [move_speed=3] - The movement speed of the persona.
+     */
+    constructor(name, description, pronunciation, spawn_point = { x: 0, y: 0 }, anims, scene, speech_bubble = true, tile_width = 32, move_speed = 3) {
         this.name = name;
         this.character = null;
         this.initial = this.generateInitials(name);
         this.description = description;
         this.pronunciation = pronunciation;
-        this.pronunciation_text = null
+        this.pronunciation_text = null;
         this.spawn_point = spawn_point;
         this.x = spawn_point.x;
         this.y = spawn_point.y;
@@ -14,28 +32,38 @@ export class Persona {
         this.chat = null;
         this.anims = anims;
         this.move_speed = move_speed;
-        this.speech_bubble = null
+        this.speech_bubble = null;
 
         this.createSprite(scene, tile_width);
         this.createWalkAnimations();
 
         if (speech_bubble) {
-            this.createSpeechBubble(scene)
+            this.createSpeechBubble(scene);
         }
-
     }
 
-    // Generate initials from the name (e.g., "John Doe" -> "JD")
+    /**
+     * Generates the initials of the persona's name (e.g., "John Doe" -> "JD").
+     * 
+     * @param {string} name - The full name of the persona.
+     * @returns {string} The initials of the persona's name.
+     */
     generateInitials(name) {
         const parts = name.split(" ");
         return parts[0][0] + (parts[parts.length - 1]?.[0] || "");
     }
 
-    // Create the sprite and position it on the map
+    /**
+     * Creates the sprite for the persona and positions it on the map.
+     * 
+     * @param {Phaser.Scene} scene - The Phaser scene where the sprite will be added.
+     * @param {number} tile_width - The width of the tiles used to position the persona correctly.
+     * @returns {void}
+     */
     createSprite(scene, tile_width) {
         const x_map = this.x * tile_width + tile_width / 2;
         const y_map = this.y * tile_width + tile_width;
-        
+
         console.log(`${this.name} coordinates:`, x_map, y_map);
 
         this.character = scene.physics.add.sprite(
@@ -52,6 +80,12 @@ export class Persona {
         this.character.body.setSize(20, 20);
     }
 
+    /**
+     * Creates the speech bubble and associated text for the persona.
+     * 
+     * @param {Phaser.Scene} scene - The Phaser scene where the speech bubble will be added.
+     * @returns {void}
+     */
     createSpeechBubble(scene) {
         // Create the speech bubble
         this.speech_bubble = scene.add.image(
@@ -84,6 +118,11 @@ export class Persona {
         });
     }
 
+    /**
+     * Disables the speech bubble and hides the associated text.
+     * 
+     * @returns {void}
+     */
     disableSpeechBubble() {
         if (this.speech_bubble) {
             this.speech_bubble.setVisible(false); // Hide the speech bubble
@@ -92,7 +131,12 @@ export class Persona {
             this.pronunciation_text.setVisible(false); // Hide the text
         }
     }
-    
+
+    /**
+     * Enables the speech bubble and shows the associated text.
+     * 
+     * @returns {void}
+     */
     enableSpeechBubble() {
         if (this.speech_bubble) {
             this.speech_bubble.setVisible(true); // Show the speech bubble
@@ -102,7 +146,11 @@ export class Persona {
         }
     }
 
-    // Create walk animations for each direction (left, right, down, up)
+    /**
+     * Creates walk animations for each direction (left, right, down, up) for the persona.
+     * 
+     * @returns {void}
+     */
     createWalkAnimations() {
         const directions = ["left", "right", "down", "up"];
         directions.forEach(direction => {
@@ -121,7 +169,11 @@ export class Persona {
         });
     }
 
-    // Convert persona data to JSON for serialization
+    /**
+     * Converts the persona's data to a JSON object for serialization.
+     * 
+     * @returns {Object} The persona data in JSON format.
+     */
     toJSON() {
         return {
             name: this.name,

@@ -6,8 +6,18 @@ import { setupSocketRoutes } from '../controllers/socket_controller';
 
 import io from 'socket.io-client';
 
-
+/**
+ * Represents the main game scene where the player and NPCs interact, including loading assets, handling movement,
+ * and setting up interactions with the server and game map.
+ * 
+ * @extends Phaser.Scene
+ */
 export class Game extends Scene {
+    /**
+     * Creates an instance of the Game scene.
+     * 
+     * @constructor
+     */
     constructor() {
         super('Game');
         this.npc_names = null;
@@ -17,6 +27,11 @@ export class Game extends Scene {
         this.collisionsLayer = null;
     }
 
+    /**
+     * Initializes the scene with simulation configuration and sets up the socket connection.
+     * 
+     * @returns {void}
+     */
     init() {
         const simCode = this.scene.settings.data.simCode;
         const sim_config = getSimForkConfig(simCode, this);
@@ -28,15 +43,19 @@ export class Game extends Scene {
         
         this.socket.on('connect', () => {
             console.log('Connected to the Socket.IO server!');
-            setupSocketRoutes(this.socket, this)
+            setupSocketRoutes(this.socket, this);
         });
   
         this.socket.on('disconnect', () => {
             console.log('Disconnected from the server');
         });
-          
     }
 
+    /**
+     * Preloads the assets for the game, including character textures and NPCs.
+     * 
+     * @returns {void}
+     */
     preload() {
         this.setupAssetPaths();
 
@@ -48,6 +67,11 @@ export class Game extends Scene {
         }
     }
 
+    /**
+     * Creates the game world, including NPCs, camera setup, and input handling.
+     * 
+     * @returns {void}
+     */
     create() {
         const map = this.make.tilemap({ key: "map" });
         this.addTileSet(map);
@@ -61,6 +85,11 @@ export class Game extends Scene {
         EventBus.emit('current-scene-ready', this);
     }
 
+    /**
+     * Updates the player and NPC movements, handles animations based on user input.
+     * 
+     * @returns {void}
+     */
     update() {
         const player_persona = this.npcs[this.player_name]
         const player = player_persona.character;
@@ -93,19 +122,34 @@ export class Game extends Scene {
             player.setFrame(`${player_persona.direction}-walk.001`);
         }
     }
-    
-    
-    // Set up base and relative paths for assets
+
+    /**
+     * Sets up the base URL and asset paths for loading assets.
+     * 
+     * @returns {void}
+     */
     setupAssetPaths() {
         this.load.setBaseURL(window.location.origin);
         this.load.setPath('assets');
     }
 
-    // Load a character's texture atlas
+    /**
+     * Loads a character's texture atlas.
+     * 
+     * @param {string} characterName - The name of the character.
+     * @param {string} texturePath - The relative path to the character's texture file.
+     * @returns {void}
+     */
     loadCharacterAtlas(characterName, texturePath) {
         this.load.atlas(characterName, `characters/${texturePath}`, 'characters/atlas.json');
     }
 
+    /**
+     * Initializes the NPCs by creating Persona instances for each one and adding them to the scene.
+     * 
+     * @param {Object} npcs_details - A dictionary of NPC details.
+     * @returns {void}
+     */
     initializeNPCs(npcs_details) {
         const anims = this.anims;
     
@@ -125,21 +169,34 @@ export class Game extends Scene {
 
         this.npcs[this.player_name].disableSpeechBubble();
     }
-    
 
-    // Configure the camera to follow the player
+    /**
+     * Configures the camera to follow the player character.
+     * 
+     * @param {Phaser.Tilemaps.Tilemap} map - The tilemap for the scene.
+     * @returns {void}
+     */
     setupCamera(map) {
         const camera = this.cameras.main;
         camera.startFollow(this.npcs[this.player_name].character);
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     }
 
-    // Set up input controls
+    /**
+     * Sets up the input controls for the game, including keyboard cursor keys.
+     * 
+     * @returns {void}
+     */
     setupInput() {
         this.cursors = this.input.keyboard.createCursorKeys();
     }
 
-    // Add tilesets and layers to the map
+    /**
+     * Adds the tilesets and layers to the map, including collision handling.
+     * 
+     * @param {Phaser.Tilemaps.Tilemap} map - The tilemap for the scene.
+     * @returns {void}
+     */
     addTileSet(map) {
         const tilesets = {
             blocks: map.addTilesetImage("blocks", "blocks_1"),

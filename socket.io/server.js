@@ -29,10 +29,12 @@ io.on('connection', (socket) => {
         "direction": "down"
     }
     socket.emit('command.map.GetMapTown', '');
+  //  socket.emit('command.map.NPCNavigate', JSON.stringify(payload));
+
     
     // Listen for a 'chat message' event from the client
     socket.on('command.map.GetMapTown', (msg) => {
-        //console.log(msg);
+        console.log(msg);
     });
     
     // Handle user disconnection
