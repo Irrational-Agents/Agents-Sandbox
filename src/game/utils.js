@@ -21,3 +21,13 @@ export const createProgressBar = (scene) => {
          scene.load.off('progress'); // Clean up the progress listener
     });
 }
+
+/**
+ * Sets up the base URL and asset paths for loading game assets.
+ * 
+ * @returns {void}
+ */
+export const setupAssetPaths = (scene) => {
+    scene.load.setBaseURL(window.location.origin);
+    scene.load.setPath('assets');
+}

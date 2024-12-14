@@ -129,8 +129,7 @@ Fetches configuration data for buildings.
       "arena_blocks": {...},
       "game_object_blocks": {...},
       "sector_blocks": {...},
-      "spawning_location_blocks": {...},
-      "world_blocks": {...}
+      "spawning_location_blocks": {...}
   }
   ```
 

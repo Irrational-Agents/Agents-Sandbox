@@ -45,7 +45,7 @@ export class Maploader extends Scene
        this.load.image("CuteRPG_Forest_C", 'the_ville/visuals/map_assets/cute_rpg_word_VXAce/tilesets/CuteRPG_Forest_C.png');
 
        // Load the tilemap JSON file
-       this.load.tilemapTiledJSON("map", 'the_ville/visuals/the_ville_jan7.json');
+       this.load.tilemapTiledJSON("map", 'the_ville/visuals/the_ville.json');
 
        // Persona Assets
        this.load.json("npc_list", "storage/npc_list.json");
@@ -60,12 +60,10 @@ export class Maploader extends Scene
        this.load.text("spawning_location_maze", "the_ville/matrix/maze/spawning_location_maze.csv")
        this.load.text("game_object_blocks","the_ville/matrix/special_blocks/game_object_blocks.csv")
 
-       this.load.text("arena_blocks","the_ville/matrix/special_blocks/arena_blocks.csv")
-       this.load.text("game_object_blocks","the_ville/matrix/special_blocks/game_object_blocks.csv")
-       this.load.text("sector_blocks","the_ville/matrix/special_blocks/sector_blocks.csv")
-       this.load.text("spawning_location_blocks","the_ville/matrix/special_blocks/spawning_location_blocks.csv")
-       this.load.text("world_blocks","the_ville/matrix/special_blocks/world_blocks.csv")
-        
+       this.load.json("arena_blocks","the_ville/matrix/special_blocks/arena_blocks.json")
+       this.load.json("game_object_blocks","the_ville/matrix/special_blocks/game_object_blocks.json")
+       this.load.json("sector_blocks","the_ville/matrix/special_blocks/sector_blocks.json")
+       this.load.json("spawning_location_blocks","the_ville/matrix/special_blocks/spawning_location_blocks.json")        
     }
 
     create () {

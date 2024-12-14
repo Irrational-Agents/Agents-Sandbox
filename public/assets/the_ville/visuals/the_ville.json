@@ -1893,7 +1893,7 @@
  "nextobjectid":1,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.8.6",
+ "tiledversion":"1.11.0",
  "tileheight":32,
  "tilesets":[
         {
@@ -2117,6 +2117,16 @@
          "spacing":0,
          "tilecount":80,
          "tileheight":32,
+         "tiles":[
+                {
+                 "id":0,
+                 "properties":[
+                        {
+                         "name":"collide",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }],
          "tilewidth":32,
          "transparentcolor":"#ff00ff"
         }, 
@@ -2150,6 +2160,6 @@
         }],
  "tilewidth":32,
  "type":"map",
- "version":"1.8",
+ "version":"1.10",
  "width":140
 }

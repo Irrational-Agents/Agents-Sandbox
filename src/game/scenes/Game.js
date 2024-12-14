@@ -3,12 +3,12 @@ import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
 import { Persona } from '../model/Persona';
 import { setupSocketRoutes } from '../controllers/socket_controller';
-
+import { setupAssetPaths } from '../utils';
 import io from 'socket.io-client';
 
 /**
- * Represents the main game scene where the player and NPCs interact, including loading assets, handling movement,
- * and setting up interactions with the server and game map.
+ * Represents the main game scene where the player and NPCs interact. Handles asset loading, NPC initialization,
+ * movement, and interactions with the server and game map.
  * 
  * @extends Phaser.Scene
  */
@@ -57,12 +57,12 @@ export class Game extends Scene {
     }
 
     /**
-     * Preloads the assets for the game, including character textures and NPCs.
+     * Preloads the assets for the game, including textures and animations for the player and NPCs.
      * 
      * @returns {void}
      */
     preload() {
-        this.setupAssetPaths();
+        setupAssetPaths(this);
 
         const npc_list = this.cache.json.get('npc_list');
         this.loadCharacterAtlas(this.player_name, npc_list[this.player_name]);
@@ -73,45 +73,41 @@ export class Game extends Scene {
     }
 
     /**
-     * Creates the game world, including NPCs, camera setup, and input handling.
+     * Sets up the game world, including the tilemap, NPCs, camera, and input handling.
      * 
      * @returns {void}
      */
     create() {
-        const map = this.make.tilemap({ key: "map" });
-        this.addTileSet(map);
+        this.map = this.make.tilemap({ key: "map" });
+        this.addTileSet(this.map);
 
         const npcs_details = getNPCSDetails(this.npc_names, this);
 
         this.initializeNPCs(npcs_details);
-        this.setupCamera(map);
+        this.setupCamera(this.map);
         this.setupInput();
         
         EventBus.emit('current-scene-ready', this);
     }
 
     /**
-     * Updates the player and NPC movements, handles animations based on user input.
+     * Updates player and NPC movements and handles animations based on input.
      * 
      * @returns {void}
      */
     update() {
         if (!this.update_frame && !this.connected) return;
 
-        // Emit a tick event
-        this.socket.emit("tick", String(this.clock));
+        this.socket.emit("Tick", String(this.clock));
         this.update_frame = false;
 
-        // Player setup
         const playerPersona = this.npcs[this.player_name];
         const player = playerPersona.character;
         const speed = playerPersona.move_speed;
         const cursors = this.cursors;
     
-        // Reset velocity
-        player.setVelocity(0);
+        player.setVelocity(0); // Reset velocity
     
-        // Movement logic
         if (cursors.left.isDown) {
             this.movePlayer(player, playerPersona, 'left', -speed, 0);
         } else if (cursors.right.isDown) {
@@ -127,13 +123,14 @@ export class Game extends Scene {
     }
     
     /**
-     * Handles player movement and animation.
+     * Moves the player in the specified direction and plays the appropriate animation.
      * 
      * @param {Phaser.GameObjects.Sprite} player - The player object.
      * @param {Persona} persona - The persona instance for the player.
-     * @param {string} direction - The direction to move (e.g., "left").
-     * @param {number} velocityX - The velocity on the X-axis.
-     * @param {number} velocityY - The velocity on the Y-axis.
+     * @param {string} direction - The direction to move ("left", "right", etc.).
+     * @param {number} velocityX - Velocity along the X-axis.
+     * @param {number} velocityY - Velocity along the Y-axis.
+     * @returns {void}
      */
     movePlayer(player, persona, direction, velocityX, velocityY) {
         player.setVelocity(velocityX * 160, velocityY * 160);
@@ -142,20 +139,10 @@ export class Game extends Scene {
     }
 
     /**
-     * Sets up the base URL and asset paths for loading assets.
-     * 
-     * @returns {void}
-     */
-    setupAssetPaths() {
-        this.load.setBaseURL(window.location.origin);
-        this.load.setPath('assets');
-    }
-
-    /**
-     * Loads a character's texture atlas.
+     * Loads a texture atlas for a character.
      * 
      * @param {string} characterName - The name of the character.
-     * @param {string} texturePath - The relative path to the character's texture file.
+     * @param {string} texturePath - The relative path to the texture file.
      * @returns {void}
      */
     loadCharacterAtlas(characterName, texturePath) {
@@ -163,9 +150,9 @@ export class Game extends Scene {
     }
 
     /**
-     * Initializes the NPCs by creating Persona instances for each one and adding them to the scene.
+     * Creates and initializes NPCs, adding them to the scene with their associated animations and data.
      * 
-     * @param {Object} npcs_details - A dictionary of NPC details.
+     * @param {Object} npcs_details - A mapping of NPC names to their details.
      * @returns {void}
      */
     initializeNPCs(npcs_details) {
@@ -174,7 +161,6 @@ export class Game extends Scene {
         for (const [npc_name, details] of Object.entries(npcs_details)) {
             const { description, pronunciation, spawn_point } = details;
     
-            // Create a Persona for each NPC and add it to the `npcs` object
             this.npcs[npc_name] = new Persona(
                 npc_name,
                 description,
@@ -201,7 +187,7 @@ export class Game extends Scene {
     }
 
     /**
-     * Sets up the input controls for the game, including keyboard cursor keys.
+     * Sets up keyboard input controls.
      * 
      * @returns {void}
      */
@@ -210,7 +196,7 @@ export class Game extends Scene {
     }
 
     /**
-     * Adds the tilesets and layers to the map, including collision handling.
+     * Adds tilesets and layers to the map and configures collision handling.
      * 
      * @param {Phaser.Tilemaps.Tilemap} map - The tilemap for the scene.
      * @returns {void}
@@ -266,7 +252,6 @@ export class Game extends Scene {
         this.collisionsLayer = map.createLayer("Collisions", tilesets.blocks, 0, 0);
         this.collisionsLayer.setCollisionByProperty({ collide: true });
 
-        // Adjust layer depths for proper rendering
         this.collisionsLayer.setDepth(-1);
         map.getLayer("Foreground L1").tilemapLayer.setDepth(2);
         map.getLayer("Foreground L2").tilemapLayer.setDepth(2);
