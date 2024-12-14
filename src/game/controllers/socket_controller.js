@@ -1,4 +1,10 @@
 export const setupSocketRoutes = (socket, scene) => {
+    socket.on("ticked", () => {
+        console.log("ticked")
+        scene.clock += 1
+        scene.update_frame = true;
+    })
+
     socket.on("command.player.GetPlayerInfo", () => {
         let player_name = scene["player_name"];
         let player_persona = scene.npcs[player_name];

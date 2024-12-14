@@ -25,6 +25,9 @@ export class Game extends Scene {
         this.npcs = {};
         this.cursors = null;
         this.collisionsLayer = null;
+        this.clock = 1;
+        this.connected = false;
+        this.update_frame = true;
     }
 
     /**
@@ -43,10 +46,12 @@ export class Game extends Scene {
         
         this.socket.on('connect', () => {
             console.log('Connected to the Socket.IO server!');
+            this.connected = true;
             setupSocketRoutes(this.socket, this);
         });
   
         this.socket.on('disconnect', () => {
+            this.connected = false;
             console.log('Disconnected from the server');
         });
     }
@@ -91,9 +96,16 @@ export class Game extends Scene {
      * @returns {void}
      */
     update() {
-        const player_persona = this.npcs[this.player_name]
-        const player = player_persona.character;
-        const speed = player_persona.move_speed;
+        if (!this.update_frame && !this.connected) return;
+
+        // Emit a tick event
+        this.socket.emit("tick", String(this.clock));
+        this.update_frame = false;
+
+        // Player setup
+        const playerPersona = this.npcs[this.player_name];
+        const player = playerPersona.character;
+        const speed = playerPersona.move_speed;
         const cursors = this.cursors;
     
         // Reset velocity
@@ -101,26 +113,32 @@ export class Game extends Scene {
     
         // Movement logic
         if (cursors.left.isDown) {
-            player.setVelocityX(-160 * speed);
-            player_persona.direction = "left";
-            player.anims.play(`${player_persona.name}-left-walk`, true);
+            this.movePlayer(player, playerPersona, 'left', -speed, 0);
         } else if (cursors.right.isDown) {
-            player.setVelocityX(160 * speed);
-            player_persona.direction = "right";
-            player.anims.play(`${player_persona.name}-right-walk`, true);
+            this.movePlayer(player, playerPersona, 'right', speed, 0);
         } else if (cursors.up.isDown) {
-            player.setVelocityY(-160 * speed);
-            player_persona.direction = "up";
-            player.anims.play(`${player_persona.name}-up-walk`, true);
+            this.movePlayer(player, playerPersona, 'up', 0, -speed);
         } else if (cursors.down.isDown) {
-            player.setVelocityY(160 * speed);
-            player_persona.direction = "down";
-            player.anims.play(`${player_persona.name}-down-walk`, true);
+            this.movePlayer(player, playerPersona, 'down', 0, speed);
         } else {
-            // Stop animation and set idle frame
             player.anims.stop();
-            player.setFrame(`${player_persona.direction}-walk.001`);
+            player.setFrame(`${playerPersona.direction}-walk.001`);
         }
+    }
+    
+    /**
+     * Handles player movement and animation.
+     * 
+     * @param {Phaser.GameObjects.Sprite} player - The player object.
+     * @param {Persona} persona - The persona instance for the player.
+     * @param {string} direction - The direction to move (e.g., "left").
+     * @param {number} velocityX - The velocity on the X-axis.
+     * @param {number} velocityY - The velocity on the Y-axis.
+     */
+    movePlayer(player, persona, direction, velocityX, velocityY) {
+        player.setVelocity(velocityX * 160, velocityY * 160);
+        persona.direction = direction;
+        player.anims.play(`${persona.name}-${direction}-walk`, true);
     }
 
     /**

@@ -28,13 +28,13 @@ io.on('connection', (socket) => {
          "speed": 2,
         "direction": "down"
     }
-    socket.emit('command.map.GetMapTown', '');
+   // socket.emit('command.map.GetMapTown', '');
   //  socket.emit('command.map.NPCNavigate', JSON.stringify(payload));
 
     
     // Listen for a 'chat message' event from the client
-    socket.on('command.map.GetMapTown', (msg) => {
-        console.log(msg);
+    socket.on('tick', (msg) => {
+        socket.emit('ticked', '')
     });
     
     // Handle user disconnection
