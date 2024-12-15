@@ -1,6 +1,5 @@
 import { Scene } from 'phaser';
-import { createProgressBar } from '../utils';
-
+import { createProgressBar, setupAssetPaths } from '../utils';
 
 export class Maploader extends Scene
 {
@@ -14,11 +13,8 @@ export class Maploader extends Scene
     }
 
     preload () {
-        // Set the base URL for all assets
-        this.load.setBaseURL(window.location.origin);
-
-        // Set the relative path for assets
-        this.load.setPath('assets');
+        // Set up asset paths for organized loading
+        setupAssetPaths(this);
 
         const simCode = this.scene.settings.data.simCode;
 

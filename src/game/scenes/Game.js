@@ -25,7 +25,7 @@ export class Game extends Scene {
         this.npcs = {};
         this.cursors = null;
         this.collisionsLayer = null;
-        this.clock = 1;
+        this.clock = 0;
         this.connected = false;
         this.update_frame = true;
     }
@@ -96,9 +96,9 @@ export class Game extends Scene {
      * @returns {void}
      */
     update() {
-        if (!this.update_frame && !this.connected) return;
+        if (!this.update_frame || !this.connected) return;
 
-        this.socket.emit("Tick", String(this.clock));
+        this.socket.emit("ui.tick", String(this.clock));
         this.update_frame = false;
 
         const playerPersona = this.npcs[this.player_name];

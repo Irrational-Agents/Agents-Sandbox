@@ -8,10 +8,15 @@ export const setupSocketRoutes = (socket, scene) => {
     /**
      * Handles the server tick event to update the game clock and refresh the frame.
      */
-    socket.on("server.tick", () => {
-        console.log("Server tick received. Updating clock and frame.");
-        scene.clock += 1;
-        scene.update_frame = true;
+    socket.on("server.tick", (data) => {
+        data = Number(data)
+        if (data == 0) {
+            socket.emit("ui.tick", String(scene.clock));
+        } else {
+            scene.clock += data
+            scene.update_frame = true;
+        }
+        console.log("Server tick received. Updating clock and frame.", scene.update_frame);
     });
 
     /**
@@ -24,7 +29,7 @@ export const setupSocketRoutes = (socket, scene) => {
         console.log(`Fetching player info for: ${playerName}`);
 
         if (playerPersona) {
-            socket.emit("player.getInfo.response", JSON.stringify(playerPersona.toJSON()));
+            socket.emit("player.getInfo.response", playerPersona.toJSON());
         } else {
             console.error(`Player persona for "${playerName}" not found.`);
         }
@@ -44,7 +49,7 @@ export const setupSocketRoutes = (socket, scene) => {
             }
         }
 
-        socket.emit("npc.getList.response", JSON.stringify(npcInfo));
+        socket.emit("npc.getList.response", npcInfo);
     });
 
     /**
@@ -57,7 +62,7 @@ export const setupSocketRoutes = (socket, scene) => {
         const npcInfo = scene.npcs?.[npcName]?.toJSON();
 
         if (npcInfo) {
-            socket.emit("npc.getInfo.response", JSON.stringify(npcInfo));
+            socket.emit("npc.getInfo.response", npcInfo);
         } else {
             console.error(`NPC "${npcName}" not found.`);
         }
@@ -129,7 +134,7 @@ export const setupSocketRoutes = (socket, scene) => {
             spawning_location_maze: scene.cache.text.get("spawning_location_maze"),
         };
 
-        socket.emit("map.getTownData.response", JSON.stringify(mapData));
+        socket.emit("map.getTownData.response", mapData);
     });
 
     /**
@@ -140,31 +145,17 @@ export const setupSocketRoutes = (socket, scene) => {
         const mapMeta = scene.cache.json.get("map_meta");
 
         if (mapMeta) {
-            socket.emit("map.getSceneMetadata.response", JSON.stringify(mapMeta));
+            socket.emit("map.getSceneMetadata.response", mapMeta);
         } else {
             console.error("Map metadata not found.");
         }
     });
 
     /**
-     * Fetches equipment configuration data and sends it to the server.
+     * Fetches block configuration data and sends it to the server.
      */
-    socket.on("config.getEquipments", () => {
-        console.log("Fetching equipment configuration.");
-        const equipmentConfig = scene.cache.text.get("game_object_blocks");
-
-        if (equipmentConfig) {
-            socket.emit("config.getEquipments.response", equipmentConfig);
-        } else {
-            console.error("Equipment configuration not found.");
-        }
-    });
-
-    /**
-     * Fetches building configuration data and sends it to the server.
-     */
-    socket.on("config.getBuildings", () => {
-        console.log("Fetching building configuration.");
+    socket.on("config.getBlockData", () => {
+        console.log("Fetching block configuration.");
         const blockData = {
             arena_blocks: scene.cache.json.get("arena_blocks"),
             game_object_blocks: scene.cache.json.get("game_object_blocks"),
@@ -172,7 +163,7 @@ export const setupSocketRoutes = (socket, scene) => {
             spawning_location_blocks: scene.cache.json.get("spawning_location_blocks"),
         };
 
-        socket.emit("config.getBuildings.response", JSON.stringify(blockData));
+        socket.emit("config.getBlockData.response", blockData);
     });
 
     /**
