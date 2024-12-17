@@ -1,5 +1,4 @@
-import { setupSocketRoutes } from '../controllers/socket_controller';
-import { getSimForkConfig } from '../controllers/server_controller';
+import { getSimForkConfig,saveSimForkConfig } from '../controllers/server_controller';
 
 import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
@@ -24,7 +23,11 @@ export class MainMenu extends Scene {
         this.socket.on('connect', () => {
             console.log('Connected to the Socket.IO server!');
             this.connected = true;
-            setupSocketRoutes(this.socket, this);
+
+            // Init Route
+            this.socket.on("init", (data) => {
+                saveSimForkConfig("thissim",data);
+            });
         });
   
         this.socket.on('disconnect', () => {
@@ -55,10 +58,12 @@ export class MainMenu extends Scene {
 
             if(sim_config != null) {
                 const simType = "play"
+                const socket = this.socket
 
                 this.scene.start('Maploader', { 
                     simType, 
-                    sim_config
+                    sim_config,
+                    socket
                 });
             }
 

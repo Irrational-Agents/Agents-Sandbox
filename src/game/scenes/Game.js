@@ -2,6 +2,9 @@ import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
 import { Persona } from '../model/Persona';
 import { setupAssetPaths } from '../utils';
+import { getMapInfo, getNPCsPosition, getPlayerPosition } from '../controllers/server_controller';
+import { setupSocketRoutes } from '../controllers/socket_controller';
+
 
 /**
  * Represents the main game scene where the player and NPCs interact. Handles asset loading, NPC initialization,
@@ -23,7 +26,6 @@ export class Game extends Scene {
         this.cursors = null;
         this.collisionsLayer = null;
         this.clock = 0;
-        this.connected = false;
         this.update_frame = true;
     }
 
@@ -37,6 +39,10 @@ export class Game extends Scene {
 
         this.player_name = sim_config["player_name"];
         this.npc_names = sim_config["npc_names"];
+
+        this.socket =  this.scene.settings.data.socket;
+        setupSocketRoutes(this.socket, this);
+
     }
 
     /**
@@ -77,12 +83,11 @@ export class Game extends Scene {
             spawn_details[npc] = sim_config[npc]
         }
 
-
-        this.scene.settings.data.sim_config;
-
         this.initializeNPCs(spawn_details);
         this.setupCamera(this.map);
         this.setupInput();
+
+        this.socket.emit('map.data' , getMapInfo(this))
         
         EventBus.emit('current-scene-ready', this);
     }
@@ -93,9 +98,15 @@ export class Game extends Scene {
      * @returns {void}
      */
     update() {
-        if (!this.update_frame || !this.connected) return;
+        if (!this.update_frame) return;
 
-        this.socket.emit("ui.tick", String(this.clock));
+        const res = {
+            clock: this.clock,
+            npc_pos: getNPCsPosition(this),
+            player_pos: getPlayerPosition(this)
+        }
+
+        this.socket.emit("ui.tick", res);
         this.update_frame = false;
 
         const playerPersona = this.npcs[this.player_name];
@@ -156,11 +167,10 @@ export class Game extends Scene {
         const anims = this.anims;
     
         for (const [npc_name, details] of Object.entries(npcs_details)) {
-            const { description, pronunciation, spawn_point } = details;
+            const { pronunciation, spawn_point } = details;
     
             this.npcs[npc_name] = new Persona(
                 npc_name,
-                description,
                 pronunciation,
                 spawn_point,
                 anims,

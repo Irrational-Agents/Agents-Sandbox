@@ -1,4 +1,4 @@
-import { saveSimForkConfig } from '../controllers/server_controller';
+import { getMapInfo, getNPCsPosition, getPlayerPosition } from '../controllers/server_controller';
 
 /**
  * Sets up Socket.IO routes for handling game-related commands and updates.
@@ -8,19 +8,19 @@ import { saveSimForkConfig } from '../controllers/server_controller';
  */
 export const setupSocketRoutes = (socket, scene) => {
     /**
-     * Handles the server init event.
-     */
-    socket.on("init", (data) => {
-       saveSimForkConfig("thissim",data);
-    });
-
-    /**
      * Handles the server tick event to update the game clock and refresh the frame.
      */
     socket.on("server.tick", (data) => {
         data = Number(data)
+
+        const res = {
+            clock: scene.clock,
+            npc_pos: getNPCsPosition(scene),
+            player_pos: getPlayerPosition(scene)
+        }
+
         if (data == 0) {
-            socket.emit("ui.tick", String(scene.clock));
+            socket.emit("ui.tick", res);
         } else {
             scene.clock += data
             scene.update_frame = true;
@@ -31,52 +31,19 @@ export const setupSocketRoutes = (socket, scene) => {
     /**
      * Fetches the player's information and sends it to the server.
      */
-    socket.on("player.getInfo", () => {
+    socket.on("player.info", () => {
         const playerName = scene.player_name;
         const playerPersona = scene.npcs?.[playerName];
 
         console.log(`Fetching player info for: ${playerName}`);
 
         if (playerPersona) {
-            socket.emit("player.getInfo.response", playerPersona.toJSON());
+            socket.emit("player.info", playerPersona.toJSON());
         } else {
             console.error(`Player persona for "${playerName}" not found.`);
         }
     });
-
-    /**
-     * Fetches the information of all NPCs excluding the player and sends it to the server.
-     */
-    socket.on("npc.getList", () => {
-        console.log("Fetching NPCs information (excluding player).");
-        const playerName = scene.player_name;
-        const npcInfo = {};
-
-        for (const [npcName, npc] of Object.entries(scene.npcs)) {
-            if (npcName !== playerName) {
-                npcInfo[npcName] = npc.toJSON();
-            }
-        }
-
-        socket.emit("npc.getList.response", npcInfo);
-    });
-
-    /**
-     * Fetches detailed information for a specific NPC and sends it to the server.
-     * 
-     * @param {string} npcName - The name of the NPC to fetch information for.
-     */
-    socket.on("npc.getInfo", (npcName) => {
-        console.log(`Fetching information for NPC: ${npcName}`);
-        const npcInfo = scene.npcs?.[npcName]?.toJSON();
-
-        if (npcInfo) {
-            socket.emit("npc.getInfo.response", npcInfo);
-        } else {
-            console.error(`NPC "${npcName}" not found.`);
-        }
-    });
-
+    
     /**
      * Processes navigation commands for an NPC, updating its position and animation based on direction and speed.
      * 
@@ -133,47 +100,14 @@ export const setupSocketRoutes = (socket, scene) => {
     /**
      * Fetches data for the town map, including arenas, collisions, and sectors, and sends it to the server.
      */
-    socket.on("map.getTownData", () => {
+    socket.on("map.data", () => {
         console.log("Fetching town map data.");
-        const mapData = {
-            arena_maze: scene.cache.text.get("arena_maze"),
-            collision_maze: scene.cache.text.get("collision_maze"),
-            game_object_maze: scene.cache.text.get("game_object_maze"),
-            sector_maze: scene.cache.text.get("sector_maze"),
-            spawning_location_maze: scene.cache.text.get("spawning_location_maze"),
-        };
 
-        socket.emit("map.getTownData.response", mapData);
+        const mapData = getMapInfo(scene)
+
+        socket.emit("map.data", mapData);
     });
 
-    /**
-     * Fetches metadata for the current map scene and sends it to the server.
-     */
-    socket.on("map.getSceneMetadata", () => {
-        console.log("Fetching map scene metadata.");
-        const mapMeta = scene.cache.json.get("map_meta");
-
-        if (mapMeta) {
-            socket.emit("map.getSceneMetadata.response", mapMeta);
-        } else {
-            console.error("Map metadata not found.");
-        }
-    });
-
-    /**
-     * Fetches block configuration data and sends it to the server.
-     */
-    socket.on("config.getBlockData", () => {
-        console.log("Fetching block configuration.");
-        const blockData = {
-            arena_blocks: scene.cache.json.get("arena_blocks"),
-            game_object_blocks: scene.cache.json.get("game_object_blocks"),
-            sector_blocks: scene.cache.json.get("sector_blocks"),
-            spawning_location_blocks: scene.cache.json.get("spawning_location_blocks"),
-        };
-
-        socket.emit("config.getBlockData.response", blockData);
-    });
 
     /**
      * Updates the chat state of an NPC with new emoji text.
@@ -182,7 +116,7 @@ export const setupSocketRoutes = (socket, scene) => {
      * @property {string} npc_name - The name of the NPC.
      * @property {string} emoji_text - The new emoji text for the NPC.
      */
-    socket.on("chat.updateNPC", (payload) => {
+    socket.on("npc.updateNPC", (payload) => {
         try {
             const { npc_name, emoji_text } = JSON.parse(payload);
 

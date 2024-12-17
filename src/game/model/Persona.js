@@ -8,7 +8,6 @@ export class Persona {
      * 
      * @constructor
      * @param {string} name - The name of the persona.
-     * @param {string} description - A description of the persona.
      * @param {string} pronunciation - The pronunciation text to display in the speech bubble.
      * @param {Object} [spawn_point={x: 0, y: 0}] - The coordinates where the persona will spawn on the map (in tiles).
      * @param {Phaser.Animations.AnimationManager} anims - The Phaser animations manager to create walk animations.
@@ -17,11 +16,10 @@ export class Persona {
      * @param {number} [tile_width=32] - The width of the tiles, used to calculate the position on the map.
      * @param {number} [move_speed=3] - The movement speed of the persona.
      */
-    constructor(name, description, pronunciation, spawn_point = { x: 0, y: 0 }, anims, scene, speech_bubble = true, tile_width = 32, move_speed = 3) {
+    constructor(name, pronunciation, spawn_point = { x: 0, y: 0 }, anims, scene, speech_bubble = true, tile_width = 32, move_speed = 3) {
         this.name = name;
         this.character = null;
         this.initial = this.generateInitials(name);
-        this.description = description;
         this.pronunciation = pronunciation;
         this.pronunciation_text = null;
         this.spawn_point = spawn_point;
@@ -33,6 +31,7 @@ export class Persona {
         this.anims = anims;
         this.move_speed = move_speed;
         this.speech_bubble = null;
+        this.tile_width = tile_width
 
         this.createSprite(scene, tile_width);
         this.createWalkAnimations();
@@ -178,7 +177,6 @@ export class Persona {
         return {
             name: this.name,
             initial: this.initial,
-            description: this.description,
             pronunciation: this.pronunciation,
             spawn_point: this.spawn_point,
             movement_history: this.movement_history,
@@ -186,4 +184,15 @@ export class Persona {
             chat: this.chat,
         };
     }
+
+    getPosition() {
+        let tile_width = this.tile_width 
+        let x_map = this.character.x
+        let y_map = this.character.y
+
+        const x =  (x_map - tile_width/2)/ tile_width;
+        const y = (y_map - tile_width)/ tile_width;
+       return  {x,y}
+    }
+
 }
