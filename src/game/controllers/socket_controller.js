@@ -1,3 +1,5 @@
+import { saveSimForkConfig } from '../controllers/server_controller';
+
 /**
  * Sets up Socket.IO routes for handling game-related commands and updates.
  * 
@@ -5,6 +7,13 @@
  * @param {Phaser.Scene} scene - The current game scene.
  */
 export const setupSocketRoutes = (socket, scene) => {
+    /**
+     * Handles the server init event.
+     */
+    socket.on("init", (data) => {
+       saveSimForkConfig("thissim",data);
+    });
+
     /**
      * Handles the server tick event to update the game clock and refresh the frame.
      */

@@ -1,6 +1,11 @@
-import { saveSimForkConfig } from '../controllers/server_controller';
+import { setupSocketRoutes } from '../controllers/socket_controller';
+import { getSimForkConfig } from '../controllers/server_controller';
+
 import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
+
+import io from 'socket.io-client';
+
 
 export class MainMenu extends Scene {
     constructor() {
@@ -11,7 +16,22 @@ export class MainMenu extends Scene {
         // Calculate center positions once
         this.centerX = this.scale.width / 2;
         this.centerY = this.scale.height / 2;
-        this.sim_fork = "defaut_sim"
+
+        this.sim_fork = "thissim"
+
+        this.socket = io('http://127.0.0.1:8080');
+        
+        this.socket.on('connect', () => {
+            console.log('Connected to the Socket.IO server!');
+            this.connected = true;
+            setupSocketRoutes(this.socket, this);
+        });
+  
+        this.socket.on('disconnect', () => {
+            this.connected = false;
+            console.log('Disconnected from the server');
+        });
+
     }
 
     create() {
@@ -25,27 +45,27 @@ export class MainMenu extends Scene {
             fontStyle: 'bold',
         }).setOrigin(0.5);
 
-        // Display maze data (for debugging purposes)
-        this.displayJsonData('defaut_sim', this.centerX, this.centerY - 50);
-
-        // Play Button
-        this.createPlayButton();
-
         // Emit event that the scene is ready
         EventBus.emit('current-scene-ready', this);
     }
 
-    // Utility function to display JSON data in text format
-    displayJsonData(key, x, y) {
-        const jsonData = this.cache.json.get(key);
-        this.add.text(x, y, `${key}.json: ${JSON.stringify(jsonData, null, 2)}`, {
-            fontSize: '24px',
-            color: '#ffffff',
-            fontStyle: 'bold',
-            wordWrap: { width: 500, useAdvancedWrap: true },
-        }).setOrigin(0.5);
-    }
+    update() {
+        try {
+            const sim_config = getSimForkConfig(this.sim_fork)
 
+            if(sim_config != null) {
+                const simType = "play"
+
+                this.scene.start('Maploader', { 
+                    simType, 
+                    sim_config
+                });
+            }
+
+        } catch(error) {
+            console.log(error)
+        }
+    }
     // Creates the play button and handles interactions
     createPlayButton() {
         const playButton = this.add.text(this.centerX, this.centerY + 150, 'Play', {
@@ -60,19 +80,6 @@ export class MainMenu extends Scene {
         .on('pointerout', () => playButton.setStyle({ backgroundColor: '#007bff' }))
         .on('pointerdown', () => {
             // Start 'MapLoader' scene with map and NPC data
-            try {
-                const sim_config = saveSimForkConfig(this.sim_fork, this)
-
-                const simType = "play"
-                const simCode = sim_config["sim_code"]
-                const step = 1
-                const speed = 1
-
-                window.location.href = `${window.location.origin}/${simType}/${simCode}/${step}/${speed}`;
-
-            } catch(error) {
-                console.log(error)
-            }
         });
     }
 }

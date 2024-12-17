@@ -16,11 +16,7 @@ export class Maploader extends Scene
         // Set up asset paths for organized loading
         setupAssetPaths(this);
 
-        const simCode = this.scene.settings.data.simCode;
-
-        // Temp Data
-        this.load.json(simCode, `storage/${simCode}/${simCode}.json`)
-        this.load.json("npc", `storage/${simCode}/npc.json`)
+        const maze_name = this.scene.settings.data.sim_config.maze_name;
 
        // Map-related assets
        this.load.image("blocks_1", "the_ville/visuals/map_assets/blocks/blocks_1.png");

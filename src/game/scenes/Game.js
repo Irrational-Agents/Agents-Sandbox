@@ -1,10 +1,7 @@
-import { getNPCSDetails, getSimForkConfig } from '../controllers/server_controller';
 import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
 import { Persona } from '../model/Persona';
-import { setupSocketRoutes } from '../controllers/socket_controller';
 import { setupAssetPaths } from '../utils';
-import io from 'socket.io-client';
 
 /**
  * Represents the main game scene where the player and NPCs interact. Handles asset loading, NPC initialization,
@@ -36,24 +33,10 @@ export class Game extends Scene {
      * @returns {void}
      */
     init() {
-        const simCode = this.scene.settings.data.simCode;
-        const sim_config = getSimForkConfig(simCode, this);
+        const sim_config = this.scene.settings.data.sim_config;
 
         this.player_name = sim_config["player_name"];
-        this.npc_names = sim_config["persona_names"];
-
-        this.socket = io('http://127.0.0.1:8080');
-        
-        this.socket.on('connect', () => {
-            console.log('Connected to the Socket.IO server!');
-            this.connected = true;
-            setupSocketRoutes(this.socket, this);
-        });
-  
-        this.socket.on('disconnect', () => {
-            this.connected = false;
-            console.log('Disconnected from the server');
-        });
+        this.npc_names = sim_config["npc_names"];
     }
 
     /**
@@ -64,11 +47,15 @@ export class Game extends Scene {
     preload() {
         setupAssetPaths(this);
 
-        const npc_list = this.cache.json.get('npc_list');
-        this.loadCharacterAtlas(this.player_name, npc_list[this.player_name]);
+        const sim_config = this.scene.settings.data.sim_config;
+        const npc_list = this.cache.json.get('npc_list')
+
+        let texture = npc_list[sim_config[this.player_name]['character']]
+        this.loadCharacterAtlas(this.player_name, texture);
 
         for (const npc of this.npc_names) {
-            this.loadCharacterAtlas(npc, npc_list[npc]);
+            texture = npc_list[sim_config[npc]['character']]
+            this.loadCharacterAtlas(npc, texture);
         }
     }
 
@@ -81,9 +68,19 @@ export class Game extends Scene {
         this.map = this.make.tilemap({ key: "map" });
         this.addTileSet(this.map);
 
-        const npcs_details = getNPCSDetails(this.npc_names, this);
+        const sim_config = this.scene.settings.data.sim_config;
+        const spawn_details ={}
+        
+        spawn_details[this.player_name] = sim_config[this.player_name]
 
-        this.initializeNPCs(npcs_details);
+        for (const npc of this.npc_names) {
+            spawn_details[npc] = sim_config[npc]
+        }
+
+
+        this.scene.settings.data.sim_config;
+
+        this.initializeNPCs(spawn_details);
         this.setupCamera(this.map);
         this.setupInput();
         

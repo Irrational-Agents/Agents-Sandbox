@@ -39,7 +39,6 @@ export class Preloader extends Scene {
 
         // Load game configuration and data
         this.load.json('npc_list', 'storage/npc_list.json');
-        this.load.json('default_sim', 'storage/default_sim.json');
     }
 
     /**
