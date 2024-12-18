@@ -48,6 +48,13 @@ export class MainMenu extends Scene {
             fontStyle: 'bold',
         }).setOrigin(0.5);
 
+        // Title Text
+        this.add.text(this.centerX, this.centerY, 'Waiting for Server on localhost:8080...', {
+            fontSize: '48px',
+            color: '#ffffff',
+            fontStyle: 'bold',
+        }).setOrigin(0.5);
+
         // Emit event that the scene is ready
         EventBus.emit('current-scene-ready', this);
     }
