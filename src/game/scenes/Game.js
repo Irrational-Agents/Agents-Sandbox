@@ -56,11 +56,11 @@ export class Game extends Scene {
         const sim_config = this.scene.settings.data.sim_config;
         const npc_list = this.cache.json.get('npc_list')
 
-        let texture = npc_list[sim_config[this.player_name]['character']]
+        let texture = npc_list[sim_config['agents_list'][this.player_name]['character']]
         this.loadCharacterAtlas(this.player_name, texture);
 
         for (const npc of this.npc_names) {
-            texture = npc_list[sim_config[npc]['character']]
+            texture = npc_list[sim_config['agents_list'][npc]['character']]
             this.loadCharacterAtlas(npc, texture);
         }
     }
@@ -77,10 +77,10 @@ export class Game extends Scene {
         const sim_config = this.scene.settings.data.sim_config;
         const spawn_details ={}
         
-        spawn_details[this.player_name] = sim_config[this.player_name]
+        spawn_details[this.player_name] = sim_config['agents_list'][this.player_name]
 
         for (const npc of this.npc_names) {
-            spawn_details[npc] = sim_config[npc]
+            spawn_details[npc] = sim_config['agents_list'][npc]
         }
 
         this.initializeNPCs(spawn_details);
