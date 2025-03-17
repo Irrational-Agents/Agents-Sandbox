@@ -50,7 +50,7 @@ export class Maploader extends Scene
        this.load.text("game_object_maze", "the_ville/matrix/maze/game_object_maze.csv")
        this.load.text("sector_maze", "the_ville/matrix/maze/sector_maze.csv")
        this.load.text("spawning_location_maze", "the_ville/matrix/maze/spawning_location_maze.csv")
-       this.load.text("game_object_blocks","the_ville/matrix/special_blocks/game_object_blocks.csv")
+       this.load.text("game_object_blocks","the_ville/matrix/special_blocks/game_object_maze.csv")
 
        this.load.json("arena_blocks","the_ville/matrix/special_blocks/arena_blocks.json")
        this.load.json("game_object_blocks","the_ville/matrix/special_blocks/game_object_blocks.json")
