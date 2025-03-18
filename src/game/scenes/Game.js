@@ -39,6 +39,7 @@ export class Game extends Scene {
 
         this.player_name = sim_config["player_name"];
         this.npc_names = sim_config["npc_names"];
+        this.map_name = sim_config["map_name"];
 
         this.socket =  this.scene.settings.data.socket;
         setupSocketRoutes(this.socket, this);
@@ -90,6 +91,41 @@ export class Game extends Scene {
         this.socket.emit('map.data' , getMapInfo(this))
         
         EventBus.emit('current-scene-ready', this);
+        this.addOverlayUI();
+    }
+
+    addOverlayUI() {
+        const centerX = this.scale.width / 2;
+        const centerY = this.scale.height / 2;
+    
+        // Define the width of the loading bar (80% of the screen width)
+        const barWidth =  this.scale.width;
+        
+        // Create a semi-transparent background panel
+        const uiPanel = this.add.rectangle(centerX, 40, barWidth, 80, 0x000000, 0.5).setScrollFactor(0);
+    
+        // Add text label on top of the panel
+        const uiText = this.add.text(centerX - 0.9*centerX, 25, this.map_name, {
+            fontSize: "48px",
+            fill: "#ffffff"
+        }).setScrollFactor(0);
+    
+        // Add button (example: a restart button)
+        const restartButton = this.add.text(centerX + 0.8*centerX, 25, "Restart", {
+            fontSize: "20px",
+            fill: "#ff0000",
+            backgroundColor: "#ffffff",
+            padding: { left: 10, right: 10, top: 5, bottom: 5 }
+        })
+        .setInteractive()
+        .setScrollFactor(0)
+        .on("pointerdown", () => {
+            this.scene.restart();
+        });
+    
+        // Group UI elements into a container
+        const uiContainer = this.add.container(0, 0, [uiPanel, uiText, restartButton]);
+        uiContainer.setDepth(1000); // Ensure it renders above everything else
     }
 
     /**

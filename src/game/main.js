@@ -28,7 +28,7 @@ const config = {
     parent: 'game-container',
     backgroundColor: '#028af8',
     pixelArt: true,
-    scale: { zoom: 0.8 },
+    scale: { zoom: 0.95 },
     physics: {
         default: "arcade",
         arcade: {
