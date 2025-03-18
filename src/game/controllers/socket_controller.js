@@ -100,7 +100,7 @@ export const setupSocketRoutes = (socket, scene) => {
     /**
      * Fetches data for the town map, including arenas, collisions, and sectors, and sends it to the server.
      */
-    socket.on("map.data", () => {
+    socket.on("map.getData", () => {
         console.log("Fetching town map data.");
 
         const mapData = getMapInfo(scene)
