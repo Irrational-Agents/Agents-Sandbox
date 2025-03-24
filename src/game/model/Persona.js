@@ -190,8 +190,8 @@ export class Persona {
         let x_map = this.character.x
         let y_map = this.character.y
 
-        const x =  (x_map - tile_width/2)/ tile_width;
-        const y = (y_map - tile_width)/ tile_width;
+        const x =  Math.round((x_map - tile_width/2)/ tile_width);
+        const y = Math.round((y_map - tile_width)/ tile_width);
         const direction = this.direction
        return  {x,y, direction}
     }
