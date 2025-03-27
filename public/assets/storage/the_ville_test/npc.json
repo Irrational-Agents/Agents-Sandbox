@@ -1,11 +1,11 @@
 {
     "Klaus Mueller" : {
-        "description": "sleeping @ the Ville:Dorm for College:Klaus Mueller's room:bed",
+        "description": "sleeping @ the Ville:Dorm for College:A room:bed",
         "pronunciation": "\ud83d\udca4",
         "spawn_point": { "x": 127, "y": 46 }
     },
    "Maria Lopez": {
-        "description": "sleeping @ the Ville:Dorm for College:Maria Lopez's room:bed",
+        "description": "sleeping @ the Ville:Dorm for College:B room:bed",
         "pronunciation": "\ud83d\ude34",
         "spawn_point": { "x": 73, "y": 14 }
     },
