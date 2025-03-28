@@ -48,9 +48,9 @@ export class MainMenu extends Scene {
             fontStyle: 'bold',
         }).setOrigin(0.5);
 
-        // Title Text
-        this.add.text(this.centerX, this.centerY, 'Waiting for Server on localhost:8080...', {
-            fontSize: '48px',
+        // Status Text
+        this.statusText = this.add.text(this.centerX, this.centerY-200, 'Waiting for Server on localhost:8080...', {
+            fontSize: '38px',
             color: '#ffffff',
             fontStyle: 'bold',
         }).setOrigin(0.5);
@@ -61,25 +61,50 @@ export class MainMenu extends Scene {
 
     update() {
         try {
-            const sim_config = getSimForkConfig(this.sim_fork)
-
-            if(sim_config != null) {
-                const simType = "play"
-                const socket = this.socket
-
-                this.scene.start('Maploader', { 
-                    simType, 
-                    sim_config,
-                    socket
+            const sim_config = getSimForkConfig(this.sim_fork);
+    
+            if (sim_config) {
+                const simType = "play";
+                const socket = this.socket;
+    
+                // Update map name
+                this.statusText.setText(`Map: ${sim_config['map_name']}`);
+    
+                // Clear previous UI elements if they exist
+                if (this.npcTitle) this.npcTitle.destroy();
+                if (this.npcTextGroup) {
+                    this.npcTextGroup.forEach(text => text.destroy());
+                }
+                this.npcTextGroup = [];
+    
+                // Add a semi-transparent background panel for NPC list
+                if (this.npcPanel) this.npcPanel.destroy();
+                this.npcPanel = this.add.rectangle(this.centerX, this.centerY, 400, 300, 0x000000, 0.5).setOrigin(0.5);
+    
+                // Add NPC title
+                this.npcTitle = this.add.text(this.centerX, this.centerY - 130, 'NPCs Config', {
+                    fontSize: '38px',
+                    color: '#ffffff',
+                    fontStyle: 'bold'
+                }).setOrigin(0.5);
+    
+                // Display NPC names with better spacing
+                sim_config['npc_names'].forEach((npc, index) => {
+                    let npcText = this.add.text(this.centerX, this.centerY - 70 + index * 40, npc, {
+                        fontSize: '28px',
+                        color: '#ffffff',
+                    }).setOrigin(0.5);
+                    this.npcTextGroup.push(npcText);
                 });
+    
+                this.createPlayButton(simType, sim_config, socket);
             }
-
-        } catch(error) {
-            console.log(error)
+        } catch (error) {
+            console.log(error);
         }
     }
     // Creates the play button and handles interactions
-    createPlayButton() {
+    createPlayButton(simType, sim_config, socket) {
         const playButton = this.add.text(this.centerX, this.centerY + 150, 'Play', {
             fontSize: '32px',
             color: '#ffffff',
@@ -91,7 +116,11 @@ export class MainMenu extends Scene {
         .on('pointerover', () => playButton.setStyle({ backgroundColor: '#0056b3' }))
         .on('pointerout', () => playButton.setStyle({ backgroundColor: '#007bff' }))
         .on('pointerdown', () => {
-            // Start 'MapLoader' scene with map and NPC data
+            this.scene.start('Maploader', { 
+                simType, 
+                sim_config,
+                socket
+            });
         });
     }
 }
