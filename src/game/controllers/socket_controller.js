@@ -31,9 +31,9 @@ export const setupSocketRoutes = (socket, scene) => {
             socket.emit("ui.tick", res);
         } else {
             scene.clock += data
+            scene.ui_clock.setText(`Clock : ${scene.clock}`)
             scene.update_frame = true;
         }
-        console.log("Server tick received. Updating clock and frame.", scene.update_frame);
     });
     
     /**

@@ -2,7 +2,7 @@ import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
 import { Persona } from '../model/Persona';
 import { setupAssetPaths } from '../utils';
-import { getMapInfo, getNPCsPosition, getPlayerPosition, tick } from '../controllers/server_controller';
+import { deleteSimForkConfig, tick } from '../controllers/server_controller';
 import { setupSocketRoutes } from '../controllers/socket_controller';
 
 
@@ -28,6 +28,7 @@ export class Game extends Scene {
         this.clock = 0;
         this.update_frame = true;
         this.spawn = null;
+        this.camara_id = 0
     }
 
     /**
@@ -92,35 +93,87 @@ export class Game extends Scene {
     addOverlayUI() {
         const centerX = this.scale.width / 2;
         const centerY = this.scale.height / 2;
-    
+        
         // Define the width of the loading bar (80% of the screen width)
         const barWidth =  this.scale.width;
         
         // Create a semi-transparent background panel
-        const uiPanel = this.add.rectangle(centerX, 40, barWidth, 80, 0x000000, 0.5).setScrollFactor(0);
-    
+        const uiPanel = this.add.rectangle(centerX, 40, barWidth, 120, 0x000000, 0.65).setScrollFactor(0);
+        
         // Add text label on top of the panel
         const uiText = this.add.text(centerX - 0.9*centerX, 25, this.map_name, {
             fontSize: "48px",
             fill: "#ffffff"
         }).setScrollFactor(0);
+
+        // Add clock
+        this.ui_clock = this.add.text(centerX + 0.65 * centerX, 15, `Clock : ${this.clock}`, {
+            fontSize: "32px",
+            fill: "#ffffff",
+            fontStyle: 'bold',
+        }).setScrollFactor(0);
     
-        // Add button (example: a restart button)
-        const restartButton = this.add.text(centerX + 0.8*centerX, 25, "Restart", {
+        // Add restart button
+        const restartButton = this.add.text(centerX + 0.8 * centerX, 50, "Restart", {
             fontSize: "20px",
             fill: "#ff0000",
             backgroundColor: "#ffffff",
             padding: { left: 10, right: 10, top: 5, bottom: 5 }
         })
-        .setInteractive()
+        .setInteractive({ useHandCursor: true })
         .setScrollFactor(0)
-        .on("pointerdown", () => {
-            this.scene.restart();
+        .on("pointerdown", async () => {
+            deleteSimForkConfig("thissim");
+            this.socket.emit("server.restart");
+
+            console.log("Restarting in 5 seconds...");
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Sleep for 1 seconds
+
+            window.location.reload();
+        });
+        
+        // Create a dropdown for selecting the camera
+        const cameraDropdown = this.add.text(centerX + 0.6*centerX, 50, `Camera: ${this.camara_id}`, {
+            fontSize: "20px",
+            fill: "#ffffff",
+            backgroundColor: "#0000ff",
+            padding: { left: 10, right: 10, top: 5, bottom: 5 }
+        }).setInteractive({ useHandCursor: true }).setScrollFactor(0);
+        
+        // Create a simple function to change camera
+        cameraDropdown.on('pointerdown', () => {
+            this.changeCameraView();
+            cameraDropdown.setText(`Camera: ${this.camara_id}`);
         });
     
         // Group UI elements into a container
-        const uiContainer = this.add.container(0, 0, [uiPanel, uiText, restartButton]);
+        const uiContainer = this.add.container(0, 0, [uiPanel, uiText, this.ui_clock, restartButton, cameraDropdown]);
         uiContainer.setDepth(1000); // Ensure it renders above everything else
+    }
+    
+    /**
+     * Change the camera view to either the player or NPC.
+     *
+     * @returns {void}
+     */
+    changeCameraView() {
+        const camera = this.cameras.main;
+
+        if(this.camara_id >= this.npc_names.length) {
+            this.camara_id = 0
+        } else {
+            this.camara_id += 1
+        }
+    
+        if (this.camara_id == 0) {
+            // Set camera to follow the player
+            camera.startFollow(this.npcs[this.player_name].character);
+        } else {
+            // Set camera to follow the first NPC (or any other logic for NPCs)
+            let npc_name = this.npc_names[this.camara_id - 1]
+            const firstNpc = this.npcs[npc_name];
+            camera.startFollow(firstNpc.character);
+        }
     }
 
     /**
@@ -302,7 +355,7 @@ export class Game extends Scene {
         return {
             [this.player_name]: {
                 pronunciation: player.current_status.emoji,
-                spawn_point: { x: player.current_location[1], y: player.current_location[0] },
+                spawn_point: { x: player.current_location[0], y: player.current_location[1] },
                 character: player.character
             },
             ...Object.fromEntries(this.npc_names.map(npc => [

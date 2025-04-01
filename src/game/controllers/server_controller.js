@@ -9,6 +9,15 @@ export const saveSimForkConfig = (forkName, forkData) => {
 };
 
 /**
+ * Deletes the simulation fork configuration from the server.
+ * 
+ * @param {string} forkName - The name of the fork configuration to delete.
+ */
+export const deleteSimForkConfig = (forkName) => {
+    localStorage.removeItem(forkName);
+};
+
+/**
  * Retrieves the simulation fork configuration from the server or cache.
  * 
  * @param {string} forkName - The name of the fork configuration to retrieve.

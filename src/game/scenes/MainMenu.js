@@ -113,11 +113,11 @@ export class MainMenu extends Scene {
     }
     // Creates the play button and handles interactions
     createButton(simType, sim_config, socket) {
-        // this.scene.start('Maploader', { 
-        //     simType, 
-        //     sim_config,
-        //     socket
-        // });
+        this.scene.start('Maploader', { 
+            simType, 
+            sim_config,
+            socket
+        });
         const playButton = this.add.text(this.centerX, this.centerY + 190, 'Start', {
             fontSize: '32px',
             color: '#ffffff',
