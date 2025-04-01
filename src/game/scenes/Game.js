@@ -78,26 +78,8 @@ export class Game extends Scene {
         this.addTileSet(this.map);
 
         const sim_config = this.scene.settings.data.sim_config;
-        const player = sim_config['player']
-        const npcs = sim_config['npcs']
-
-        const spawn_details ={}
-        
-        spawn_details[this.player_name] = {
-            "pronunciation": player['current_status']['emoji'],
-            "spawn_point":  {"x": player['current_location'][1], "y": player['current_location'][0]},
-            "character": player['character']
-        }
-
-        for (const npc of this.npc_names) {
-            spawn_details[npc] = {
-                "pronunciation": npcs[npc]['current_status']['emoji'],
-                "spawn_point":  {"x":npcs[npc]['current_location'][0],"y":npcs[npc]['current_location'][1]},
-                "character": npcs[npc]['character']
-            }
-        }
-
-        console.log(spawn_details)
+        const { player, npcs } = this.scene.settings.data.sim_config;
+        const spawn_details = this.getSpawnDetails(player, npcs);
 
         this.initializeNPCs(spawn_details);
         this.setupCamera(this.map);
@@ -308,4 +290,30 @@ export class Game extends Scene {
     loadCharacterAtlas(characterName, texturePath) {
         this.load.atlas(characterName, `characters/${texturePath}`, 'characters/atlas.json');
     }
+
+    /**
+     * Generates spawn details for the player and NPCs.
+     *
+     * @param {Object} player - The player object containing status and location.
+     * @param {Object} npcs - An object mapping NPC names to their respective data.
+     * @returns {Object} An object containing spawn details for the player and NPCs.
+     */
+    getSpawnDetails(player, npcs) {
+        return {
+            [this.player_name]: {
+                pronunciation: player.current_status.emoji,
+                spawn_point: { x: player.current_location[1], y: player.current_location[0] },
+                character: player.character
+            },
+            ...Object.fromEntries(this.npc_names.map(npc => [
+                npc,
+                {
+                    pronunciation: npcs[npc].current_status.emoji,
+                    spawn_point: { x: npcs[npc].current_location[0], y: npcs[npc].current_location[1] },
+                    character: npcs[npc].character
+                }
+            ]))
+        };
+    }
+
 }
