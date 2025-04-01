@@ -2,7 +2,7 @@ import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
 import { Persona } from '../model/Persona';
 import { setupAssetPaths } from '../utils';
-import { getMapInfo, getNPCsPosition, getPlayerPosition } from '../controllers/server_controller';
+import { getMapInfo, getNPCsPosition, getPlayerPosition, tick } from '../controllers/server_controller';
 import { setupSocketRoutes } from '../controllers/socket_controller';
 
 
@@ -27,6 +27,7 @@ export class Game extends Scene {
         this.collisionsLayer = null;
         this.clock = 0;
         this.update_frame = true;
+        this.spawn = null;
     }
 
     /**
@@ -40,6 +41,7 @@ export class Game extends Scene {
         this.player_name = sim_config["player_name"];
         this.npc_names = sim_config["npc_names"];
         this.map_name = sim_config["map_name"];
+
 
         this.socket =  this.scene.settings.data.socket;
         setupSocketRoutes(this.socket, this);
@@ -57,11 +59,11 @@ export class Game extends Scene {
         const sim_config = this.scene.settings.data.sim_config;
         const npc_list = this.cache.json.get('npc_list')
 
-        let texture = npc_list[sim_config[this.player_name]['character']]
+        let texture = npc_list[sim_config["player"]['character']]
         this.loadCharacterAtlas(this.player_name, texture);
 
         for (const npc of this.npc_names) {
-            texture = npc_list[sim_config[npc]['character']]
+            texture = npc_list[sim_config["npcs"][npc]['character']]
             this.loadCharacterAtlas(npc, texture);
         }
     }
@@ -76,19 +78,30 @@ export class Game extends Scene {
         this.addTileSet(this.map);
 
         const sim_config = this.scene.settings.data.sim_config;
+        const player = sim_config['player']
+        const npcs = sim_config['npcs']
+
         const spawn_details ={}
         
-        spawn_details[this.player_name] = sim_config[this.player_name]
+        spawn_details[this.player_name] = {
+            "pronunciation": player['current_status']['emoji'],
+            "spawn_point":  {"x": player['current_location'][1], "y": player['current_location'][0]},
+            "character": player['character']
+        }
 
         for (const npc of this.npc_names) {
-            spawn_details[npc] = sim_config[npc]
+            spawn_details[npc] = {
+                "pronunciation": npcs[npc]['current_status']['emoji'],
+                "spawn_point":  {"x":npcs[npc]['current_location'][0],"y":npcs[npc]['current_location'][1]},
+                "character": npcs[npc]['character']
+            }
         }
+
+        console.log(spawn_details)
 
         this.initializeNPCs(spawn_details);
         this.setupCamera(this.map);
         this.setupInput();
-
-        this.socket.emit('map.data' , getMapInfo(this))
         
         EventBus.emit('current-scene-ready', this);
         this.addOverlayUI();
@@ -136,11 +149,7 @@ export class Game extends Scene {
     update() {
         if (!this.update_frame) return;
 
-        const res = {
-            clock: this.clock,
-            npc_pos: getNPCsPosition(this),
-            player_pos: getPlayerPosition(this)
-        }
+        const res = tick(this)
 
         this.socket.emit("ui.tick", res);
         this.update_frame = false;
@@ -180,17 +189,6 @@ export class Game extends Scene {
         player.setVelocity(velocityX * 160, velocityY * 160);
         persona.direction = direction;
         player.anims.play(`${persona.name}-${direction}-walk`, true);
-    }
-
-    /**
-     * Loads a texture atlas for a character.
-     * 
-     * @param {string} characterName - The name of the character.
-     * @param {string} texturePath - The relative path to the texture file.
-     * @returns {void}
-     */
-    loadCharacterAtlas(characterName, texturePath) {
-        this.load.atlas(characterName, `characters/${texturePath}`, 'characters/atlas.json');
     }
 
     /**
@@ -298,5 +296,16 @@ export class Game extends Scene {
         this.collisionsLayer.setDepth(-1);
         map.getLayer("Foreground L1").tilemapLayer.setDepth(2);
         map.getLayer("Foreground L2").tilemapLayer.setDepth(2);
+    }
+
+    /**
+     * Loads a texture atlas for a character.
+     * 
+     * @param {string} characterName - The name of the character.
+     * @param {string} texturePath - The relative path to the texture file.
+     * @returns {void}
+     */
+    loadCharacterAtlas(characterName, texturePath) {
+        this.load.atlas(characterName, `characters/${texturePath}`, 'characters/atlas.json');
     }
 }

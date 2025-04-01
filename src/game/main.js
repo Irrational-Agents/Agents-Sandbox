@@ -2,6 +2,7 @@ import { Boot } from './scenes/Boot';
 import { Game } from './scenes/Game';
 import { MainMenu } from './scenes/MainMenu';
 import { Maploader } from './scenes/Maploader';
+import { PlayerMenu } from './scenes/PlayerMenu';
 import { Preloader } from './scenes/Preloader';
 import Phaser from 'phaser';
 
@@ -40,6 +41,7 @@ const config = {
         Preloader,
         MainMenu,
         Maploader,
+        PlayerMenu,
         Game
     ]
 };

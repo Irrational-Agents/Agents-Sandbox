@@ -42,14 +42,14 @@ export class MainMenu extends Scene {
         this.add.image(this.centerX, this.centerY, 'background').setOrigin(0.5);
 
         // Title Text
-        this.add.text(this.centerX, 80, 'Main Menu', {
+        this.add.text(this.centerX, 80, 'Agent Simulator', {
             fontSize: '48px',
             color: '#ffffff',
             fontStyle: 'bold',
         }).setOrigin(0.5);
 
         // Status Text
-        this.statusText = this.add.text(this.centerX, this.centerY-200, 'Waiting for Server on localhost:8080...', {
+        this.statusText = this.add.text(this.centerX, this.centerY, 'Waiting for Server on localhost:8080...', {
             fontSize: '38px',
             color: '#ffffff',
             fontStyle: 'bold',
@@ -67,45 +67,58 @@ export class MainMenu extends Scene {
                 const simType = "play";
                 const socket = this.socket;
     
-                // Update map name
-                this.statusText.setText(`Map: ${sim_config['map_name']}`);
+                this.statusText.setText("");
     
                 // Clear previous UI elements if they exist
-                if (this.npcTitle) this.npcTitle.destroy();
-                if (this.npcTextGroup) {
-                    this.npcTextGroup.forEach(text => text.destroy());
+                if (this.configTitle) this.configTitle.destroy();
+                if (this.configTextGroup) {
+                    this.configTextGroup.forEach(text => text.destroy());
                 }
-                this.npcTextGroup = [];
+                this.configTextGroup = [];
     
-                // Add a semi-transparent background panel for NPC list
-                if (this.npcPanel) this.npcPanel.destroy();
-                this.npcPanel = this.add.rectangle(this.centerX, this.centerY, 400, 300, 0x000000, 0.5).setOrigin(0.5);
-    
+                // Add a semi-transparent background panel
+                if (this.configPanel) this.configPanel.destroy();
+                this.configPanel = this.add.rectangle(this.centerX, this.centerY+20, 500, 400, 0x000000, 0.5).setOrigin(0.5);
+
                 // Add NPC title
-                this.npcTitle = this.add.text(this.centerX, this.centerY - 130, 'NPCs Config', {
+                this.npcTitle = this.add.text(this.centerX, this.centerY - 150, 'Config', {
                     fontSize: '38px',
                     color: '#ffffff',
                     fontStyle: 'bold'
                 }).setOrigin(0.5);
+
+                let config = {
+                    sim_type: "play",
+                    map_name: sim_config['map_name'],
+                    sec_per_step: sim_config['sec_per_step'],
+                    start_date: sim_config['start_date'],
+                    start_time: sim_config['start_time'],
+                    npcs: sim_config['npc_names'].length,
+                }
     
-                // Display NPC names with better spacing
-                sim_config['npc_names'].forEach((npc, index) => {
-                    let npcText = this.add.text(this.centerX, this.centerY - 70 + index * 40, npc, {
+                // Display Config
+                Object.keys(config).forEach((key, index) => {
+                    let configText = this.add.text(this.centerX, this.centerY - 90 + index * 40, `${key}: ${config[key]}`, {
                         fontSize: '28px',
                         color: '#ffffff',
                     }).setOrigin(0.5);
-                    this.npcTextGroup.push(npcText);
+                    this.configTextGroup.push(configText);
                 });
     
-                this.createPlayButton(simType, sim_config, socket);
+                this.createButton(simType, sim_config, socket);
             }
         } catch (error) {
             console.log(error);
         }
     }
     // Creates the play button and handles interactions
-    createPlayButton(simType, sim_config, socket) {
-        const playButton = this.add.text(this.centerX, this.centerY + 150, 'Play', {
+    createButton(simType, sim_config, socket) {
+        // this.scene.start('Maploader', { 
+        //     simType, 
+        //     sim_config,
+        //     socket
+        // });
+        const playButton = this.add.text(this.centerX, this.centerY + 190, 'Start', {
             fontSize: '32px',
             color: '#ffffff',
             backgroundColor: '#007bff',

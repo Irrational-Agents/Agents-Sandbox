@@ -1,3 +1,4 @@
+import { data } from 'react-router';
 import { getMapInfo, getNPCsPosition, getPlayerPosition } from '../controllers/server_controller';
 
 /**
@@ -7,6 +8,13 @@ import { getMapInfo, getNPCsPosition, getPlayerPosition } from '../controllers/s
  * @param {Phaser.Scene} scene - The current game scene.
  */
 export const setupSocketRoutes = (socket, scene) => {
+    /**
+     * Handles the server tick event to update the game clock and refresh the frame.
+     */
+    socket.on("play", (data) => {
+        console.log(data)
+    })
+
     /**
      * Handles the server tick event to update the game clock and refresh the frame.
      */
@@ -26,22 +34,6 @@ export const setupSocketRoutes = (socket, scene) => {
             scene.update_frame = true;
         }
         console.log("Server tick received. Updating clock and frame.", scene.update_frame);
-    });
-
-    /**
-     * Fetches the player's information and sends it to the server.
-     */
-    socket.on("player.info", () => {
-        const playerName = scene.player_name;
-        const playerPersona = scene.npcs?.[playerName];
-
-        console.log(`Fetching player info for: ${playerName}`);
-
-        if (playerPersona) {
-            socket.emit("player.info", playerPersona.toJSON());
-        } else {
-            console.error(`Player persona for "${playerName}" not found.`);
-        }
     });
     
     /**
@@ -100,7 +92,7 @@ export const setupSocketRoutes = (socket, scene) => {
     /**
      * Fetches data for the town map, including arenas, collisions, and sectors, and sends it to the server.
      */
-    socket.on("map.getData", () => {
+    socket.on("map.data", () => {
         console.log("Fetching town map data.");
 
         const mapData = getMapInfo(scene)
@@ -116,7 +108,7 @@ export const setupSocketRoutes = (socket, scene) => {
      * @property {string} npc_name - The name of the NPC.
      * @property {string} emoji_text - The new emoji text for the NPC.
      */
-    socket.on("npc.updateNPC", (payload) => {
+    socket.on("npc.emoji", (payload) => {
         try {
             const { npc_name, emoji_text } = JSON.parse(payload);
 

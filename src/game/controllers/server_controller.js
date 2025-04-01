@@ -78,6 +78,10 @@ export const getMapInfo = (scene) => {
  * @returns {Object} An object mapping NPC names to their positions.
  */
 export const getNPCsPosition = (scene) => {
+    if(scene.clock == 0) {
+        //
+    }
+
     return scene.npc_names.reduce((positions, npc) => {
         positions[npc] = scene.npcs[npc]?.getPosition();
         return positions;
@@ -96,3 +100,15 @@ export const getPlayerPosition = (scene) => {
         [playerName]: scene.npcs[playerName]?.getPosition()
     };
 };
+
+
+export const tick = (scene) => {
+
+    const res = { 
+        clock: scene.clock,
+        npc_pos: null,//getNPCsPosition(this),
+        player_pos: null//getPlayerPosition(this)
+    };
+
+    return res
+}

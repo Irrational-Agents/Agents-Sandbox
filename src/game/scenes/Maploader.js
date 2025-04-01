@@ -17,6 +17,8 @@ export class Maploader extends Scene
         setupAssetPaths(this);
 
         const map_name = this.scene.settings.data.sim_config.map_name;
+        const sim_config = this.scene.settings.data.sim_config;
+        const npc_list = this.cache.json.get('npc_list')
 
        // Map-related assets
        this.load.image("blocks_1", "the_ville/visuals/map_assets/blocks/blocks_1.png");
@@ -40,8 +42,10 @@ export class Maploader extends Scene
        this.load.tilemapTiledJSON("map", 'the_ville/visuals/the_ville.json');
 
        // Persona Assets
-       this.load.json("npc_list", "storage/npc_list.json");
        this.load.image('speech_bubble', 'speech_bubble/v3.png');
+       for(let npc in npc_list) {
+        this.loadCharacterAtlas(npc, npc_list[npc]);
+       }
 
        // Meta Data
        this.load.json("map_meta", "the_ville/matrix/maze_meta_info.json")
@@ -54,11 +58,26 @@ export class Maploader extends Scene
        this.load.json("arena_blocks","the_ville/matrix/special_blocks/arena_blocks.json")
        this.load.json("game_object_blocks","the_ville/matrix/special_blocks/game_object_blocks.json")
        this.load.json("sector_blocks","the_ville/matrix/special_blocks/sector_blocks.json")
-       this.load.json("spawning_location_blocks","the_ville/matrix/special_blocks/spawning_location_blocks.json")        
+       this.load.json("spawning_location_blocks","the_ville/matrix/special_blocks/spawning_location_blocks.json")
+       
+       // Load game configuration and data
+       this.load.json('spawn', 'storage/spawn.json');
     }
 
+    /**
+     * Loads a texture atlas for a character.
+     * 
+     * @param {string} characterName - The name of the character.
+     * @param {string} texturePath - The relative path to the texture file.
+     * @returns {void}
+     */
+    loadCharacterAtlas(characterName, texturePath) {
+        this.load.atlas(characterName, `characters/${texturePath}`, 'characters/atlas.json');
+    }
+
+
     create () {
-        this.scene.start('Game', {
+        this.scene.start('PlayerMenu', {
             ...this.scene.settings.data
         });
     }
