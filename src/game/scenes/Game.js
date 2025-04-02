@@ -31,7 +31,7 @@ export class Game extends Scene {
         this.clock = 0;
         this.update_frame = true;
         this.spawn = null;
-        this.camara_id = 2
+        this.camara_id = -1;
     }
 
     /**
@@ -95,6 +95,7 @@ export class Game extends Scene {
         
         EventBus.emit('current-scene-ready', this);
         this.addOverlayUI();
+        //this.addBottomUI();
     }
 
     addOverlayUI() {
@@ -105,7 +106,7 @@ export class Game extends Scene {
         const barWidth =  this.scale.width;
         
         // Create a semi-transparent background panel
-        const uiPanel = this.add.rectangle(centerX, 40, barWidth, 120, 0x000000, 0.65).setScrollFactor(0);
+        const uiPanel = this.add.rectangle(centerX, 40, barWidth, 120, 0x000000, 0.85).setScrollFactor(0);
         
         // Add text label on top of the panel
         const uiText = this.add.text(centerX - 0.9*centerX, 25, this.map_name, {
@@ -139,6 +140,7 @@ export class Game extends Scene {
 
             window.location.reload();
         });
+
         
         // Create a dropdown for selecting the camera
         const cameraDropdown = this.add.text(centerX + 0.6*centerX, 50, `Camera: ${this.camara_id}`, {
@@ -153,10 +155,41 @@ export class Game extends Scene {
             this.changeCameraView();
             cameraDropdown.setText(`Camera: ${this.camara_id}`);
         });
+
+        // NPC Status
+        const npc_status = this.add.text(centerX + 0.38 * centerX, 50, "NPC Status", {
+            fontSize: "20px",
+            fill: "#ff0000",
+            backgroundColor: '#ffcc00',
+            padding: { left: 10, right: 10, top: 5, bottom: 5 }
+        })
+        .setInteractive({ useHandCursor: true })
+        .setScrollFactor(0);
+        
+        // LLM Status
+        const llm_status = this.add.text(centerX + 0.18 * centerX, 50, "LLM Status", {
+            fontSize: "20px",
+            fill: '#ffffff',
+            backgroundColor: "#ff0000",
+            padding: { left: 10, right: 10, top: 5, bottom: 5 }
+        })
+        .setInteractive({ useHandCursor: true })
+        .setScrollFactor(0);
     
         // Group UI elements into a container
-        const uiContainer = this.add.container(0, 0, [uiPanel, uiText, this.ui_clock, restartButton, cameraDropdown]);
+        const uiContainer = this.add.container(0, 0, [uiPanel, uiText, this.ui_clock, restartButton, cameraDropdown, npc_status, llm_status]);
         uiContainer.setDepth(1000); // Ensure it renders above everything else
+    }
+
+    addBottomUI() {
+        const centerX = this.scale.width / 2;
+        const centerY = this.scale.height / 2;
+
+        // Define the width of the loading bar (80% of the screen width)
+        const barWidth =  this.scale.width;
+
+        // Create a semi-transparent background panel
+        const uiPanel = this.add.rectangle(centerX, centerY + 0.95*centerY, barWidth, 70, 0x000000, 0.85).setScrollFactor(0);
     }
     
     /**
