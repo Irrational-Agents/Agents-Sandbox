@@ -31,7 +31,8 @@ export class Persona {
         this.anims = anims;
         this.move_speed = move_speed;
         this.speech_bubble = null;
-        this.tile_width = tile_width
+        this.tile_width = tile_width;
+        this.current_activity = "Sleeping"
 
         this.createSprite(scene, tile_width);
         this.createWalkAnimations();

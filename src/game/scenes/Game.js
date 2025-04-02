@@ -90,12 +90,12 @@ export class Game extends Scene {
 
         this.initializeNPCs(spawn_details);
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        this.changeCameraView();
         this.setupInput();
         
         EventBus.emit('current-scene-ready', this);
         this.addOverlayUI();
-        //this.addBottomUI();
+        this.addBottomUI();
+        this.changeCameraView();
     }
 
     addOverlayUI() {
@@ -143,7 +143,8 @@ export class Game extends Scene {
 
         
         // Create a dropdown for selecting the camera
-        const cameraDropdown = this.add.text(centerX + 0.6*centerX, 50, `Camera: ${this.camara_id}`, {
+        let cam = this.camara_id == -1 ? 0 : this.camara_id
+        const cameraDropdown = this.add.text(centerX + 0.6*centerX, 50, `Camera: ${cam}`, {
             fontSize: "20px",
             fill: "#ffffff",
             backgroundColor: "#0000ff",
@@ -183,39 +184,85 @@ export class Game extends Scene {
 
     addBottomUI() {
         const centerX = this.scale.width / 2;
-        const centerY = this.scale.height / 2;
-
-        // Define the width of the loading bar (80% of the screen width)
-        const barWidth =  this.scale.width;
-
-        // Create a semi-transparent background panel
-        const uiPanel = this.add.rectangle(centerX, centerY + 0.95*centerY, barWidth, 70, 0x000000, 0.85).setScrollFactor(0);
+        const centerY = this.scale.height * 0.925; // UI panel position
+    
+        // Define panel dimensions
+        const barWidth = this.scale.width * 0.9;
+        const barHeight = 100;
+        const borderThickness = 4;
+    
+        // Create border rectangle
+        const border = this.add.rectangle(0, 0, barWidth + borderThickness, barHeight + borderThickness, 0xffffff);
+    
+        // Create semi-transparent background panel
+        this.bPanel = this.add.rectangle(0, 0, barWidth, barHeight, 0x000000, 0.85);
+    
+        // Determine character sprite
+        const charSpriteKey = (this.camara_id === 0 || this.camara_id === -1) 
+            ? this.player_name 
+            : this.npc_names[this.camara_id - 1];
+    
+        // Create and position the character sprite inside the panel (relative positioning)
+        this.npcSprite = this.add.sprite(
+            -barWidth / 2 + 50, // Positioned inside the panel (left side)
+            0, // Centered vertically in the UI panel
+            charSpriteKey,
+            "down"
+        ).setScale(3).setOrigin(0.5, 0.5);
+    
+        // Group UI elements into a container
+        const uiContainer = this.add.container(centerX, centerY, [border, this.bPanel, this.npcSprite]);
+        uiContainer.setDepth(1000); // Ensure it renders above other elements
+    
+        // Make sure the UI stays fixed
+        uiContainer.setScrollFactor(0);
     }
     
     /**
-     * Change the camera view to either the player or NPC.
+     * Change the camera view to either the player or an NPC.
      *
      * @returns {void}
      */
     changeCameraView() {
         const camera = this.cameras.main;
 
-        if(this.camara_id >= this.npc_names.length) {
-            this.camara_id = 0
-        } else {
-            this.camara_id += 1
+        // Ensure npcSprite exists before proceeding
+        if (!this.npcSprite) {
+            console.error("npcSprite is undefined! Make sure addBottomUI() is called before changing the camera view.");
+            return;
         }
-    
-        if (this.camara_id == 0) {
+
+        // Cycle through player and NPCs
+        this.camara_id = (this.camara_id + 1) % (this.npc_names.length + 1);
+
+        let newTexture = null;
+
+        if (this.camara_id === 0) {
             // Set camera to follow the player
-            camera.startFollow(this.npcs[this.player_name].character);
+            const player = this.npcs[this.player_name];
+            if (player) {
+                camera.startFollow(player.character);
+                newTexture = this.player_name;
+            }
         } else {
-            // Set camera to follow the first NPC (or any other logic for NPCs)
-            let npc_name = this.npc_names[this.camara_id - 1]
-            const firstNpc = this.npcs[npc_name];
-            camera.startFollow(firstNpc.character);
+            // Set camera to follow the NPC
+            const npc_name = this.npc_names[this.camara_id - 1];
+            const npc = this.npcs[npc_name];
+
+            if (npc) {
+                camera.startFollow(npc.character);
+                newTexture = npc_name;
+            }
+        }
+
+        // Safely update npcSprite texture
+        if (newTexture) {
+            this.npcSprite.setTexture(newTexture,"down");
+        } else {
+            console.warn("Invalid texture detected:", newTexture);
         }
     }
+
 
     /**
      * Updates player and NPC movements and handles animations based on input.

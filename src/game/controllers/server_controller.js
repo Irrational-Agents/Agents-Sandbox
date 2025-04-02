@@ -111,8 +111,6 @@ export const tick = (scene) => {
 
     const res = { 
         clock: scene.clock,
-        npc_pos: null,
-        player_pos: null
     };
 
     if(scene.clock == 0) {

@@ -179,9 +179,9 @@ export class PlayerMenu extends Scene {
     }
 
     createPlayButton() {
-        // this.scene.settings.data.sim_config['npcs'] = this.npcs;
-        // this.scene.settings.data.sim_config['player'] = this.player;
-        // this.scene.start('Game', { ...this.scene.settings.data });
+        this.scene.settings.data.sim_config['npcs'] = this.npcs;
+        this.scene.settings.data.sim_config['player'] = this.player;
+        this.scene.start('Game', { ...this.scene.settings.data });
         const playButton = this.add.text(1250, 650, 'Play', {
             fontSize: '48px',
             fill: '#ffffff',
