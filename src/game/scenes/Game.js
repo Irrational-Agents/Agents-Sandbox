@@ -209,9 +209,21 @@ export class Game extends Scene {
             charSpriteKey,
             "down"
         ).setScale(3).setOrigin(0.5, 0.5);
+
+        this.charSpriteName  = this.add.text(-barWidth / 2 + 100, -30, `${charSpriteKey}`, {
+            fontSize: "24px",
+            fill: "#ffffff",
+            fontStyle: 'bold',
+        }).setScrollFactor(0);
+
+        this.charSpriteStatus  = this.add.text(-barWidth / 2 + 120, 10, `${this.npcs[charSpriteKey].current_activity} ${this.npcs[charSpriteKey].pronunciation}`, {
+            fontSize: "24px",
+            fill: "#ffffff",
+            fontStyle: 'bold',
+        }).setScrollFactor(0);
     
         // Group UI elements into a container
-        const uiContainer = this.add.container(centerX, centerY, [border, this.bPanel, this.npcSprite]);
+        const uiContainer = this.add.container(centerX, centerY, [border, this.bPanel, this.npcSprite, this.charSpriteName, this.charSpriteStatus]);
         uiContainer.setDepth(1000); // Ensure it renders above other elements
     
         // Make sure the UI stays fixed
@@ -258,6 +270,8 @@ export class Game extends Scene {
         // Safely update npcSprite texture
         if (newTexture) {
             this.npcSprite.setTexture(newTexture,"down");
+            this.charSpriteName.setText(newTexture)
+            this.charSpriteStatus.setText(`${this.npcs[newTexture].current_activity} ${this.npcs[newTexture].pronunciation}`)
         } else {
             console.warn("Invalid texture detected:", newTexture);
         }
@@ -336,6 +350,8 @@ export class Game extends Scene {
         }
 
         this.npcs[this.player_name].disableSpeechBubble();
+        this.npcs[this.player_name].pronunciation = "🎮";
+        this.npcs[this.player_name].current_activity = "Playing";
     }
 
     /**
