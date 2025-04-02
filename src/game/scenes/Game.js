@@ -25,10 +25,13 @@ export class Game extends Scene {
         this.npcs = {};
         this.cursors = null;
         this.collisionsLayer = null;
+        this.game_time = null;
+        this.game_date = null;
+        this.sec_per_step = null;
         this.clock = 0;
         this.update_frame = true;
         this.spawn = null;
-        this.camara_id = 0
+        this.camara_id = 2
     }
 
     /**
@@ -42,6 +45,9 @@ export class Game extends Scene {
         this.player_name = sim_config["player_name"];
         this.npc_names = sim_config["npc_names"];
         this.map_name = sim_config["map_name"];
+        this.game_time = sim_config["start_time"]; // 00:00
+        this.sec_per_step = sim_config["sec_per_step"]; // 10
+        this.game_date = sim_config["start_date"] // 2024-04-01
 
 
         this.socket =  this.scene.settings.data.socket;
@@ -83,7 +89,8 @@ export class Game extends Scene {
         const spawn_details = this.getSpawnDetails(player, npcs);
 
         this.initializeNPCs(spawn_details);
-        this.setupCamera(this.map);
+        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.changeCameraView();
         this.setupInput();
         
         EventBus.emit('current-scene-ready', this);
@@ -107,8 +114,9 @@ export class Game extends Scene {
         }).setScrollFactor(0);
 
         // Add clock
-        this.ui_clock = this.add.text(centerX + 0.60 * centerX, 15, `Clock : ${this.clock}`, {
-            fontSize: "32px",
+        this.ui_clock = this.add.text(centerX + 0.1 * centerX, 10, `
+            Date: ${this.game_date} | Clock : ${this.game_time} | Step : ${this.clock}`, {
+            fontSize: "24px",
             fill: "#ffffff",
             fontStyle: 'bold',
         }).setScrollFactor(0);
@@ -251,18 +259,6 @@ export class Game extends Scene {
     }
 
     /**
-     * Configures the camera to follow the player character.
-     * 
-     * @param {Phaser.Tilemaps.Tilemap} map - The tilemap for the scene.
-     * @returns {void}
-     */
-    setupCamera(map) {
-        const camera = this.cameras.main;
-        camera.startFollow(this.npcs[this.player_name].character);
-        camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    }
-
-    /**
      * Sets up keyboard input controls.
      * 
      * @returns {void}
@@ -326,7 +322,7 @@ export class Game extends Scene {
         });
 
         this.collisionsLayer = map.createLayer("Collisions", tilesets.blocks, 0, 0);
-        this.collisionsLayer.setCollisionByProperty({ collide: true });
+        //this.collisionsLayer.setCollisionByProperty({ collide: true });
 
         this.collisionsLayer.setDepth(-1);
         map.getLayer("Foreground L1").tilemapLayer.setDepth(2);

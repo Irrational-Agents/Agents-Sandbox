@@ -19,19 +19,36 @@ export const setupSocketRoutes = (socket, scene) => {
      * Handles the server tick event to update the game clock and refresh the frame.
      */
     socket.on("server.tick", (data) => {
-        data = Number(data)
-
+        data = Number(data);
+    
         const res = {
             clock: scene.clock,
             npc_pos: getNPCsPosition(scene),
             player_pos: getPlayerPosition(scene)
-        }
-
+        };
+    
         if (data == 0) {
             socket.emit("ui.tick", res);
         } else {
-            scene.clock += data
-            scene.ui_clock.setText(`Clock : ${scene.clock}`)
+            // Convert game time to minutes
+            let [hours, minutes] = scene.game_time.split(":").map(Number);
+            let totalMinutes = hours * 60 + minutes + data * scene.sec_per_step;
+    
+            // Update game date if time exceeds 24 hours
+            let newHours = Math.floor(totalMinutes / 60) % 24;
+            let newMinutes = totalMinutes % 60;
+    
+            if (Math.floor(totalMinutes / 60) >= 24) {
+                let date = new Date(scene.game_date);
+                date.setDate(date.getDate() + 1);
+                scene.game_date = date.toISOString().split('T')[0]; // Format YYYY-MM-DD
+            }
+    
+            // Update scene properties
+            scene.game_time = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
+            scene.clock += data;
+            
+            scene.ui_clock.setText(`Date: ${scene.game_date} | Clock: ${scene.game_time} | Step: ${scene.clock}`);
             scene.update_frame = true;
         }
     });
@@ -58,24 +75,26 @@ export const setupSocketRoutes = (socket, scene) => {
             const player = npcPersona.character;
             player.setVelocity(0);
 
+            const move_delta = 100
+
             switch (direction) {
                 case "left":
-                    player.setVelocityX(-160 * speed);
+                    player.setVelocityX(-1*move_delta * speed);
                     npcPersona.direction = "left";
                     player.anims.play(`${npcPersona.name}-left-walk`, true);
                     break;
                 case "right":
-                    player.setVelocityX(160 * speed);
+                    player.setVelocityX(1*move_delta * speed);
                     npcPersona.direction = "right";
                     player.anims.play(`${npcPersona.name}-right-walk`, true);
                     break;
                 case "up":
-                    player.setVelocityY(-160 * speed);
+                    player.setVelocityY(-1*move_delta * speed);
                     npcPersona.direction = "up";
                     player.anims.play(`${npcPersona.name}-up-walk`, true);
                     break;
                 case "down":
-                    player.setVelocityY(160 * speed);
+                    player.setVelocityY(1*move_delta * speed);
                     npcPersona.direction = "down";
                     player.anims.play(`${npcPersona.name}-down-walk`, true);
                     break;
