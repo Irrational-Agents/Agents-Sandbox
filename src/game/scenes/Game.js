@@ -107,7 +107,7 @@ export class Game extends Scene {
         }).setScrollFactor(0);
 
         // Add clock
-        this.ui_clock = this.add.text(centerX + 0.65 * centerX, 15, `Clock : ${this.clock}`, {
+        this.ui_clock = this.add.text(centerX + 0.60 * centerX, 15, `Clock : ${this.clock}`, {
             fontSize: "32px",
             fill: "#ffffff",
             fontStyle: 'bold',

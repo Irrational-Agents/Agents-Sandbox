@@ -75,10 +75,10 @@ export class PlayerMenu extends Scene {
             npc["current_status"]['emoji'] = "💤";
 
             let text = this.add.text(100, yOffset + 100 + index * 50, `NPC-${index}`, {
-                fontSize: '32px',
+                fontSize: '38px',
                 fill: '#ffffff',
                 backgroundColor: '#000000',
-                padding: { left: 10, right: 10, top: 5, bottom: 5 }
+                padding: { left: 20, right: 20, top: 5, bottom: 5 }
             }).setInteractive({ useHandCursor: true });
 
             text.on('pointerdown', () => {
@@ -109,10 +109,10 @@ export class PlayerMenu extends Scene {
         this.player["current_status"]['emoji'] = "💤";
 
         let text = this.add.text(100, Object.keys(this.npcs).length * 50, "Player", {
-            fontSize: '32px',
+            fontSize: '38px',
             fill: '#ffffff',
             backgroundColor: '#000000',
-            padding: { left: 10, right: 10, top: 5, bottom: 5 }
+            padding: { left: 8, right: 8, top: 5, bottom: 5 }
         }).setInteractive({ useHandCursor: true });
 
         text.on('pointerdown', () => {
@@ -179,9 +179,9 @@ export class PlayerMenu extends Scene {
     }
 
     createPlayButton() {
-        this.scene.settings.data.sim_config['npcs'] = this.npcs;
-        this.scene.settings.data.sim_config['player'] = this.player;
-        this.scene.start('Game', { ...this.scene.settings.data });
+        // this.scene.settings.data.sim_config['npcs'] = this.npcs;
+        // this.scene.settings.data.sim_config['player'] = this.player;
+        // this.scene.start('Game', { ...this.scene.settings.data });
         const playButton = this.add.text(1250, 650, 'Play', {
             fontSize: '48px',
             fill: '#ffffff',
