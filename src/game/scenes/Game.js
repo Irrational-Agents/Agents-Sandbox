@@ -115,8 +115,7 @@ export class Game extends Scene {
         }).setScrollFactor(0);
 
         // Add clock
-        this.ui_clock = this.add.text(centerX + 0.1 * centerX, 10, `
-            Date: ${this.game_date} | Clock : ${this.game_time} | Step : ${this.clock}`, {
+        this.ui_clock = this.add.text(centerX + 0.1 * centerX, 10, `Date: ${this.game_date} | Clock: ${this.game_time} | Step: ${this.clock}`, {
             fontSize: "24px",
             fill: "#ffffff",
             fontStyle: 'bold',
@@ -167,8 +166,8 @@ export class Game extends Scene {
         .setInteractive({ useHandCursor: true })
         .setScrollFactor(0);
         
-        // LLM Status
-        const llm_status = this.add.text(centerX + 0.18 * centerX, 50, "LLM Status", {
+        // LLM Logs
+        const llm_status = this.add.text(centerX + 0.18 * centerX, 50, "LLM Logs", {
             fontSize: "20px",
             fill: '#ffffff',
             backgroundColor: "#ff0000",

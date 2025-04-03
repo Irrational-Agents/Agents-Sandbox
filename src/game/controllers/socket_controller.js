@@ -1,5 +1,5 @@
 import { data } from 'react-router';
-import { getMapInfo, getNPCsPosition, getPlayerPosition } from '../controllers/server_controller';
+import { getMapInfo, tick} from '../controllers/server_controller';
 
 /**
  * Sets up Socket.IO routes for handling game-related commands and updates.
@@ -18,14 +18,11 @@ export const setupSocketRoutes = (socket, scene) => {
     /**
      * Handles the server tick event to update the game clock and refresh the frame.
      */
-    socket.on("server.tick", (data) => {
-        data = Number(data);
+    socket.on("server.tick", (updata) => {
+        let updates = updata["updates"]
+        let data = updata["clock"]       
     
-        const res = {
-            clock: scene.clock,
-            npc_pos: getNPCsPosition(scene),
-            player_pos: getPlayerPosition(scene)
-        };
+        const res = tick(scene);
     
         if (data == 0) {
             socket.emit("ui.tick", res);
@@ -49,6 +46,11 @@ export const setupSocketRoutes = (socket, scene) => {
             scene.clock += data;
             
             scene.ui_clock.setText(`Date: ${scene.game_date} | Clock: ${scene.game_time} | Step: ${scene.clock}`);
+
+            for(let npc_name in updates) {
+                scene.npcs[npc_name].doUpdates(updates[npc_name])
+            }
+
             scene.update_frame = true;
         }
     });

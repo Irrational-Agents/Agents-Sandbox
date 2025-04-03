@@ -33,6 +33,7 @@ export class Persona {
         this.speech_bubble = null;
         this.tile_width = tile_width;
         this.current_activity = "Sleeping"
+        this.speed = 32
 
         this.createSprite(scene, tile_width);
         this.createWalkAnimations();
@@ -197,4 +198,56 @@ export class Persona {
        return  {x,y, direction}
     }
 
+    doUpdates(update) {
+        if (update["activity"] === "move") {
+            this.pronunciation = "👣";
+            this.pronunciation_text.setText(this.pronunciation)
+            this.current_activity = "Moving";
+    
+            let path = update["path"]; // Array of movement directions
+            if (path && path.length > 0) {
+                let direction = path[0]; // Get the first movement direction
+                let velocityX = 0;
+                let velocityY = 0;
+                let tileSize = this.tile_width;
+    
+                switch (direction) {
+                    case "up":
+                        velocityY = -1;
+                        break;
+                    case "down":
+                        velocityY = 1;
+                        break;
+                    case "left":
+                        velocityX = -1;
+                        break;
+                    case "right":
+                        velocityX = 1;
+                        break;
+                }
+    
+                // Set velocity
+                this.character.setVelocity(velocityX * 160, velocityY * 160);
+                this.direction = direction;
+    
+                if (this.character.anims) {
+                    this.character.anims.play(`${this.name}-${direction}-walk`, true);
+                }
+    
+                // Stop movement once out of the current tile
+                let checkTileExit = setInterval(() => {
+                    console.log("check")
+                    let { x, y } = this.getPosition();
+                    let newX = Math.round((this.character.x - tileSize / 2) / tileSize);
+                    let newY = Math.round(this.character.y / tileSize);
+    
+                    if (newX !== x || newY !== y) {
+                        this.character.setVelocity(0, 0); // Stop movement
+
+                        clearInterval(checkTileExit); // Stop checking
+                    }
+                }, 50); // Check every 50ms
+            }
+        }
+    }   
 }

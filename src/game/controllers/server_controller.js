@@ -80,45 +80,33 @@ export const getMapInfo = (scene) => {
     return { mapMeta, mapData, blockData };
 };
 
-/**
- * Retrieves the positions of NPCs in the scene.
- *
- * @param {Phaser.Scene} scene - The current game scene.
- * @returns {Object} An object mapping NPC names to their positions.
- */
-export const getNPCsPosition = (scene) => {
-    return scene.npc_names.reduce((positions, npc) => {
-        positions[npc] = scene.npcs[npc]?.getPosition();
-        return positions;
-    }, {});
-};
-
-/**
- * Retrieves the player's position in the scene.
- *
- * @param {Phaser.Scene} scene - The current game scene.
- * @returns {Object} An object mapping the player name to their position.
- */
-export const getPlayerPosition = (scene) => {
-    const playerName = scene.player_name;
-    return {
-        [playerName]: scene.npcs[playerName]?.getPosition()
-    };
-};
-
-
 export const tick = (scene) => {
-
-    const res = { 
-        clock: scene.clock,
-    };
-
-    if(scene.clock == 0) {
-        res['map_data'] = getMapInfo(scene)
-    } else {
-        res['npc_pos'] = getNPCsPosition(scene),
-        res['player_pos'] = getPlayerPosition(scene)
+    if (scene.clock === 0) {
+        return { 
+            clock: scene.clock,
+            npc_status: null,
+            player_status: null,
+            map_data: getMapInfo(scene)
+        };
     }
 
-    return res
-}
+    const npc_status = scene.npc_names.reduce((acc, npc_name) => {
+        const npc = scene.npcs[npc_name];
+        acc[npc_name] = {
+            position: npc?.getPosition() || null,
+            activity: npc?.current_activity || null,
+            steps_remaining: 0
+        };
+        return acc;
+    }, {});
+
+    return {
+        clock: scene.clock,
+        npc_status,
+        player_status: {
+            position: scene.npcs[scene.player_name]?.getPosition() || null,
+            activity: null,
+            steps_remaining: 0
+        }
+    };
+};
