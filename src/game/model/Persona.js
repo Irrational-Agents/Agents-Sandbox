@@ -1,179 +1,415 @@
 /**
- * Represents a character (Persona) in the game world with name, description, animations, and other properties.
- * The character can be spawned at a given location and have walk animations, speech bubbles, and other actions.
+ * Represents a character (Persona) in the game world with animations, movement, and interactions.
  */
 export class Persona {
-    /**
-     * Creates an instance of a Persona.
-     * 
-     * @constructor
-     * @param {string} name - The name of the persona.
-     * @param {string} pronunciation - The pronunciation text to display in the speech bubble.
-     * @param {Object} [spawn_point={x: 0, y: 0}] - The coordinates where the persona will spawn on the map (in tiles).
-     * @param {Phaser.Animations.AnimationManager} anims - The Phaser animations manager to create walk animations.
-     * @param {Phaser.Scene} scene - The Phaser scene where the persona will be placed.
-     * @param {boolean} [speech_bubble=true] - Whether the persona will have a speech bubble above them.
-     * @param {number} [tile_width=32] - The width of the tiles, used to calculate the position on the map.
-     * @param {number} [move_speed=3] - The movement speed of the persona.
-     */
-    constructor(name, pronunciation, spawn_point = { x: 0, y: 0 }, anims, scene, speech_bubble = true, tile_width = 32, move_speed = 3) {
-        this.name = name;
-        this.character = null;
-        this.initial = this.generateInitials(name);
-        this.pronunciation = pronunciation;
-        this.pronunciation_text = null;
-        this.spawn_point = spawn_point;
-        this.x = spawn_point.x;
-        this.y = spawn_point.y;
-        this.movement_history = [spawn_point];
-        this.direction = "down";
-        this.chat = null;
-        this.anims = anims;
-        this.move_speed = move_speed;
-        this.speech_bubble = null;
-        this.tile_width = tile_width;
-        this.current_activity = "Sleeping"
-        this.speed = 32
+    // Animation configuration constants
+    static ANIM_CONFIG = {
+        FRAME_RATE: 4,
+        FRAME_PREFIX: '-walk.',
+        FRAME_START: 0,
+        FRAME_END: 3,
+        FRAME_PAD: 3,
+        DIRECTIONS: ['left', 'right', 'down', 'up']
+    };
 
-        this.createSprite(scene, tile_width);
+    // Movement configuration constants
+    static MOVEMENT_CONFIG = {
+        BASE_SPEED: 160,
+        TILE_CHECK_INTERVAL: 200, // ms
+        COLLIDER_SIZE: { width: 20, height: 20 },
+        SPRITE_SIZE: { width: 30, height: 40 },
+        SPRITE_OFFSET: { x: 0, y: 0 },
+        DISPLAY_WIDTH: 40
+    };
+
+    constructor(
+        name, 
+        pronunciation, 
+        spawn_point = { x: 0, y: 0 }, 
+        anims, 
+        scene, 
+        speech_bubble = true, 
+        tile_width = 32, 
+        move_speed = 3
+    ) {
+        // Core properties
+        this.name = name;
+        this.pronunciation = pronunciation;
+        this.spawn_point = spawn_point;
+        this.tile_width = tile_width;
+        this.move_speed = move_speed;
+        this.current_activity = "sleep";
+        
+        // Game objects
+        this.character = null;
+        this.speech_bubble = null;
+        this.pronunciation_text = null;
+        
+        // State tracking
+        this.direction = "down";
+        this.movement_history = [spawn_point];
+        this.movementInterval = null;
+        
+        // References
+        this.anims = anims;
+        this.scene = scene;
+
+        // Initial setup
+        this.initial = this.generateInitials(name);
+        this.createSprite();
         this.createWalkAnimations();
 
         if (speech_bubble) {
-            this.createSpeechBubble(scene);
+            this.createSpeechBubble();
         }
     }
 
     /**
-     * Generates the initials of the persona's name (e.g., "John Doe" -> "JD").
-     * 
-     * @param {string} name - The full name of the persona.
-     * @returns {string} The initials of the persona's name.
+     * Generates initials from the persona's name (e.g., "John Doe" -> "JD")
      */
     generateInitials(name) {
-        const parts = name.split(" ");
-        return parts[0][0] + (parts[parts.length - 1]?.[0] || "");
+        return name.split(" ")
+            .filter(part => part.length > 0)
+            .map(part => part[0])
+            .join("");
     }
 
     /**
-     * Creates the sprite for the persona and positions it on the map.
-     * 
-     * @param {Phaser.Scene} scene - The Phaser scene where the sprite will be added.
-     * @param {number} tile_width - The width of the tiles used to position the persona correctly.
-     * @returns {void}
+     * Creates and configures the character sprite
      */
-    createSprite(scene, tile_width) {
-        const x_map = this.x * tile_width + tile_width / 2;
-        const y_map = this.y * tile_width + tile_width;
+    createSprite() {
+        const { x, y } = this.calculateSpritePosition();
+        const config = Persona.MOVEMENT_CONFIG;
 
-        console.log(`${this.name} coordinates:`, x_map, y_map);
-
-        this.character = scene.physics.add.sprite(
-            x_map,
-            y_map,
-            this.name,
+        this.character = this.scene.physics.add.sprite(
+            x, y, 
+            this.name, 
             this.direction
-        ).setSize(30, 40).setOffset(0, 0);
+        );
 
-        // Set the display width and maintain the aspect ratio
-        this.character.displayWidth = 40;
-        this.character.scaleY = this.character.scaleX;
-        scene.physics.add.collider(this.character, scene.collisionsLayer);
-        this.character.body.setSize(20, 20);
+        // Configure sprite physics and display
+        this.character
+            .setSize(config.SPRITE_SIZE.width, config.SPRITE_SIZE.height)
+            .setOffset(config.SPRITE_OFFSET.x, config.SPRITE_OFFSET.y)
+            .setDisplaySize(config.DISPLAY_WIDTH, 
+                          config.DISPLAY_WIDTH * (config.SPRITE_SIZE.height / config.SPRITE_SIZE.width));
+
+        // Add collisions
+        this.scene.physics.add.collider(
+            this.character, 
+            this.scene.collisionsLayer
+        );
+        this.character.body.setSize(
+            config.COLLIDER_SIZE.width, 
+            config.COLLIDER_SIZE.height
+        );
     }
 
     /**
-     * Creates the speech bubble and associated text for the persona.
-     * 
-     * @param {Phaser.Scene} scene - The Phaser scene where the speech bubble will be added.
-     * @returns {void}
+     * Calculates the sprite's initial position on the map
      */
-    createSpeechBubble(scene) {
-        // Create the speech bubble
-        this.speech_bubble = scene.add.image(
+    calculateSpritePosition() {
+        return {
+            x: this.spawn_point.x * this.tile_width + this.tile_width / 2,
+            y: this.spawn_point.y * this.tile_width + this.tile_width
+        };
+    }
+
+    /**
+     * Creates and configures the speech bubble
+     */
+    createSpeechBubble() {
+        const bubbleYOffset = -30;
+        const textYOffset = -42;
+        
+        this.speech_bubble = this.scene.add.image(
             this.character.x, 
-            this.character.y - 30, 
+            this.character.y + bubbleYOffset, 
             'speech_bubble'
         )
         .setDepth(3)
-        .setDisplaySize(130, 58); // Set width and height
-    
-        // Create the text inside the speech bubble
-        this.pronunciation_text = scene.add.text(
+        .setDisplaySize(130, 58);
+
+        this.pronunciation_text = this.scene.add.text(
             this.character.x, 
-            this.character.y - 42, 
+            this.character.y + textYOffset, 
             this.pronunciation, 
             {
                 font: "24px monospace",
                 fill: "#000000",
                 align: "center"
             }
-        ).setOrigin(0.5) // Center the text
-         .setDepth(3);
-    
-        // Attach the speech bubble and text to follow the character
-        scene.events.on('update', () => {
-            if (this.character) {
-                this.speech_bubble.setPosition(this.character.x, this.character.y - 30);
-                this.pronunciation_text.setPosition(this.character.x, this.character.y - 42);
-            }
-        });
+        )
+        .setOrigin(0.5)
+        .setDepth(3);
+
+        // Update position each frame
+        this.scene.events.on('update', this.updateSpeechBubblePosition.bind(this));
     }
 
     /**
-     * Disables the speech bubble and hides the associated text.
-     * 
-     * @returns {void}
+     * Updates speech bubble position to follow the character
      */
+    updateSpeechBubblePosition() {
+        if (!this.character) return;
+        
+        const bubbleYOffset = -30;
+        const textYOffset = -42;
+        
+        this.speech_bubble?.setPosition(
+            this.character.x, 
+            this.character.y + bubbleYOffset
+        );
+        this.pronunciation_text?.setPosition(
+            this.character.x, 
+            this.character.y + textYOffset
+        );
+    }
+
+    /**
+     * Toggles speech bubble visibility
+     */
+    setSpeechBubbleVisibility(visible) {
+        this.speech_bubble?.setVisible(visible);
+        this.pronunciation_text?.setVisible(visible);
+    }
+
     disableSpeechBubble() {
-        if (this.speech_bubble) {
-            this.speech_bubble.setVisible(false); // Hide the speech bubble
-        }
-        if (this.pronunciation_text) {
-            this.pronunciation_text.setVisible(false); // Hide the text
-        }
+        this.setSpeechBubbleVisibility(false);
     }
 
-    /**
-     * Enables the speech bubble and shows the associated text.
-     * 
-     * @returns {void}
-     */
     enableSpeechBubble() {
-        if (this.speech_bubble) {
-            this.speech_bubble.setVisible(true); // Show the speech bubble
-        }
-        if (this.pronunciation_text) {
-            this.pronunciation_text.setVisible(true); // Show the text
-        }
+        this.setSpeechBubbleVisibility(true);
     }
 
     /**
-     * Creates walk animations for each direction (left, right, down, up) for the persona.
-     * 
-     * @returns {void}
+     * Creates walk animations for all directions
      */
     createWalkAnimations() {
-        const directions = ["left", "right", "down", "up"];
-        directions.forEach(direction => {
-            const walkAnimationKey = `${this.name}-${direction}-walk`;
+        Persona.ANIM_CONFIG.DIRECTIONS.forEach(direction => {
             this.anims.create({
-                key: walkAnimationKey,
+                key: `${this.name}-${direction}-walk`,
                 frames: this.anims.generateFrameNames(this.name, {
-                    prefix: `${direction}-walk.`,
-                    start: 0,
-                    end: 3,
-                    zeroPad: 3
+                    prefix: `${direction}${Persona.ANIM_CONFIG.FRAME_PREFIX}`,
+                    start: Persona.ANIM_CONFIG.FRAME_START,
+                    end: Persona.ANIM_CONFIG.FRAME_END,
+                    zeroPad: Persona.ANIM_CONFIG.FRAME_PAD
                 }),
-                frameRate: 4,
+                frameRate: Persona.ANIM_CONFIG.FRAME_RATE,
                 repeat: -1
             });
         });
     }
 
     /**
-     * Converts the persona's data to a JSON object for serialization.
-     * 
-     * @returns {Object} The persona data in JSON format.
+     * Gets current tile position and direction
+     */
+    getPosition() {
+        const x = Math.round((this.character.x - this.tile_width / 2) / this.tile_width);
+        const y = Math.round((this.character.y - this.tile_width) / this.tile_width);
+        return { x, y, direction: this.direction };
+    }
+
+    /**
+     * Handles updates from the server/game logic
+     */
+    async doUpdates(update) {
+        if (!update || typeof update !== 'object') {
+            console.warn('Invalid update received:', update);
+            return false;
+        }
+
+        try {
+            switch (update.activity) {
+                case "move":
+                    return await this.handleMoveUpdate(update);
+                    
+                case "speak":
+                    return this.handleSpeechUpdate(update);
+                    
+                case "emote":
+                    return this.handleEmotionUpdate(update);
+                    
+                default:
+                    console.warn('Unknown activity type:', update.activity);
+                    return false;
+            }
+        } catch (error) {
+            console.error('Error processing update:', error);
+            this.stopMovement();
+            return false;
+        }
+    }
+
+    /**
+     * Handles movement updates
+     */
+    async handleMoveUpdate(update) {
+        this.current_activity = update.activity;
+        this.pronunciation = "👟";
+        this.pronunciation_text?.setText(this.pronunciation);
+
+        if (!update.path?.length) {
+            update.path = this.path
+        }
+
+        this.path = update.path
+
+        // Process first movement step in sequence
+        let direction = this.path.shift()
+        console.log(direction)
+            
+        try {
+            await this.executeMovement(direction);
+        } catch (error) {
+            console.error('Movement failed:', error);
+            this.stopMovement();
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Executes a single movement step
+     */
+    async executeMovement(direction) {
+        return new Promise((resolve) => {
+            // Setup movement completion callback
+            this.movementResolve = () => {
+                this.movementResolve = null;
+                resolve();
+            };
+
+            // Start the movement
+            this.startMovement(direction);
+        });
+    }
+
+    /**
+     * Starts movement in a specific direction
+     */
+    startMovement(direction) {
+        this.stopMovement(); // Clean up any existing movement
+
+        this.direction = direction;
+        this.isMoving = true;
+
+        // Set velocity and animation
+        const velocity = this.calculateVelocity(direction);
+        this.character.setVelocity(velocity.x, velocity.y);
+        
+        if (this.character.anims) {
+            this.character.anims.play(`${this.name}-${direction}-walk`, true);
+        }
+
+        // Start position checking
+        this.startPositionCheck();
+    }
+
+    /**
+     * Calculates velocity vector based on direction
+     */
+    calculateVelocity(direction) {
+        const speed = Persona.MOVEMENT_CONFIG.BASE_SPEED;
+        switch (direction) {
+            case "up": return { x: 0, y: -speed };
+            case "down": return { x: 0, y: speed };
+            case "left": return { x: -speed, y: 0 };
+            case "right": return { x: speed, y: 0 };
+            default: return { x: 0, y: 0 };
+        }
+    }
+
+    /**
+     * Starts checking position periodically
+     */
+    startPositionCheck() {
+        this.lastTile = this.getCurrentTile();
+        this.movementInterval = setInterval(
+            () => this.checkPositionChange(),
+            Persona.MOVEMENT_CONFIG.TILE_CHECK_INTERVAL
+        );
+    }
+
+    /**
+     * Checks if character has changed tiles
+     */
+    checkPositionChange() {
+        if (!this.isMoving) return;
+
+        const currentTile = this.getCurrentTile();
+        
+        if (currentTile.x !== this.lastTile.x || currentTile.y !== this.lastTile.y) {
+            console.log(currentTile)
+            this.handleMovementComplete();
+        }
+    }
+
+    /**
+     * Gets the current tile position
+     */
+    getCurrentTile() {
+        return {
+            x: Math.round((this.character.x - this.tile_width / 2) / this.tile_width),
+            y: Math.round(this.character.y / this.tile_width)
+        };
+    }
+
+    /**
+     * Handles completion of movement to new tile
+     */
+    handleMovementComplete() {
+        this.stopMovement();
+        
+        if (this.movementResolve) {
+            this.movementResolve();
+        }
+    }
+
+    /**
+     * Stops all movement and cleans up
+     */
+    stopMovement() {
+        this.isMoving = false;
+        
+        if (this.character) {
+            this.character.setVelocity(0, 0);
+            this.character.anims?.stop();
+        }
+        
+        if (this.movementInterval) {
+            clearInterval(this.movementInterval);
+            this.movementInterval = null;
+        }
+    }
+
+    /**
+     * Handles speech updates
+     */
+    handleSpeechUpdate(update) {
+        if (!update.message) return false;
+        
+        this.pronunciation = update.message;
+        this.pronunciation_text?.setText(update.message);
+        this.current_activity = "Speaking";
+        return true;
+    }
+
+    /**
+     * Handles emotion updates
+     */
+    handleEmotionUpdate(update) {
+        if (!update.emotion) return false;
+        
+        this.pronunciation = update.emotion;
+        this.pronunciation_text?.setText(update.emotion);
+        this.current_activity = "Emoting";
+        return true;
+    }
+
+    /**
+     * Serializes persona data
      */
     toJSON() {
         return {
@@ -183,71 +419,7 @@ export class Persona {
             spawn_point: this.spawn_point,
             movement_history: this.movement_history,
             direction: this.direction,
-            chat: this.chat,
+            chat: this.chat
         };
     }
-
-    getPosition() {
-        let tile_width = this.tile_width 
-        let x_map = this.character.x
-        let y_map = this.character.y
-
-        const x =  Math.round((x_map - tile_width/2)/ tile_width);
-        const y = Math.round((y_map - tile_width)/ tile_width);
-        const direction = this.direction
-       return  {x,y, direction}
-    }
-
-    doUpdates(update) {
-        if (update["activity"] === "move") {
-            this.pronunciation = "👣";
-            this.pronunciation_text.setText(this.pronunciation)
-            this.current_activity = "Moving";
-    
-            let path = update["path"]; // Array of movement directions
-            if (path && path.length > 0) {
-                let direction = path[0]; // Get the first movement direction
-                let velocityX = 0;
-                let velocityY = 0;
-                let tileSize = this.tile_width;
-    
-                switch (direction) {
-                    case "up":
-                        velocityY = -1;
-                        break;
-                    case "down":
-                        velocityY = 1;
-                        break;
-                    case "left":
-                        velocityX = -1;
-                        break;
-                    case "right":
-                        velocityX = 1;
-                        break;
-                }
-    
-                // Set velocity
-                this.character.setVelocity(velocityX * 160, velocityY * 160);
-                this.direction = direction;
-    
-                if (this.character.anims) {
-                    this.character.anims.play(`${this.name}-${direction}-walk`, true);
-                }
-    
-                // Stop movement once out of the current tile
-                let checkTileExit = setInterval(() => {
-                    console.log("check")
-                    let { x, y } = this.getPosition();
-                    let newX = Math.round((this.character.x - tileSize / 2) / tileSize);
-                    let newY = Math.round(this.character.y / tileSize);
-    
-                    if (newX !== x || newY !== y) {
-                        this.character.setVelocity(0, 0); // Stop movement
-
-                        clearInterval(checkTileExit); // Stop checking
-                    }
-                }, 50); // Check every 50ms
-            }
-        }
-    }   
 }

@@ -441,7 +441,7 @@ export class Game extends Scene {
 
         this.npcs[this.player_name].disableSpeechBubble();
         this.npcs[this.player_name].pronunciation = "🎮";
-        this.npcs[this.player_name].current_activity = "Playing";
+        this.npcs[this.player_name].current_activity = "play";
     }
 
     setupInput() {
