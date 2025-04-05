@@ -5,19 +5,84 @@ import { setupAssetPaths } from '../utils';
 import { deleteSimForkConfig, tick } from '../controllers/server_controller';
 import { setupSocketRoutes } from '../controllers/socket_controller';
 
+// Constants for UI configuration
+const UI_CONFIG = {
+    OVERLAY: {
+        PANEL: {
+            WIDTH_RATIO: 1.0,
+            HEIGHT: 120,
+            ALPHA: 0.85,
+            Y_POSITION: 40
+        },
+        TEXT: {
+            OFFSET_X: 0.9,
+            FONT_SIZE: '48px',
+            COLOR: '#ffffff'
+        },
+        CLOCK: {
+            OFFSET_X: 0.1,
+            FONT_SIZE: '24px',
+            COLOR: '#ffffff',
+            STYLE: 'bold'
+        },
+        BUTTONS: {
+            RESTART: {
+                OFFSET_X: 0.8,
+                FONT_SIZE: '20px',
+                COLOR: '#ff0000',
+                BG_COLOR: '#ffffff',
+                PADDING: { left: 10, right: 10, top: 5, bottom: 5 }
+            },
+            CAMERA: {
+                OFFSET_X: 0.6,
+                FONT_SIZE: '20px',
+                COLOR: '#ffffff',
+                BG_COLOR: '#0000ff',
+                PADDING: { left: 10, right: 10, top: 5, bottom: 5 }
+            },
+            NPC_STATUS: {
+                OFFSET_X: 0.38,
+                FONT_SIZE: '20px',
+                COLOR: '#ff0000',
+                BG_COLOR: '#ffcc00',
+                PADDING: { left: 10, right: 10, top: 5, bottom: 5 }
+            },
+            LLM_LOGS: {
+                OFFSET_X: 0.18,
+                FONT_SIZE: '20px',
+                COLOR: '#ffffff',
+                BG_COLOR: '#ff0000',
+                PADDING: { left: 10, right: 10, top: 5, bottom: 5 }
+            }
+        }
+    },
+    BOTTOM_UI: {
+        Y_POSITION_RATIO: 0.925,
+        WIDTH_RATIO: 0.9,
+        HEIGHT: 100,
+        BORDER_THICKNESS: 4,
+        BORDER_COLOR: 0xffffff,
+        PANEL_COLOR: 0x000000,
+        PANEL_ALPHA: 0.85,
+        CHARACTER: {
+            X_OFFSET: -0.5,
+            Y_OFFSET: 0,
+            SCALE: 3,
+            SPRITE_OFFSET: 50,
+            NAME_OFFSET: 100,
+            STATUS_OFFSET: 120,
+            NAME_FONT: '24px',
+            STATUS_FONT: '24px',
+            COLOR: '#ffffff',
+            STYLE: 'bold'
+        }
+    }
+};
 
 /**
- * Represents the main game scene where the player and NPCs interact. Handles asset loading, NPC initialization,
- * movement, and interactions with the server and game map.
- * 
- * @extends Phaser.Scene
+ * Represents the main game scene where the player and NPCs interact.
  */
 export class Game extends Scene {
-    /**
-     * Creates an instance of the Game scene.
-     * 
-     * @constructor
-     */
     constructor() {
         super('Game');
         this.npc_names = null;
@@ -31,61 +96,51 @@ export class Game extends Scene {
         this.clock = 0;
         this.update_frame = true;
         this.spawn = null;
-        this.camara_id = -1;
+        this.camara_id = 2;
+        this.map = null;
+        this.ui_clock = null;
+        this.npcSprite = null;
+        this.bPanel = null;
+        this.charSpriteName = null;
+        this.charSpriteStatus = null;
+        this.socket = null;
     }
 
-    /**
-     * Initializes the scene with simulation configuration and sets up the socket connection.
-     * 
-     * @returns {void}
-     */
     init() {
         const sim_config = this.scene.settings.data.sim_config;
 
-        this.player_name = sim_config["player_name"];
-        this.npc_names = sim_config["npc_names"];
-        this.map_name = sim_config["map_name"];
-        this.game_time = sim_config["start_time"]; // 00:00
-        this.sec_per_step = sim_config["sec_per_step"]; // 10
-        this.game_date = sim_config["start_date"] // 2024-04-01
+        this.player_name = sim_config.player_name;
+        this.npc_names = sim_config.npc_names;
+        this.map_name = sim_config.map_name;
+        this.game_time = sim_config.start_time;
+        this.sec_per_step = sim_config.sec_per_step;
+        this.game_date = sim_config.start_date;
 
-
-        this.socket =  this.scene.settings.data.socket;
+        this.socket = this.scene.settings.data.socket;
         setupSocketRoutes(this.socket, this);
-
     }
 
-    /**
-     * Preloads the assets for the game, including textures and animations for the player and NPCs.
-     * 
-     * @returns {void}
-     */
     preload() {
         setupAssetPaths(this);
 
         const sim_config = this.scene.settings.data.sim_config;
-        const npc_list = this.cache.json.get('npc_list')
+        const npc_list = this.cache.json.get('npc_list');
 
-        let texture = npc_list[sim_config["player"]['character']]
+        let texture = npc_list[sim_config.player.character];
         this.loadCharacterAtlas(this.player_name, texture);
 
         for (const npc of this.npc_names) {
-            texture = npc_list[sim_config["npcs"][npc]['character']]
+            texture = npc_list[sim_config.npcs[npc].character];
             this.loadCharacterAtlas(npc, texture);
         }
     }
 
-    /**
-     * Sets up the game world, including the tilemap, NPCs, camera, and input handling.
-     * 
-     * @returns {void}
-     */
     create() {
         this.map = this.make.tilemap({ key: "map" });
         this.addTileSet(this.map);
 
         const sim_config = this.scene.settings.data.sim_config;
-        const { player, npcs } = this.scene.settings.data.sim_config;
+        const { player, npcs } = sim_config;
         const spawn_details = this.getSpawnDetails(player, npcs);
 
         this.initializeNPCs(spawn_details);
@@ -95,39 +150,58 @@ export class Game extends Scene {
         EventBus.emit('current-scene-ready', this);
         this.addOverlayUI();
         this.addBottomUI();
-        this.changeCameraView();
+        this.setCameraView();
     }
 
     addOverlayUI() {
         const centerX = this.scale.width / 2;
-        const centerY = this.scale.height / 2;
-        
-        // Define the width of the loading bar (80% of the screen width)
-        const barWidth =  this.scale.width;
-        
-        // Create a semi-transparent background panel
-        const uiPanel = this.add.rectangle(centerX, 40, barWidth, 120, 0x000000, 0.85).setScrollFactor(0);
-        
-        // Add text label on top of the panel
-        const uiText = this.add.text(centerX - 0.9*centerX, 25, this.map_name, {
-            fontSize: "48px",
-            fill: "#ffffff"
-        }).setScrollFactor(0);
+        const config = UI_CONFIG.OVERLAY;
+
+        // Create UI panel
+        const uiPanel = this.add.rectangle(
+            centerX,
+            config.PANEL.Y_POSITION,
+            this.scale.width * config.PANEL.WIDTH_RATIO,
+            config.PANEL.HEIGHT,
+            0x000000,
+            config.PANEL.ALPHA
+        ).setScrollFactor(0);
+
+        // Add map name text
+        const uiText = this.add.text(
+            centerX - centerX * config.TEXT.OFFSET_X,
+            25,
+            this.map_name,
+            {
+                fontSize: config.TEXT.FONT_SIZE,
+                fill: config.TEXT.COLOR
+            }
+        ).setScrollFactor(0);
 
         // Add clock
-        this.ui_clock = this.add.text(centerX + 0.1 * centerX, 10, `Date: ${this.game_date} | Clock: ${this.game_time} | Step: ${this.clock}`, {
-            fontSize: "24px",
-            fill: "#ffffff",
-            fontStyle: 'bold',
-        }).setScrollFactor(0);
-    
+        this.ui_clock = this.add.text(
+            centerX + centerX * config.CLOCK.OFFSET_X,
+            10,
+            `Date: ${this.game_date} | Clock: ${this.game_time} | Step: ${this.clock}`,
+            {
+                fontSize: config.CLOCK.FONT_SIZE,
+                fill: config.CLOCK.COLOR,
+                fontStyle: config.CLOCK.STYLE
+            }
+        ).setScrollFactor(0);
+
         // Add restart button
-        const restartButton = this.add.text(centerX + 0.8 * centerX, 50, "Restart", {
-            fontSize: "20px",
-            fill: "#ff0000",
-            backgroundColor: "#ffffff",
-            padding: { left: 10, right: 10, top: 5, bottom: 5 }
-        })
+        const restartButton = this.add.text(
+            centerX + centerX * config.BUTTONS.RESTART.OFFSET_X,
+            50,
+            "Restart",
+            {
+                fontSize: config.BUTTONS.RESTART.FONT_SIZE,
+                fill: config.BUTTONS.RESTART.COLOR,
+                backgroundColor: config.BUTTONS.RESTART.BG_COLOR,
+                padding: config.BUTTONS.RESTART.PADDING
+            }
+        )
         .setInteractive({ useHandCursor: true })
         .setScrollFactor(0)
         .on("pointerdown", async () => {
@@ -135,158 +209,191 @@ export class Game extends Scene {
             this.socket.emit("server.restart");
 
             console.log("Restarting in 5 seconds...");
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Sleep for 1 seconds
-
+            await new Promise(resolve => setTimeout(resolve, 1000));
             window.location.reload();
         });
 
-        
-        // Create a dropdown for selecting the camera
-        let cam = this.camara_id == -1 ? 0 : this.camara_id
-        const cameraDropdown = this.add.text(centerX + 0.6*centerX, 50, `Camera: ${cam}`, {
-            fontSize: "20px",
-            fill: "#ffffff",
-            backgroundColor: "#0000ff",
-            padding: { left: 10, right: 10, top: 5, bottom: 5 }
-        }).setInteractive({ useHandCursor: true }).setScrollFactor(0);
-        
-        // Create a simple function to change camera
-        cameraDropdown.on('pointerdown', () => {
+        // Add camera dropdown
+        let cam = this.camara_id == -1 ? 0 : this.camara_id;
+        const cameraDropdown = this.add.text(
+            centerX + centerX * config.BUTTONS.CAMERA.OFFSET_X,
+            50,
+            `Camera: ${cam}`,
+            {
+                fontSize: config.BUTTONS.CAMERA.FONT_SIZE,
+                fill: config.BUTTONS.CAMERA.COLOR,
+                backgroundColor: config.BUTTONS.CAMERA.BG_COLOR,
+                padding: config.BUTTONS.CAMERA.PADDING
+            }
+        )
+        .setInteractive({ useHandCursor: true })
+        .setScrollFactor(0)
+        .on('pointerdown', () => {
             this.changeCameraView();
             cameraDropdown.setText(`Camera: ${this.camara_id}`);
         });
 
-        // NPC Status
-        const npc_status = this.add.text(centerX + 0.38 * centerX, 50, "NPC Status", {
-            fontSize: "20px",
-            fill: "#ff0000",
-            backgroundColor: '#ffcc00',
-            padding: { left: 10, right: 10, top: 5, bottom: 5 }
-        })
+        // Add NPC status button
+        const npcStatus = this.add.text(
+            centerX + centerX * config.BUTTONS.NPC_STATUS.OFFSET_X,
+            50,
+            "NPC Status",
+            {
+                fontSize: config.BUTTONS.NPC_STATUS.FONT_SIZE,
+                fill: config.BUTTONS.NPC_STATUS.COLOR,
+                backgroundColor: config.BUTTONS.NPC_STATUS.BG_COLOR,
+                padding: config.BUTTONS.NPC_STATUS.PADDING
+            }
+        )
         .setInteractive({ useHandCursor: true })
         .setScrollFactor(0);
-        
-        // LLM Logs
-        const llm_status = this.add.text(centerX + 0.18 * centerX, 50, "LLM Logs", {
-            fontSize: "20px",
-            fill: '#ffffff',
-            backgroundColor: "#ff0000",
-            padding: { left: 10, right: 10, top: 5, bottom: 5 }
-        })
+
+        // Add LLM logs button
+        const llmStatus = this.add.text(
+            centerX + centerX * config.BUTTONS.LLM_LOGS.OFFSET_X,
+            50,
+            "LLM Logs",
+            {
+                fontSize: config.BUTTONS.LLM_LOGS.FONT_SIZE,
+                fill: config.BUTTONS.LLM_LOGS.COLOR,
+                backgroundColor: config.BUTTONS.LLM_LOGS.BG_COLOR,
+                padding: config.BUTTONS.LLM_LOGS.PADDING
+            }
+        )
         .setInteractive({ useHandCursor: true })
         .setScrollFactor(0);
-    
-        // Group UI elements into a container
-        const uiContainer = this.add.container(0, 0, [uiPanel, uiText, this.ui_clock, restartButton, cameraDropdown, npc_status, llm_status]);
-        uiContainer.setDepth(1000); // Ensure it renders above everything else
+
+        // Group all UI elements
+        this.add.container(0, 0, [
+            uiPanel, 
+            uiText, 
+            this.ui_clock, 
+            restartButton, 
+            cameraDropdown, 
+            npcStatus, 
+            llmStatus
+        ]).setDepth(1000);
     }
 
     addBottomUI() {
         const centerX = this.scale.width / 2;
-        const centerY = this.scale.height * 0.925; // UI panel position
-    
-        // Define panel dimensions
-        const barWidth = this.scale.width * 0.9;
-        const barHeight = 100;
-        const borderThickness = 4;
-    
-        // Create border rectangle
-        const border = this.add.rectangle(0, 0, barWidth + borderThickness, barHeight + borderThickness, 0xffffff);
-    
-        // Create semi-transparent background panel
-        this.bPanel = this.add.rectangle(0, 0, barWidth, barHeight, 0x000000, 0.85);
-    
+        const centerY = this.scale.height * UI_CONFIG.BOTTOM_UI.Y_POSITION_RATIO;
+        const config = UI_CONFIG.BOTTOM_UI;
+
+        // Create border
+        const border = this.add.rectangle(
+            0,
+            0,
+            this.scale.width * config.WIDTH_RATIO + config.BORDER_THICKNESS,
+            config.HEIGHT + config.BORDER_THICKNESS,
+            config.BORDER_COLOR
+        );
+
+        // Create panel
+        this.bPanel = this.add.rectangle(
+            0,
+            0,
+            this.scale.width * config.WIDTH_RATIO,
+            config.HEIGHT,
+            config.PANEL_COLOR,
+            config.PANEL_ALPHA
+        );
+
         // Determine character sprite
         const charSpriteKey = (this.camara_id === 0 || this.camara_id === -1) 
             ? this.player_name 
             : this.npc_names[this.camara_id - 1];
-    
-        // Create and position the character sprite inside the panel (relative positioning)
+
+        // Add character sprite
         this.npcSprite = this.add.sprite(
-            -barWidth / 2 + 50, // Positioned inside the panel (left side)
-            0, // Centered vertically in the UI panel
+            this.scale.width * config.WIDTH_RATIO * config.CHARACTER.X_OFFSET + config.CHARACTER.SPRITE_OFFSET,
+            config.CHARACTER.Y_OFFSET,
             charSpriteKey,
             "down"
-        ).setScale(3).setOrigin(0.5, 0.5);
+        )
+        .setScale(config.CHARACTER.SCALE)
+        .setOrigin(0.5, 0.5);
 
-        this.charSpriteName  = this.add.text(-barWidth / 2 + 100, -30, `${charSpriteKey}`, {
-            fontSize: "24px",
-            fill: "#ffffff",
-            fontStyle: 'bold',
-        }).setScrollFactor(0);
+        // Add character name
+        this.charSpriteName = this.add.text(
+            this.scale.width * config.WIDTH_RATIO * config.CHARACTER.X_OFFSET + config.CHARACTER.NAME_OFFSET,
+            -30,
+            charSpriteKey,
+            {
+                fontSize: config.CHARACTER.NAME_FONT,
+                fill: config.CHARACTER.COLOR,
+                fontStyle: config.CHARACTER.STYLE
+            }
+        ).setScrollFactor(0);
 
-        this.charSpriteStatus  = this.add.text(-barWidth / 2 + 120, 10, `${this.npcs[charSpriteKey].current_activity} ${this.npcs[charSpriteKey].pronunciation}`, {
-            fontSize: "24px",
-            fill: "#ffffff",
-            fontStyle: 'bold',
-        }).setScrollFactor(0);
-    
-        // Group UI elements into a container
-        const uiContainer = this.add.container(centerX, centerY, [border, this.bPanel, this.npcSprite, this.charSpriteName, this.charSpriteStatus]);
-        uiContainer.setDepth(1000); // Ensure it renders above other elements
-    
-        // Make sure the UI stays fixed
-        uiContainer.setScrollFactor(0);
+        // Add character status
+        this.charSpriteStatus = this.add.text(
+            this.scale.width * config.WIDTH_RATIO * config.CHARACTER.X_OFFSET + config.CHARACTER.STATUS_OFFSET,
+            10,
+            `${this.npcs[charSpriteKey].current_activity} ${this.npcs[charSpriteKey].pronunciation}`,
+            {
+                fontSize: config.CHARACTER.STATUS_FONT,
+                fill: config.CHARACTER.COLOR,
+                fontStyle: config.CHARACTER.STYLE
+            }
+        ).setScrollFactor(0);
+
+        // Group all bottom UI elements
+        this.add.container(centerX, centerY, [
+            border,
+            this.bPanel,
+            this.npcSprite,
+            this.charSpriteName,
+            this.charSpriteStatus
+        ])
+        .setDepth(1000)
+        .setScrollFactor(0);
     }
-    
-    /**
-     * Change the camera view to either the player or an NPC.
-     *
-     * @returns {void}
-     */
-    changeCameraView() {
+
+    setCameraView() {
         const camera = this.cameras.main;
-
-        // Ensure npcSprite exists before proceeding
-        if (!this.npcSprite) {
-            console.error("npcSprite is undefined! Make sure addBottomUI() is called before changing the camera view.");
-            return;
-        }
-
-        // Cycle through player and NPCs
-        this.camara_id = (this.camara_id + 1) % (this.npc_names.length + 1);
-
         let newTexture = null;
 
         if (this.camara_id === 0) {
-            // Set camera to follow the player
             const player = this.npcs[this.player_name];
             if (player) {
                 camera.startFollow(player.character);
                 newTexture = this.player_name;
             }
         } else {
-            // Set camera to follow the NPC
             const npc_name = this.npc_names[this.camara_id - 1];
             const npc = this.npcs[npc_name];
-
             if (npc) {
                 camera.startFollow(npc.character);
                 newTexture = npc_name;
             }
         }
 
-        // Safely update npcSprite texture
         if (newTexture) {
-            this.npcSprite.setTexture(newTexture,"down");
-            this.charSpriteName.setText(newTexture)
-            this.charSpriteStatus.setText(`${this.npcs[newTexture].current_activity} ${this.npcs[newTexture].pronunciation}`)
+            this.npcSprite.setTexture(newTexture, "down");
+            this.charSpriteName.setText(newTexture);
+            this.charSpriteStatus.setText(
+                `${this.npcs[newTexture].current_activity} ${this.npcs[newTexture].pronunciation}`
+            );
         } else {
             console.warn("Invalid texture detected:", newTexture);
         }
     }
 
+    changeCameraView() {
+        if (!this.npcSprite) {
+            console.error("npcSprite is undefined!");
+            return;
+        }
 
-    /**
-     * Updates player and NPC movements and handles animations based on input.
-     * 
-     * @returns {void}
-     */
+        this.camara_id = (this.camara_id + 1) % (this.npc_names.length + 1);
+        this.setCameraView()
+    }
+
     update() {
         if (!this.update_frame) return;
 
-        const res = tick(this)
-
+        const res = tick(this);
         this.socket.emit("ui.tick", res);
         this.update_frame = false;
 
@@ -295,7 +402,7 @@ export class Game extends Scene {
         const speed = playerPersona.move_speed;
         const cursors = this.cursors;
     
-        player.setVelocity(0); // Reset velocity
+        player.setVelocity(0);
     
         if (cursors.left.isDown) {
             this.movePlayer(player, playerPersona, 'left', -speed, 0);
@@ -310,29 +417,13 @@ export class Game extends Scene {
             player.setFrame(`${playerPersona.direction}-walk.001`);
         }
     }
-    
-    /**
-     * Moves the player in the specified direction and plays the appropriate animation.
-     * 
-     * @param {Phaser.GameObjects.Sprite} player - The player object.
-     * @param {Persona} persona - The persona instance for the player.
-     * @param {string} direction - The direction to move ("left", "right", etc.).
-     * @param {number} velocityX - Velocity along the X-axis.
-     * @param {number} velocityY - Velocity along the Y-axis.
-     * @returns {void}
-     */
+
     movePlayer(player, persona, direction, velocityX, velocityY) {
         player.setVelocity(velocityX * 160, velocityY * 160);
         persona.direction = direction;
         player.anims.play(`${persona.name}-${direction}-walk`, true);
     }
 
-    /**
-     * Creates and initializes NPCs, adding them to the scene with their associated animations and data.
-     * 
-     * @param {Object} npcs_details - A mapping of NPC names to their details.
-     * @returns {void}
-     */
     initializeNPCs(npcs_details) {
         const anims = this.anims;
     
@@ -353,21 +444,10 @@ export class Game extends Scene {
         this.npcs[this.player_name].current_activity = "Playing";
     }
 
-    /**
-     * Sets up keyboard input controls.
-     * 
-     * @returns {void}
-     */
     setupInput() {
         this.cursors = this.input.keyboard.createCursorKeys();
     }
 
-    /**
-     * Adds tilesets and layers to the map and configures collision handling.
-     * 
-     * @param {Phaser.Tilemaps.Tilemap} map - The tilemap for the scene.
-     * @returns {void}
-     */
     addTileSet(map) {
         const tilesets = {
             blocks: map.addTilesetImage("blocks", "blocks_1"),
@@ -417,31 +497,15 @@ export class Game extends Scene {
         });
 
         this.collisionsLayer = map.createLayer("Collisions", tilesets.blocks, 0, 0);
-        //this.collisionsLayer.setCollisionByProperty({ collide: true });
-
         this.collisionsLayer.setDepth(-1);
         map.getLayer("Foreground L1").tilemapLayer.setDepth(2);
         map.getLayer("Foreground L2").tilemapLayer.setDepth(2);
     }
 
-    /**
-     * Loads a texture atlas for a character.
-     * 
-     * @param {string} characterName - The name of the character.
-     * @param {string} texturePath - The relative path to the texture file.
-     * @returns {void}
-     */
     loadCharacterAtlas(characterName, texturePath) {
         this.load.atlas(characterName, `characters/${texturePath}`, 'characters/atlas.json');
     }
 
-    /**
-     * Generates spawn details for the player and NPCs.
-     *
-     * @param {Object} player - The player object containing status and location.
-     * @param {Object} npcs - An object mapping NPC names to their respective data.
-     * @returns {Object} An object containing spawn details for the player and NPCs.
-     */
     getSpawnDetails(player, npcs) {
         return {
             [this.player_name]: {
@@ -459,5 +523,4 @@ export class Game extends Scene {
             ]))
         };
     }
-
 }
