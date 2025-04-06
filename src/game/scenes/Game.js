@@ -96,7 +96,7 @@ export class Game extends Scene {
         this.clock = 0;
         this.update_frame = true;
         this.spawn = null;
-        this.camara_id = 2;
+        this.camara_id = 1;
         this.map = null;
         this.ui_clock = null;
         this.npcSprite = null;

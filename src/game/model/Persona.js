@@ -377,7 +377,6 @@ export class Persona {
         
         if (this.character) {
             this.character.setVelocity(0, 0);
-            this.character.anims?.stop();
         }
         
         if (this.movementInterval) {
