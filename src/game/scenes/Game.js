@@ -350,31 +350,33 @@ export class Game extends Scene {
         .setScrollFactor(0);
     }
 
-    setCameraView() {
-        const camera = this.cameras.main;
+    getCameraTexture() {
         let newTexture = null;
 
         if (this.camara_id === 0) {
-            const player = this.npcs[this.player_name];
-            if (player) {
-                camera.startFollow(player.character);
-                newTexture = this.player_name;
-            }
+            newTexture = this.player_name;
         } else {
-            const npc_name = this.npc_names[this.camara_id - 1];
-            const npc = this.npcs[npc_name];
-            if (npc) {
-                camera.startFollow(npc.character);
-                newTexture = npc_name;
-            }
+            newTexture = this.npc_names[this.camara_id - 1];
         }
+        return newTexture
+    }
+
+    setActivity(newTexture) {
+        this.charSpriteStatus.setText(
+            `${this.npcs[newTexture].current_activity} ${this.npcs[newTexture].pronunciation}`
+        ); 
+    }
+
+    setCameraView() {
+        const camera = this.cameras.main;
+        let newTexture = this.getCameraTexture();
 
         if (newTexture) {
             this.npcSprite.setTexture(newTexture, "down");
             this.charSpriteName.setText(newTexture);
-            this.charSpriteStatus.setText(
-                `${this.npcs[newTexture].current_activity} ${this.npcs[newTexture].pronunciation}`
-            );
+            this.setActivity(newTexture)
+            const npc = this.npcs[newTexture];
+            camera.startFollow(npc.character);
         } else {
             console.warn("Invalid texture detected:", newTexture);
         }
@@ -395,6 +397,8 @@ export class Game extends Scene {
 
         const res = tick(this);
         this.socket.emit("ui.tick", res);
+        const texture = this.getCameraTexture();
+        this.setActivity(texture)
         this.update_frame = false;
 
         const playerPersona = this.npcs[this.player_name];

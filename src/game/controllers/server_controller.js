@@ -94,8 +94,7 @@ export const tick = (scene) => {
         const npc = scene.npcs[npc_name];
         acc[npc_name] = {
             position: npc?.getPosition() || null,
-            activity: npc?.current_activity || null,
-            steps_remaining: 0
+            state: npc?.getActivity() || null
         };
         return acc;
     }, {});
@@ -105,8 +104,7 @@ export const tick = (scene) => {
         npc_status,
         player_status: {
             position: scene.npcs[scene.player_name]?.getPosition() || null,
-            activity: null,
-            steps_remaining: 0
+            state: null
         }
     };
 };

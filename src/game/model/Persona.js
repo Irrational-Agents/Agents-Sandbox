@@ -249,15 +249,18 @@ export class Persona {
         this.pronunciation = "👟";
         this.pronunciation_text?.setText(this.pronunciation);
 
-        if (!update.path?.length) {
+        if (update.path == null) {
             update.path = this.path
+        } else {
+            this.path = update.path
         }
 
-        this.path = update.path
+        if(this.path.length == 0) {
+            return true;
+        }
 
         // Process first movement step in sequence
         let direction = this.path.shift()
-        console.log(direction)
             
         try {
             await this.executeMovement(direction);
@@ -341,7 +344,6 @@ export class Persona {
         const currentTile = this.getCurrentTile();
         
         if (currentTile.x !== this.lastTile.x || currentTile.y !== this.lastTile.y) {
-            console.log(currentTile)
             this.handleMovementComplete();
         }
     }
@@ -406,6 +408,31 @@ export class Persona {
         this.pronunciation_text?.setText(update.emotion);
         this.current_activity = "Emoting";
         return true;
+    }
+
+    getActivity() {
+        switch (this.current_activity) {
+            case "move":
+                return {
+                    "activity": this.current_activity,
+                    "steps_remaining": this.path?.length
+                };
+                
+            case "speak":
+                return {
+                    "activity": this.current_activity,
+                };
+                
+            case "emote":
+                return {
+                    "activity": this.current_activity,
+                };
+                
+            default:
+                return {
+                    "activity": "free",
+                };
+        }
     }
 
     /**
