@@ -76,6 +76,38 @@ const UI_CONFIG = {
             COLOR: '#ffffff',
             STYLE: 'bold'
         }
+    },
+    NPC_STATS: {
+        WIDTH: 400,
+        HEIGHT: 500,
+        PANEL_COLOR: 0x000000,
+        PANEL_ALPHA: 0.9,
+        BORDER_COLOR: 0xffffff,
+        BORDER_THICKNESS: 2,
+        TITLE: {
+            TEXT: "NPC Stats",
+            FONT_SIZE: '32px',
+            COLOR: '#ffffff',
+            OFFSET_Y: 20
+        },
+        STATS: {
+            FONT_SIZE: '20px',
+            COLOR: '#ffffff',
+            LINE_HEIGHT: 30,
+            OFFSET_X: 20,
+            OFFSET_Y: 70,
+            PROPERTY_WIDTH: 150
+        },
+        CLOSE_BUTTON: {
+            TEXT: "X",
+            FONT_SIZE: '24px',
+            COLOR: '#ffffff',
+            BG_COLOR: '#ff0000',
+            OFFSET_X: 180,
+            OFFSET_Y: 15,
+            WIDTH: 30,
+            HEIGHT: 30
+        }
     }
 };
 
@@ -104,6 +136,8 @@ export class Game extends Scene {
         this.charSpriteName = null;
         this.charSpriteStatus = null;
         this.socket = null;
+        this.npcStatsPanel = null;
+        this.isNPCStatsVisible = true;
     }
 
     init() {
@@ -151,6 +185,7 @@ export class Game extends Scene {
         this.addOverlayUI();
         this.addBottomUI();
         this.setCameraView();
+        this.showNPCStats();
     }
 
     addOverlayUI() {
@@ -246,7 +281,8 @@ export class Game extends Scene {
             }
         )
         .setInteractive({ useHandCursor: true })
-        .setScrollFactor(0);
+        .setScrollFactor(0)
+        .on('pointerdown', () => this.toggleNPCStats());
 
         // Add LLM logs button
         const llmStatus = this.add.text(
@@ -350,6 +386,86 @@ export class Game extends Scene {
         .setScrollFactor(0);
     }
 
+    toggleNPCStats() {
+        if (this.isNPCStatsVisible) {
+            this.hideNPCStats();
+        } else {
+            this.showNPCStats();
+        }
+        this.isNPCStatsVisible = !this.isNPCStatsVisible;
+    }
+
+    showNPCStats() {
+        if (this.npcStatsPanel) {
+            this.npcStatsPanel.setVisible(true);
+            return;
+        }
+
+        const config = UI_CONFIG.NPC_STATS;
+        const centerX = this.scale.width / 2;
+        const centerY = this.scale.height / 2;
+
+        // Create panel
+        const panel = this.add.rectangle(
+            0, 0,
+            config.WIDTH,
+            config.HEIGHT,
+            config.PANEL_COLOR,
+            config.PANEL_ALPHA
+        ).setStrokeStyle(config.BORDER_THICKNESS, config.BORDER_COLOR);
+
+        // Add title
+        const title = this.add.text(
+            0, -centerY + config.TITLE.OFFSET_Y,
+            config.TITLE.TEXT,
+            {
+                fontSize: config.TITLE.FONT_SIZE,
+                fill: config.TITLE.COLOR
+            }
+        ).setOrigin(0.5, 0.5);
+
+        // Add close button
+        const closeButton = this.add.rectangle(
+            config.WIDTH / 2 - config.CLOSE_BUTTON.OFFSET_X,
+            -centerY + config.CLOSE_BUTTON.OFFSET_Y,
+            config.CLOSE_BUTTON.WIDTH,
+            config.CLOSE_BUTTON.HEIGHT,
+            0xff0000
+        )
+        .setInteractive()
+        .on('pointerdown', () => this.toggleNPCStats());
+
+        const closeText = this.add.text(
+            closeButton.x, closeButton.y,
+            config.CLOSE_BUTTON.TEXT,
+            {
+                fontSize: config.CLOSE_BUTTON.FONT_SIZE,
+                fill: config.CLOSE_BUTTON.COLOR
+            }
+        ).setOrigin(0.5, 0.5);
+
+        // Create scrollable content
+        const scrollPanel = this.add.container(0, 0);
+        const mask = this.add.rectangle(
+            0, 0,
+            config.WIDTH - 20,
+            config.HEIGHT - 100,
+            0x000000, 0
+        ).setOrigin(0.5, 0);
+        scrollPanel.setMask(new Phaser.Display.Masks.GeometryMask(this, mask));
+
+        // Add NPC stats
+        this.addNPCStats(scrollPanel, config);
+
+        // Create container for all elements
+        this.npcStatsPanel = this.add.container(centerX, centerY, [
+            panel,
+            title,
+            closeButton,
+            closeText,
+        ]).setDepth(2000);
+    }
+
     getCameraTexture() {
         let newTexture = null;
 
@@ -390,6 +506,70 @@ export class Game extends Scene {
 
         this.camara_id = (this.camara_id + 1) % (this.npc_names.length + 1);
         this.setCameraView()
+    }
+
+    addNPCStats(container, config) {
+        let yOffset = 0;
+        const statConfig = config.STATS;
+
+        Object.entries(this.npcs).forEach(([name, npc]) => {
+            if (name === this.player_name) return; // Skip player
+
+            // Add NPC name
+            const nameText = this.add.text(
+                -config.WIDTH/2 + statConfig.OFFSET_X,
+                yOffset,
+                `${name}:`,
+                {
+                    fontSize: statConfig.FONT_SIZE,
+                    fill: '#ffcc00',
+                    fontStyle: 'bold'
+                }
+            );
+            container.add(nameText);
+            yOffset += statConfig.LINE_HEIGHT;
+
+            // Add NPC stats
+            const stats = [
+                `Activity: ${npc.current_activity}`,
+                `Location: (${Math.round(npc.character.x)}, ${Math.round(npc.character.y)})`,
+                `Status: ${npc.pronunciation}`,
+                `Direction: ${npc.direction}`,
+                `Speed: ${npc.move_speed}`,
+                `Path: ${npc.current_path ? npc.current_path.length : 0} points`
+            ];
+
+            stats.forEach(stat => {
+                const statText = this.add.text(
+                    -config.WIDTH/2 + statConfig.OFFSET_X + statConfig.PROPERTY_WIDTH,
+                    yOffset,
+                    stat,
+                    {
+                        fontSize: statConfig.FONT_SIZE,
+                        fill: statConfig.COLOR
+                    }
+                );
+                container.add(statText);
+                yOffset += statConfig.LINE_HEIGHT;
+            });
+
+            // Add separator
+            yOffset += statConfig.LINE_HEIGHT / 2;
+        });
+
+        // Make content scrollable
+        this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
+            if (this.isNPCStatsVisible) {
+                container.y += deltaY * 0.1;
+                container.y = Phaser.Math.Clamp(container.y, -yOffset + config.HEIGHT - 100, 0);
+            }
+        });
+    }
+
+    hideNPCStats() {
+        if (this.npcStatsPanel) {
+            this.npcStatsPanel.setVisible(false);
+        }
     }
 
     update() {
