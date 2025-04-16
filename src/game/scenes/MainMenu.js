@@ -17,8 +17,9 @@ export class MainMenu extends Scene {
         this.centerY = this.scale.height / 2;
 
         this.sim_fork = "thissim"
+        this.host = 'http://10.12.1.183:8080'
 
-        this.socket = io('http://127.0.0.1:8080');
+        this.socket = io(this.host);
         
         this.socket.on('connect', () => {
             console.log('Connected to the Socket.IO server!');
@@ -49,7 +50,7 @@ export class MainMenu extends Scene {
         }).setOrigin(0.5);
 
         // Status Text
-        this.statusText = this.add.text(this.centerX, this.centerY, 'Waiting for Server on localhost:8080...', {
+        this.statusText = this.add.text(this.centerX, this.centerY, `Waiting for Server on ${this.host}...`, {
             fontSize: '38px',
             color: '#ffffff',
             fontStyle: 'bold',

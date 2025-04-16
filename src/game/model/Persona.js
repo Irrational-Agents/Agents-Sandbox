@@ -224,8 +224,8 @@ export class Persona {
                 case "move":
                     return await this.handleMoveUpdate(update);
                     
-                case "speak":
-                    return this.handleSpeechUpdate(update);
+                case "think":
+                    return this.handleThinkUpdate(update);
                     
                 case "emote":
                     return this.handleEmotionUpdate(update);
@@ -250,7 +250,7 @@ export class Persona {
         this.pronunciation_text?.setText(this.pronunciation);
 
         if (update.path == null) {
-            update.path = this.path
+            update.move_extra.path = this.path
         } else {
             this.path = update.path
         }
@@ -388,7 +388,7 @@ export class Persona {
     /**
      * Handles speech updates
      */
-    handleSpeechUpdate(update) {
+    handleThinkUpdate(update) {
         if (!update.message) return false;
         
         this.pronunciation = update.message;
