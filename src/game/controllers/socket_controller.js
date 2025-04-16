@@ -99,9 +99,10 @@ async function processNpcUpdates(scene, updates) {
  * @param {number} timeDelta - The time change in game steps
  */
 function processTimeUpdate(scene, timeDelta) {
+    scene.clock = timeDelta
     // Convert game time to minutes
     const [hours, minutes] = scene.game_time.split(":").map(Number);
-    let totalMinutes = Math.floor((scene.clock * timeDelta)/(scene.sec_per_step*6));
+    let totalMinutes = Math.floor((scene.clock)/(scene.sec_per_step*6));
 
     // Calculate new time
     const newHours = Math.floor(totalMinutes / TIME_CONFIG.MINUTES_IN_HOUR) % TIME_CONFIG.HOURS_IN_DAY;

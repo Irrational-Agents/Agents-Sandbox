@@ -49,6 +49,9 @@ export class Persona {
         this.direction = "down";
         this.movement_history = [spawn_point];
         this.movementInterval = null;
+        this.processing = "..."
+        this.engaging = '...'
+        this.directing = '...'
         
         // References
         this.anims = anims;
@@ -214,21 +217,28 @@ export class Persona {
      * Handles updates from the server/game logic
      */
     async doUpdates(update) {
+        console.log(update)
         if (!update || typeof update !== 'object') {
             console.warn('Invalid update received:', update);
             return false;
         }
 
         try {
-            switch (update.activity) {
+            switch (update.state.activity) {
                 case "move":
-                    return await this.handleMoveUpdate(update);
+                    return await this.handleMoveUpdate(update.state);
                     
                 case "think":
-                    return this.handleThinkUpdate(update);
-                    
+                    return await this.handleThinkUpdate(update.state);
+
+                case "chat":
+                    return await this.handleChatUpdate(update.state);
+
+                case "interact":
+                    return await this.handleInteractUpdate(update.state);
+
                 case "emote":
-                    return this.handleEmotionUpdate(update);
+                    return this.handleEmotionUpdate(update.state);
                     
                 default:
                     console.warn('Unknown activity type:', update.activity);
@@ -369,14 +379,23 @@ export class Persona {
         }
     }
 
-    /**
-     * Stops all movement and cleans up
-     */
     stopMovement() {
         this.isMoving = false;
         
+        // Clear all intervals
+        if (this.thinkIdleInterval) clearInterval(this.thinkIdleInterval);
+        if (this.chatIdleInterval) clearInterval(this.chatIdleInterval);
+        if (this.interactIdleInterval) clearInterval(this.interactIdleInterval);
+        
+        // Stop all tweens
+        this.scene.tweens.killTweensOf(this.character);
+        
         if (this.character) {
             this.character.setVelocity(0, 0);
+            // Play idle animation when stopping
+            if (this.character.anims && this.direction) {
+                this.character.anims.play(`${this.name}-${this.direction}-idle`, true);
+            }
         }
         
         if (this.movementInterval) {
@@ -386,20 +405,230 @@ export class Persona {
     }
 
     /**
-     * Handles speech updates
+     * Handles thinking updates with movement animation
      */
-    handleThinkUpdate(update) {
+    async handleThinkUpdate(update) {
         if (!update.description) return false;
+
+        // Clear any previous think state
+        if (this.thinkTimeout) clearTimeout(this.thinkTimeout);
+        this.stopMovement();
 
         this.current_activity = update.activity;
         this.pronunciation = "🤔";
         this.pronunciation_text?.setText(this.pronunciation);
         
-        this.pronunciation = update.message;
-        this.pronunciation_text?.setText(update.message);
-        this.current_activity = "Thinking";
+        this.processing = update.description;
+        this.scene.bottomUI.updateCharacterInfo();
+        
+        // Play thinking animation
+        await this.playThinkMovement();
+        
+        // Set timeout to clear thinking after delay
+        this.thinkTimeout = setTimeout(() => {
+        }, 5000); // Clear after 5 seconds
+        
         return true;
     }
+
+    /**
+     * Plays thinking movement animation
+     */
+    async playThinkMovement() {
+        const originalX = this.character.x;
+        const originalY = this.character.y;
+        
+        // Thinking animation - subtle swaying
+        const movements = [
+            { x: originalX, y: originalY - 3, duration: 1000 },
+            { x: originalX + 2, y: originalY - 1, duration: 800 },
+            { x: originalX - 2, y: originalY - 1, duration: 800 },
+            { x: originalX, y: originalY, duration: 1000 }
+        ];
+        
+        // Play animation sequence
+        for (const move of movements) {
+            if (this.current_activity !== "think") break; // Stop if state changed
+            await this.tweenMovement(move);
+        }
+        
+        // Continuous idle thinking animation
+        if (this.current_activity === "think") {
+            this.thinkIdleInterval = setInterval(() => {
+                if (this.current_activity !== "think") {
+                    clearInterval(this.thinkIdleInterval);
+                    return;
+                }
+                // Random subtle movements
+                this.scene.tweens.add({
+                    targets: this.character,
+                    x: originalX + (Math.random() * 4 - 2),
+                    y: originalY + (Math.random() * 2 - 1),
+                    duration: 2000,
+                    ease: 'Sine.easeInOut'
+                });
+            }, 2000);
+        }
+    }
+
+    /**
+     * Handles chat updates with movement timeout
+     */
+    async handleChatUpdate(update) {
+        if (!update.description) return false;
+
+        this.current_activity = update.activity;
+        this.pronunciation = "💬";
+        this.pronunciation_text?.setText(this.pronunciation);
+        
+        const message = `To ${update.description[1]} - ${update.description[2]}`;
+        this.engaging = message;
+        this.scene.bottomUI.updateCharacterInfo();
+        
+        // Add subtle movement during chat
+        await this.playChatMovement();
+        
+        return true;
+    }
+
+    /**
+     * Plays subtle movement animation during chat
+     */
+    async playChatMovement() {
+        const originalX = this.character.x;
+        const originalY = this.character.y;
+        const duration = 3000; // 3 seconds of chat animation
+        
+        // Small back-and-forth movement
+        const moveDistance = 5;
+        const movements = [
+            { x: originalX + moveDistance, y: originalY, duration: 500 },
+            { x: originalX - moveDistance, y: originalY, duration: 500 },
+            { x: originalX, y: originalY, duration: 500 }
+        ];
+        
+        // Play animation sequence
+        for (const move of movements) {
+            await this.tweenMovement(move);
+        }
+        
+        // Random idle movements during remaining time
+        const remainingTime = duration - 1500;
+        if (remainingTime > 0) {
+            await new Promise(resolve => {
+                this.chatTimeout = setTimeout(() => {
+                    this.returnToOriginalPosition(originalX, originalY);
+                    resolve();
+                }, remainingTime);
+            });
+        }
+    }
+
+    /**
+     * Smooth tween movement helper
+     */
+    tweenMovement({x, y, duration}) {
+        return new Promise(resolve => {
+            this.scene.tweens.add({
+                targets: this.character,
+                x: x,
+                y: y,
+                duration: duration,
+                ease: 'Sine.easeInOut',
+                onComplete: resolve
+            });
+        });
+    }
+
+    /**
+     * Returns character to original position
+     */
+    returnToOriginalPosition(originalX, originalY) {
+        this.scene.tweens.add({
+            targets: this.character,
+            x: originalX,
+            y: originalY,
+            duration: 300,
+            ease: 'Back.easeOut'
+        });
+    }
+
+    /**
+     * Handles interaction updates with timeout and movement animation
+     */
+    async handleInteractUpdate(update) {
+        if (!update.description) return false;
+
+        // Clear any previous interaction state
+        if (this.interactTimeout) clearTimeout(this.interactTimeout);
+        this.stopMovement();
+
+        this.current_activity = update.activity;
+        this.pronunciation = "🤝";
+        this.pronunciation_text?.setText(this.pronunciation);
+        
+        const message = `${update.description}`;
+        this.directing = message;
+        this.scene.bottomUI.updateCharacterInfo();
+        
+        // Play interaction animation
+        await this.playInteractMovement();
+        
+        // Set timeout to clear interaction after delay
+        this.interactTimeout = setTimeout(() => {
+        }, this.calculateInteractDuration(message)); // Dynamic duration based on message
+        
+        return true;
+    }
+
+    /**
+     * Plays interaction movement animation
+     */
+    async playInteractMovement() {
+        const originalX = this.character.x;
+        const originalY = this.character.y;
+        
+        // Interaction animation - purposeful movements
+        const movements = [
+            { x: originalX, y: originalY - 5, duration: 300 },
+            { x: originalX, y: originalY + 2, duration: 200 },
+            { x: originalX, y: originalY, duration: 100 }
+        ];
+        
+        // Play animation sequence
+        for (const move of movements) {
+            if (this.current_activity !== "interact") break;
+            await this.tweenMovement(move);
+        }
+        
+        // Continuous idle interaction animation
+        if (this.current_activity === "interact") {
+            this.interactIdleInterval = setInterval(() => {
+                if (this.current_activity !== "interact") {
+                    clearInterval(this.interactIdleInterval);
+                    return;
+                }
+                // Focused interaction movements
+                this.scene.tweens.add({
+                    targets: this.character,
+                    x: originalX + (Math.random() * 6 - 3),
+                    y: originalY + (Math.random() * 4 - 2),
+                    duration: 1200,
+                    ease: 'Sine.easeInOut'
+                });
+            }, 1200);
+        }
+    }
+
+    /**
+     * Calculates interaction display duration based on message length
+     */
+    calculateInteractDuration(message) {
+        const baseDuration = 2500; // 2.5 seconds minimum
+        const extraPerChar = 40; // 40ms per additional character
+        return baseDuration + (message.length * extraPerChar);
+    }
+
 
     /**
      * Handles emotion updates

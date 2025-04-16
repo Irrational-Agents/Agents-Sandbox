@@ -17,7 +17,7 @@ export class MainMenu extends Scene {
         this.centerY = this.scale.height / 2;
 
         this.sim_fork = "thissim"
-        this.host = 'http://localhost:8080'
+        this.host = `http://127.0.0.1:8080`
 
         this.socket = io(this.host);
         
