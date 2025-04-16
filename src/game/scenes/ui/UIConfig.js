@@ -68,6 +68,14 @@ export const UI_CONFIG = {
             STATUS_FONT: '24px',
             COLOR: '#ffffff',
             STYLE: 'bold'
+        },
+        THINKING: {
+            WIDTH: 800,
+            HEIGHT: 100,
+            OFFSET: 100,
+            FONT_SIZE: '16px',
+            COLOR: '#ffffff',
+            STYLE: 'italic'
         }
     },
     NPC_STATS: {

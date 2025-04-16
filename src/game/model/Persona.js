@@ -389,11 +389,15 @@ export class Persona {
      * Handles speech updates
      */
     handleThinkUpdate(update) {
-        if (!update.message) return false;
+        if (!update.description) return false;
+
+        this.current_activity = update.activity;
+        this.pronunciation = "🤔";
+        this.pronunciation_text?.setText(this.pronunciation);
         
         this.pronunciation = update.message;
         this.pronunciation_text?.setText(update.message);
-        this.current_activity = "Speaking";
+        this.current_activity = "Thinking";
         return true;
     }
 
