@@ -395,10 +395,10 @@ export class Persona {
         
         if (this.character) {
             this.character.setVelocity(0, 0);
-            // Play idle animation when stopping
-            if (this.character.anims && this.direction) {
-                this.character.anims.play(`${this.name}-${this.direction}-idle`, true);
-            }
+            // // Play idle animation when stopping
+            // if (this.character.anims && this.direction) {
+            //     this.character.anims.play(`${this.name}-${this.direction}-walk.000`, true);
+            // }
         }
         
         if (this.movementInterval) {
@@ -425,11 +425,11 @@ export class Persona {
         this.scene.bottomUI.updateCharacterInfo();
         
         // Play thinking animation
-        await this.playThinkMovement();
+        this.playThinkMovement();
         
         // Set timeout to clear thinking after delay
         this.thinkTimeout = setTimeout(() => {
-        }, 5000); // Clear after 5 seconds
+        }, 500); // Clear after 5 seconds
         
         return true;
     }
@@ -575,7 +575,7 @@ export class Persona {
         this.scene.bottomUI.updateCharacterInfo();
         
         // Play interaction animation
-        await this.playInteractMovement();
+        this.playInteractMovement();
         
         // Set timeout to clear interaction after delay
         this.interactTimeout = setTimeout(() => {
@@ -627,7 +627,7 @@ export class Persona {
      * Calculates interaction display duration based on message length
      */
     calculateInteractDuration(message) {
-        const baseDuration = 2500; // 2.5 seconds minimum
+        const baseDuration = 250; // 2.5 seconds minimum
         const extraPerChar = 40; // 40ms per additional character
         return baseDuration + (message.length * extraPerChar);
     }
