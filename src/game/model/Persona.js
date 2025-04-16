@@ -258,9 +258,12 @@ export class Persona {
         this.current_activity = update.activity;
         this.pronunciation = "👟";
         this.pronunciation_text?.setText(this.pronunciation);
+        
+        this.directing = update.description;
+        this.scene.bottomUI.updateCharacterInfo();
 
         if (update.path == null) {
-            update.move_extra.path = this.path
+            update.path = this.path
         } else {
             this.path = update.path
         }

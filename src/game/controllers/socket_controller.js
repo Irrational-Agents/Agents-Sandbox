@@ -28,7 +28,8 @@ export const setupSocketRoutes = (socket, scene) => {
                 throw new Error('Invalid update data received');
             }
 
-            const { updates = {}, clock = 0 } = updateData;
+            const clock = updateData.clock;
+            const updates = updateData.updates;
             const response = tick(scene);
 
             if (clock === 0) {
@@ -99,6 +100,7 @@ async function processNpcUpdates(scene, updates) {
  * @param {number} timeDelta - The time change in game steps
  */
 function processTimeUpdate(scene, timeDelta) {
+    console.log(timeDelta)
     scene.clock = timeDelta
     // Convert game time to minutes
     const [hours, minutes] = scene.game_time.split(":").map(Number);
@@ -115,7 +117,7 @@ function processTimeUpdate(scene, timeDelta) {
 
     // Update scene properties
     scene.game_time = formatTime(newHours, newMinutes);
-    scene.clock += timeDelta;
+    scene.clock += 1;
 }
 
 /**
