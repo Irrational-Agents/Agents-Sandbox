@@ -21,32 +21,27 @@ export const setupSocketRoutes = (socket, scene) => {
      * @param {Object} updateData - Contains clock and NPC updates
      */
     socket.on("server.tick", async (updateData) => { 
-        console.log(`Data : ${JSON.stringify(updateData)}`)
+        console.log(`Data : ${JSON.stringify(updateData)}`);
 
         try {
             if (!updateData || typeof updateData !== 'object') {
                 throw new Error('Invalid update data received');
             }
 
-            const clock = updateData.clock;
             const updates = updateData.updates;
             const response = tick(scene);
 
-            if (clock === 0) {
-                // Initial tick - just send response
-                socket.emit("ui.tick", response);
-                return;
-            }
+            // Increment the clock
+            processTimeUpdate(scene);
 
-            // Process time and date updates
-            processTimeUpdate(scene, clock);
-            
             // Process NPC updates - now awaited
             await processNpcUpdates(scene, updates);
 
             // Update UI and enable next frame update
             updateClockDisplay(scene);
-            scene.update_frame = true;
+            if (scene.clock <= scene.total_steps){
+                scene.update_frame = true;
+            }
 
         } catch (error) {
             console.error('Error processing server tick:', error);
@@ -93,29 +88,30 @@ async function processNpcUpdates(scene, updates) {
     await Promise.all(updatePromises);
 }
 
-
 /**
  * Processes time and date updates for the game scene
  * @param {Phaser.Scene} scene - The game scene
- * @param {number} timeDelta - The time change in game steps
  */
-function processTimeUpdate(scene, timeDelta) {
-    scene.clock = timeDelta
-    // Convert game time to minutes
-    const totalMinutes = Math.floor((scene.clock)/(scene.steps_per_min*6));
+function processTimeUpdate(scene) {
+    // Increment the scene's clock by 1
+    scene.clock += 1;
 
-    // Calculate new time
+    // Prevent clock overflow
+    const maxClockValue = scene.steps_per_min * TIME_CONFIG.MINUTES_IN_HOUR * TIME_CONFIG.HOURS_IN_DAY * 6;
+    if (scene.clock >= maxClockValue) {
+        scene.clock %= maxClockValue; // Reset clock to avoid overflow
+        updateGameDate(scene); // Increment the date when a new day starts
+    }
+
+    // Convert game time to total minutes
+    const totalMinutes = Math.floor(scene.clock / (scene.steps_per_min));
+
+    // Calculate new hours and minutes
     const newHours = Math.floor(totalMinutes / TIME_CONFIG.MINUTES_IN_HOUR) % TIME_CONFIG.HOURS_IN_DAY;
     const newMinutes = totalMinutes % TIME_CONFIG.MINUTES_IN_HOUR;
 
-    // Update date if needed
-    if (Math.floor(totalMinutes / TIME_CONFIG.MINUTES_IN_HOUR) >= TIME_CONFIG.HOURS_IN_DAY) {
-        updateGameDate(scene);
-    }
-
     // Update scene properties
     scene.game_time = formatTime(newHours, newMinutes);
-    scene.clock += 1;
 }
 
 /**

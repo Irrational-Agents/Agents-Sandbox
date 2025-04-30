@@ -46,6 +46,7 @@ export class Game extends Scene {
         this.game_time = sim_config.start_time;
         this.steps_per_min = sim_config.steps_per_min;
         this.game_date = sim_config.start_date;
+        this.total_steps = sim_config.total_steps;
 
         this.socket = this.scene.settings.data.socket;
         setupSocketRoutes(this.socket, this);

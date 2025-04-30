@@ -24,37 +24,17 @@ export class MainMenu extends Scene {
         this.socket.on('connect', () => {
             console.log('Connected to the Socket.IO server!');
             this.connected = true;
-            
+
+            this.socket.emit("init", {
+                ...this.game.registry.get('customConfig')
+            });            
+
 
             // Init Route
             this.socket.on("init", (data) => {
                 console.log("Received init data", data);
-                this.sim_fork = Number(data)
-
-                const customConfig = this.game.registry.get('customConfig');
-
-                let npcs = {}
-                for (let i = 0; i < customConfig.npcList.length; i++) {
-                    npcs[customConfig.npcList[i].name] = customConfig.npcList[i]
-                }
-
-                const sim_config = {
-                    sim_id: this.sim_fork,
-                    sim_type: customConfig.sim_type,
-                    map_name: customConfig.map_name,
-                    steps_per_min: customConfig.steps_per_min,
-                    start_date: customConfig.start_date,
-                    start_time: customConfig.start_time,
-                    total_steps: customConfig.total_steps,
-                    end_time: customConfig.end_time,
-                    end_date: customConfig.end_date,
-                    npcs: npcs,
-                    player_enabled: customConfig.player_enabled,
-                    player_name: customConfig.player_name,
-                    npc_names: customConfig.npcList.map((npc) => npc.name)
-                }
-
-                saveSimForkConfig(this.sim_fork,JSON.stringify(sim_config))
+                this.sim_fork = data.sim_id;
+                saveSimForkConfig(this.sim_fork,JSON.stringify(data))
             });
         });
   

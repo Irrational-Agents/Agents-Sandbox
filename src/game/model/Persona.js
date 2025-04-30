@@ -257,36 +257,31 @@ export class Persona {
         this.current_activity = update.activity;
         this.pronunciation = "👟";
         this.pronunciation_text?.setText(this.pronunciation);
-        
+    
         this.directing = update.description;
         this.scene.bottomUI.updateCharacterInfo();
-
-        if (update.path == null) {
-            update.path = this.path
+    
+        if (!Array.isArray(update.path)) {
+            update.path = this.path ?? [];
         } else {
-            this.path = update.path
+            this.path = update.path;
         }
-
-        //console.log(`${this.name}(this.path):`, this.path.length);
-
-        if(this.path.length == 0) {
-            return true;
-        }
-
-        // Process first movement step in sequence
-        let direction = this.path.shift()
-            
+    
+        if (this.path.length === 0) return true;
+    
         try {
-            await this.executeMovement(direction);
+            while (this.path.length > 0) {
+                const direction = this.path.shift();
+                await this.executeMovement(direction);
+            }
         } catch (error) {
             console.error('Movement failed:', error);
             this.stopMovement();
             return false;
         }
-        
+    
         return true;
     }
-
     /**
      * Executes a single movement step
      */
@@ -297,6 +292,15 @@ export class Persona {
                 this.movementResolve = null;
                 resolve();
             };
+
+            const current = this.getCurrentTile();
+            switch (direction) {
+                case "up":    this.targetTile = { x: current.x,     y: current.y - 1 }; break;
+                case "down":  this.targetTile = { x: current.x,     y: current.y + 1 }; break;
+                case "left":  this.targetTile = { x: current.x - 1, y: current.y     }; break;
+                case "right": this.targetTile = { x: current.x + 1, y: current.y     }; break;
+                default:      this.targetTile = current;
+            }
 
             // Start the movement
             this.startMovement(direction);
@@ -377,7 +381,13 @@ export class Persona {
      */
     handleMovementComplete() {
         this.stopMovement();
-        
+        // Snap to target tile coordinates
+        if (this.targetTile) {
+            const snappedX = this.targetTile.x * this.tile_width + this.tile_width / 2;
+            const snappedY = this.targetTile.y * this.tile_width;
+            this.character.setPosition(snappedX, snappedY);
+        }
+
         if (this.movementResolve) {
             this.movementResolve();
         }

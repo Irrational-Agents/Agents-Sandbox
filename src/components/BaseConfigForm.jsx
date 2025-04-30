@@ -12,7 +12,7 @@ const BaseConfigForm = ({ onSubmit }) => {
   const [totalSteps, setTotalSteps] = useState(1000);
   const [endTime, setEndTime] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [replayId, setReplayId] = useState('');
+  const [replayId, setReplayId] = useState('sample');
   
 
   const isReplay = simType === 'replay';
