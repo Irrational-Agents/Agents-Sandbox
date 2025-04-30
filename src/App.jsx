@@ -1,32 +1,46 @@
-import { useRef } from 'react';
-import { PhaserGame } from './game/PhaserGame';
+import React, { useRef, useState } from 'react';
+import BaseConfigForm from './components/BaseConfigForm';
+import NPCManager from './components/NPCManager';
+import PhaserGameWrapper from './components/PhaserGameWrapper';
 
-/**
- * The main application component.
- * 
- * This component renders the `PhaserGame` component and manages the logic for scene transitions.
- * It uses a `useRef` hook to reference the `PhaserGame` instance.
- * 
- * @component
- * @returns {React.Element} The main application UI, containing the Phaser game.
- */
 function App() {
-  // Reference to the Phaser game instance.
-  const phaserRef = useRef();
+  const phaserRef = useRef(null);
+  const [baseConfig, setBaseConfig] = useState(null); // Step 1 config
+  const [finalConfig, setFinalConfig] = useState(null); // Step 2 complete config
 
-  /**
-   * Handles the logic to run when the scene changes in the game.
-   * 
-   * @param {Object} scene - The new scene that is activated.
-   * @returns {void}
-   */
-  const currentScene = (scene) => {
-    // Logic to run on scene change (e.g., updating UI, state, etc.)
-  }
+  const handleSceneChange = (scene) => {
+    console.log('Scene changed');
+  };
+
+  const handleBaseConfigSubmit = (formData) => {
+    if (formData.sim_type === 'replay') {
+      // Skip NPC config and go straight to final config
+      setFinalConfig(formData);
+    } else {
+      // Continue to NPCManager step
+      setBaseConfig(formData);
+    }
+  };
+
+  const handleNPCConfigSubmit = (npc_config) => {
+    setFinalConfig({ ...baseConfig, ...npc_config });
+  };
 
   return (
-    <div id="app">
-      <PhaserGame ref={phaserRef} currentActiveScene={currentScene}/>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 text-white p-6">
+      <h1 className="text-5xl font-extrabold mb-6 drop-shadow-lg">Agent Simulator</h1>
+
+      {!baseConfig && !finalConfig ? (
+        <BaseConfigForm onSubmit={handleBaseConfigSubmit} />
+      ) : !finalConfig ? (
+        <NPCManager baseConfig={baseConfig} onSubmit={handleNPCConfigSubmit} />
+      ) : (
+        <PhaserGameWrapper
+          finalConfig={finalConfig}
+          phaserRef={phaserRef}
+          handleSceneChange={handleSceneChange}
+        />
+      )}
     </div>
   );
 }

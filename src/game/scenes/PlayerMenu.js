@@ -24,18 +24,18 @@ export class PlayerMenu extends Scene {
         });
 
         this.createMenu(sim_config, spawn);
-        this.setupPlayer(sim_config, spawn);  // Separate function for player setup
+
+        if (sim_config['player_enabled']) {
+            this.setupPlayer(sim_config, spawn);
+        }
+        
         this.createPlayButton();
     }
 
     createMenu(sim_config, spawn) {
         const chars = [...sim_config['npc_names']];
 
-        for (const npc of sim_config['npcs']) {
-            if (chars.includes(npc.name)) {
-                this.npcs[npc.name] = npc;
-            }
-        }
+        this.npcs = sim_config['npcs'];
 
         let yOffset = 100;
 
@@ -181,7 +181,6 @@ export class PlayerMenu extends Scene {
     createPlayButton() {
         this.scene.settings.data.sim_config['npcs'] = this.npcs;
         this.scene.settings.data.sim_config['player'] = this.player;
-        this.scene.start('Game', { ...this.scene.settings.data });
         const playButton = this.add.text(1250, 650, 'Play', {
             fontSize: '48px',
             fill: '#ffffff',

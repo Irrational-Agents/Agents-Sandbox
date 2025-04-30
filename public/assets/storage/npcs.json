@@ -1,0 +1,225 @@
+[{
+  "name": "Kenta Takahashi",
+  "birthday": "2001-09-22",
+  "spawn": "apartment A:main room:sp-A",
+  "character": "C006",
+  "description": [
+    "Third-year Computer Science student at a local tech institute",
+    "Passionate about AI and emotional wellness technology",
+    "Currently building an AI chatbot for co-living communities",
+    "Lives in a shared apartment with access to study and collaboration spaces",
+    "Collaborates often with Hiroshi Watanabe on tech projects",
+    "Hosts weekly 'Tech Night' events to share ideas and build skills",
+    "Dreams of founding an AI startup that solves real-world problems"
+  ],  
+ "personality_traits": {
+    "openness": 8,
+    "conscientiousness": 9,
+    "extraversion": 6,
+    "agreeableness": 7,
+    "neuroticism": 4
+  },
+  "skills": [
+    { "skill": "Programming (Python, Java, C++)", "level": 8 },
+    { "skill": "Machine Learning", "level": 7 },
+    { "skill": "Data Analysis", "level": 6 },
+    { "skill": "English", "level": 6 }
+  ],
+  "goals": [
+    {
+      "long_term": "Start an AI company and contribute to solving global challenges through technology"
+    },
+    {
+      "mid_term": [
+        {
+          "description": "Complete and present the AI-powered chatbot project at the community showcase event",
+          "deadline": "2025-08-15"
+        }
+      ]
+    }
+  ],
+  "social_relationships": {
+    "Sakura Sato": { "relationship": "Girlfriend", "closeness": 9 },
+    "Yuriko Yamamoto": { "relationship": "Stranger", "closeness": 1 },
+    "Zhang San": { "relationship": "Community activity partner", "closeness": 6 } 
+  },
+  "important_memories": {
+    "favorite_programming_language": "Python",
+    "favorite_area_of_study": "Artificial Intelligence"
+  }
+},
+{
+  "name": "Sakura Sato",
+  "birthday": "2002-04-15",
+  "spawn": "Dorm for College:A room:sp-A",
+  "character": "C002",
+  "description": [
+    "Sakura Sato is a second-year student majoring in Japanese Literature at the local college",
+    "Sakura is particularly interested in contemporary literature and enjoys exploring new forms and methods of literary expression",
+    "Currently, Sakura is writing a short story themed around youth culture for her creative writing class",
+    "Sakura is taking classes in both literary theory and creative writing practice",
+    "Sakura lives in the college dormitory, sharing space with other students",
+    "Sakura's friend from her literature class often studies with her in the college library",
+    "Sakura enjoys intellectual conversations and discussing literary themes with her peers",
+    "Sakura is a member of the college's literary club, where she has made many friends",
+    "Sakura occasionally visits the campus cafe to write and find inspiration",
+    "Sakura's dream is to become a published writer and bring fresh perspectives to literature"
+  ],
+  "personality_traits": {
+    "openness": 9,
+    "conscientiousness": 7,
+    "extraversion": 5,
+    "agreeableness": 8,
+    "neuroticism": 6
+  },
+  "skills": [
+    { "skill": "Creative Writing", "level": 7 },
+    { "skill": "Literary Theory", "level": 6 },
+    { "skill": "Proofreading", "level": 5 },
+    { "skill": "English", "level": 4 }
+  ],
+  "goals": [
+    {
+      "long_term": "Become a famous writer and bring a fresh perspective to Japanese literature"
+    },
+    {
+      "mid_term": [
+        {
+          "description": "Win the top prize in this semester's Creative Writing workshop",
+          "deadline": "2023-07-31"
+        }
+      ]
+    }
+  ],
+  "social_relationships": {
+    "Kenta Takahashi": { "relationship": "Boyfriend", "closeness": 8 },
+    "Yuriko Yamamoto": { "relationship": "Stranger", "closeness": 1 },
+    "Zhang San": { "relationship": "Language exchange partner", "closeness": 5 }
+  },
+  "important_memories": {
+    "favorite_author": "Haruki Murakami",
+    "favorite_genre": "Contemporary Literature"
+  }
+},
+{
+  "name": "Zhang San",
+  "birthday": "2002-04-15",
+  "spawn": "co-living space:B room:sp-B",
+  "character": "C019",
+  "description": [
+    "Interior architect specializing in cozy shared living spaces and adaptive reuse",
+    "mbti: INTP",
+    "Work 13:00-18:00 redesigning co-living and dorm interiors for young professionals",
+    "Enjoys diving at the nearby park's artificial lake with local hobby groups",
+    "Dreams of transforming an old dorm wing into a modern creative studio-home"
+  ],
+  "personality_traits": {
+    "openness": 9,
+    "conscientiousness": 7,
+    "extraversion": 8,
+    "agreeableness": 9,
+    "neuroticism": 4
+  },
+  "skills": [
+    {
+      "skill": "Interior Design",
+      "level": 9
+    },
+    {
+      "skill": "3D Modeling",
+      "level": 8
+    },
+    {
+      "skill": "Color Theory",
+      "level": 9
+    },
+    {
+      "skill": "Project Management",
+      "level": 7
+    },
+    {
+      "skill": "Client Communication",
+      "level": 8
+    },
+    {
+      "skill": "Sustainability Design",
+      "level": 7
+    },
+    {
+      "skill": "Surfing",
+      "level": 6
+    },
+    {
+      "skill": "Scuba Diving",
+      "level": 5
+    },
+    {
+      "skill": "Digital Illustration",
+      "level": 8
+    },
+    {
+      "skill": "Feng Shui",
+      "level": 6
+    },
+    {
+      "skill": "Furniture Design",
+      "level": 7
+    },
+    {
+      "skill": "Networking",
+      "level": 8
+    },
+    {
+      "skill": "Trend Analysis",
+      "level": 8
+    },
+    {
+      "skill": "Photography",
+      "level": 6
+    },
+    {
+      "skill": "Public Speaking",
+      "level": 7
+    },
+    {
+      "skill": "English",
+      "level": 7
+    }
+  ],
+  "goals": [
+    {
+      "long_term": "Oceanfront live-work villa"
+    },
+    {
+      "mid_term": [
+        {
+          "description": "Launch boutique design studio in the co-living district",
+          "deadline": "2027-07-31"
+        }
+      ]
+    }
+  ],
+  "social_relationships": {
+    "social_relationships": {
+      "Kenta Takahashi": {
+        "relationship": "Community activity partner",
+        "closeness": 7
+      },
+      "Sakura Sato": {
+        "relationship": "Language exchange partner",
+        "closeness": 4
+      },
+      "Yuriko Yamamoto": {
+        "relationship": "Stranger",
+        "closeness": 1
+      }
+    }
+  },
+  "important_memories": {
+    "first_design_project": "Redesigning the common room in Dorm for College with reclaimed wood and soft lighting",
+    "cats_arrival": "Adopting two Maine Coon cats, Bobo and Langley, who now love lounging in the dorm's garden"
+  }
+}
+]
+
+

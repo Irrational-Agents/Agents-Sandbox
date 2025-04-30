@@ -217,7 +217,6 @@ export class Persona {
      * Handles updates from the server/game logic
      */
     async doUpdates(update) {
-        console.log(update)
         if (!update || typeof update !== 'object') {
             console.warn('Invalid update received:', update);
             return false;
@@ -267,6 +266,8 @@ export class Persona {
         } else {
             this.path = update.path
         }
+
+        //console.log(`${this.name}(this.path):`, this.path.length);
 
         if(this.path.length == 0) {
             return true;

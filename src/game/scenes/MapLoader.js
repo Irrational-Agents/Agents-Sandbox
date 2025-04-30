@@ -16,9 +16,7 @@ export class Maploader extends Scene
         // Set up asset paths for organized loading
         setupAssetPaths(this);
 
-        const map_name = this.scene.settings.data.sim_config.map_name;
-        const sim_config = this.scene.settings.data.sim_config;
-        const npc_list = this.cache.json.get('npc_list')
+       const npc_list = this.cache.json.get('npc_list')
 
        // Map-related assets
        this.load.image("blocks_1", "the_ville/visuals/map_assets/blocks/blocks_1.png");

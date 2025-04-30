@@ -56,8 +56,12 @@ const config = {
  * @param {string} parent - The ID of the DOM element to render the Phaser game into.
  * @returns {Phaser.Game} The Phaser game instance.
  */
-const StartGame = (parent) => {
-    return new Phaser.Game({ ...config, parent });
+const StartGame = (parent, parent_config) => {
+    const game = new Phaser.Game({ ...config, parent });
+
+    game.registry.set('customConfig', parent_config);
+
+    return game;
 }
 
 export default StartGame;

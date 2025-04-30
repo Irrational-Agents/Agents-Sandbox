@@ -24,10 +24,37 @@ export class MainMenu extends Scene {
         this.socket.on('connect', () => {
             console.log('Connected to the Socket.IO server!');
             this.connected = true;
+            
 
             // Init Route
             this.socket.on("init", (data) => {
-                saveSimForkConfig("thissim",data);
+                console.log("Received init data", data);
+                this.sim_fork = Number(data)
+
+                const customConfig = this.game.registry.get('customConfig');
+
+                let npcs = {}
+                for (let i = 0; i < customConfig.npcList.length; i++) {
+                    npcs[customConfig.npcList[i].name] = customConfig.npcList[i]
+                }
+
+                const sim_config = {
+                    sim_id: this.sim_fork,
+                    sim_type: customConfig.sim_type,
+                    map_name: customConfig.map_name,
+                    steps_per_min: customConfig.steps_per_min,
+                    start_date: customConfig.start_date,
+                    start_time: customConfig.start_time,
+                    total_steps: customConfig.total_steps,
+                    end_time: customConfig.end_time,
+                    end_date: customConfig.end_date,
+                    npcs: npcs,
+                    player_enabled: customConfig.player_enabled,
+                    player_name: customConfig.player_name,
+                    npc_names: customConfig.npcList.map((npc) => npc.name)
+                }
+
+                saveSimForkConfig(this.sim_fork,JSON.stringify(sim_config))
             });
         });
   
@@ -43,7 +70,7 @@ export class MainMenu extends Scene {
         this.add.image(this.centerX, this.centerY, 'background').setOrigin(0.5);
 
         // Title Text
-        this.add.text(this.centerX, 80, 'Agent Simulator', {
+        this.add.text(this.centerX, 80, 'Main Menu', {
             fontSize: '48px',
             color: '#ffffff',
             fontStyle: 'bold',
@@ -79,27 +106,31 @@ export class MainMenu extends Scene {
     
                 // Add a semi-transparent background panel
                 if (this.configPanel) this.configPanel.destroy();
-                this.configPanel = this.add.rectangle(this.centerX, this.centerY+20, 500, 400, 0x000000, 0.5).setOrigin(0.5);
+                this.configPanel = this.add.rectangle(this.centerX, this.centerY+40, 600, 600, 0x000000, 0.5).setOrigin(0.5);
 
                 // Add NPC title
-                this.npcTitle = this.add.text(this.centerX, this.centerY - 150, 'Config', {
+                this.npcTitle = this.add.text(this.centerX, this.centerY - 180, 'Config', {
                     fontSize: '38px',
                     color: '#ffffff',
                     fontStyle: 'bold'
                 }).setOrigin(0.5);
 
                 let config = {
-                    sim_type: "play",
+                    sim_id: sim_config['sim_id'],
                     map_name: sim_config['map_name'],
-                    sec_per_step: sim_config['sec_per_step'],
+                    steps_per_min: sim_config['steps_per_min'],
                     start_date: sim_config['start_date'],
                     start_time: sim_config['start_time'],
+                    end_date: sim_config['end_date'],
+                    end_time: sim_config['end_time'],
+                    total_steps: sim_config['total_steps'],
+                    player_enabled: sim_config['player_enabled'],
                     npcs: sim_config['npc_names'].length,
                 }
     
                 // Display Config
                 Object.keys(config).forEach((key, index) => {
-                    let configText = this.add.text(this.centerX, this.centerY - 90 + index * 40, `${key}: ${config[key]}`, {
+                    let configText = this.add.text(this.centerX, this.centerY - 120 + index * 40, `${key}: ${config[key]}`, {
                         fontSize: '28px',
                         color: '#ffffff',
                     }).setOrigin(0.5);
@@ -114,12 +145,7 @@ export class MainMenu extends Scene {
     }
     // Creates the play button and handles interactions
     createButton(simType, sim_config, socket) {
-        this.scene.start('Maploader', { 
-            simType, 
-            sim_config,
-            socket
-        });
-        const playButton = this.add.text(this.centerX, this.centerY + 190, 'Start', {
+        const playButton = this.add.text(this.centerX, this.centerY + 320, 'Start', {
             fontSize: '32px',
             color: '#ffffff',
             backgroundColor: '#007bff',

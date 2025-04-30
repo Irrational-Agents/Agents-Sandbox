@@ -21,14 +21,15 @@ export class Game extends Scene {
         this.collisionsLayer = null;
         this.game_time = null;
         this.game_date = null;
-        this.sec_per_step = null;
+        this.steps_per_min = null;
         this.clock = 0;
         this.update_frame = true;
         this.spawn = null;
-        this.camara_id = 1;
+        this.camara_id = 0;
         this.map = null;
         this.map_name = null;
         this.socket = null;
+        this.player_enabled = false;
         
         // UI Components
         this.overlayUI = null;
@@ -43,7 +44,7 @@ export class Game extends Scene {
         this.npc_names = sim_config.npc_names;
         this.map_name = sim_config.map_name;
         this.game_time = sim_config.start_time;
-        this.sec_per_step = sim_config.sec_per_step;
+        this.steps_per_min = sim_config.steps_per_min;
         this.game_date = sim_config.start_date;
 
         this.socket = this.scene.settings.data.socket;
@@ -55,12 +56,16 @@ export class Game extends Scene {
 
         const sim_config = this.scene.settings.data.sim_config;
         const npc_list = this.cache.json.get('npc_list');
+        this.player_enabled = sim_config.player_enabled;
 
-        let texture = npc_list[sim_config.player.character];
-        this.loadCharacterAtlas(this.player_name, texture);
+        if (this.player_enabled) {
+            let texture = npc_list[sim_config.player.character];
+            this.loadCharacterAtlas(this.player_name, texture);
+        }
 
         for (const npc of this.npc_names) {
-            texture = npc_list[sim_config.npcs[npc].character];
+            console.log("Loading NPC:", npc);
+            let texture = npc_list[sim_config.npcs[npc].character];
             this.loadCharacterAtlas(npc, texture);
         }
     }
@@ -70,8 +75,19 @@ export class Game extends Scene {
         this.addTileSet(this.map);
 
         const sim_config = this.scene.settings.data.sim_config;
-        const { player, npcs } = sim_config;
-        const spawn_details = this.getSpawnDetails(player, npcs);
+        const { npcs, player } = sim_config;
+        const spawn_details = this.getSpawnDetails(npcs);
+
+        if (this.player_enabled) {
+            const spawn_details = {
+                [this.player_name]: {
+                    pronunciation: player.current_status.emoji,
+                    spawn_point: { x: player.current_location[0], y: player.current_location[1] },
+                    character: player.character
+                },
+                ...spawn_details
+            };
+        }
 
         this.initializeNPCs(spawn_details);
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -102,6 +118,12 @@ export class Game extends Scene {
         // Update clock in overlay
         this.overlayUI.updateClock(this.game_date, this.game_time, this.clock);
 
+        if (this.player_enabled) {
+            this.handlePlayerInput();
+        }
+    }
+
+    handlePlayerInput() {
         const playerPersona = this.npcs[this.player_name];
         const player = playerPersona.character;
         const speed = playerPersona.move_speed;
@@ -147,19 +169,25 @@ export class Game extends Scene {
             );
         }
 
-        this.npcs[this.player_name].disableSpeechBubble();
-        this.npcs[this.player_name].pronunciation = "🎮";
-        this.npcs[this.player_name].current_activity = "play";
+        if (this.player_enabled) {
+            this.npcs[this.player_name].disableSpeechBubble();
+            this.npcs[this.player_name].pronunciation = "🎮";
+            this.npcs[this.player_name].current_activity = "play";
+        }
     }
 
     // ======================
     // Camera Methods
     // ======================
     getCameraTexture() {
-        if (this.camara_id === 0) {
-            return this.player_name;
+        if (this.player_enabled) {
+            if (this.camara_id === 0) {
+                return this.player_name;
+            } else {
+                return this.npc_names[this.camara_id - 1];
+            }
         } else {
-            return this.npc_names[this.camara_id - 1];
+            return this.npc_names[this.camara_id];
         }
     }
 
@@ -182,7 +210,10 @@ export class Game extends Scene {
             return;
         }
 
-        this.camara_id = (this.camara_id + 1) % (this.npc_names.length + 1);
+        if (this.player_enabled) {
+            this.camara_id = (this.camara_id + 1) % (this.npc_names.length + 1);
+        }
+        this.camara_id = (this.camara_id + 1) % (this.npc_names.length);
         this.setCameraView();
     }
 
@@ -264,13 +295,8 @@ export class Game extends Scene {
         this.load.atlas(characterName, `characters/${texturePath}`, 'characters/atlas.json');
     }
 
-    getSpawnDetails(player, npcs) {
+    getSpawnDetails(npcs) {
         return {
-            [this.player_name]: {
-                pronunciation: player.current_status.emoji,
-                spawn_point: { x: player.current_location[0], y: player.current_location[1] },
-                character: player.character
-            },
             ...Object.fromEntries(this.npc_names.map(npc => [
                 npc,
                 {

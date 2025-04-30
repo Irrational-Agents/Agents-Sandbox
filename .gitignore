@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 package-lock.json
 docs/
+
+#Ignore vscode AI rules
+.github/copilot-instructions.md

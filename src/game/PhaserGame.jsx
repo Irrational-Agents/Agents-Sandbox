@@ -18,7 +18,7 @@ import { EventBus } from './EventBus';
  * @param {React.Ref} ref - A reference to the Phaser game instance, allowing interaction with it outside the component.
  * @returns {React.Element} The rendered component containing the Phaser game.
  */
-export const PhaserGame = forwardRef(function PhaserGame ({ currentActiveScene }, ref) {
+export const PhaserGame = forwardRef(function PhaserGame ({ currentActiveScene, config }, ref) {
     const game = useRef();
 
     /**
@@ -30,7 +30,7 @@ export const PhaserGame = forwardRef(function PhaserGame ({ currentActiveScene }
      */
     useLayoutEffect(() => {
         if (game.current === undefined) {
-            game.current = StartGame("game-container");
+            game.current = StartGame("game-container", config);
 
             if (ref !== null) {
                 ref.current = { game: game.current, scene: null };

@@ -10,5 +10,5 @@
   ],
   "player_name": "Yuriko Yamamoto",
   "step": 20,
-  "sec_per_step": 10
+  "steps_per_min": 10
 }

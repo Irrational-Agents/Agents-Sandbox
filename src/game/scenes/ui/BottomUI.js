@@ -48,10 +48,15 @@ export class BottomUI {
             config.PANEL_ALPHA
         );
 
-        // Determine character sprite
-        const charSpriteKey = (this.scene.camara_id === 0 || this.scene.camara_id === -1) 
+         // Determine character sprite
+        const charSpriteKey = this.scene.npc_names[this.scene.camara_id];
+        if (this.scene.player_enabled) {
+            charSpriteKey = (this.scene.camara_id === 0 || this.scene.camara_id === -1) 
             ? this.scene.player_name 
             : this.scene.npc_names[this.scene.camara_id - 1];
+        }
+
+
 
         // Add character sprite
         this.uiElements.npcSprite = this.scene.add.sprite(
