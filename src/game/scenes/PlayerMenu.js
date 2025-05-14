@@ -18,7 +18,7 @@ export class PlayerMenu extends Scene {
         const sim_config = this.scene.settings.data.sim_config;
         const spawn = this.cache.json.get('spawn');
 
-        this.add.text(100, 100 , 'NPC Config', {
+        this.add.text(100, 50 , 'NPC Config', {
             fontSize: '38px',
             fontStyle: 'bold'
         });
@@ -34,51 +34,54 @@ export class PlayerMenu extends Scene {
 
     createMenu(sim_config, spawn) {
         const chars = [...sim_config['npc_names']];
-
         this.npcs = sim_config['npcs'];
+        this.npcTextElements = {};
 
-        let yOffset = 100;
-
-        this.add.graphics()
-            .fillStyle(0x000000, 0.6)
-            .fillRoundedRect(380, 40, 380, 750, 10);
-
+        // Side panels
+        this.add.graphics().fillStyle(0x000000, 0.6).fillRoundedRect(380, 40, 380, 750, 10);
         this.npcDetailsText = this.add.text(400, 50, '', {
             fontSize: '18px',
             fill: '#ffffff',
             wordWrap: { width: 350, useAdvancedWrap: true }
         });
 
-        this.add.graphics()
-            .fillStyle(0x000000, 0.6)
-            .fillRoundedRect(800, 40, 360, 750, 10);
-
+        this.add.graphics().fillStyle(0x000000, 0.6).fillRoundedRect(800, 40, 360, 750, 10);
         this.npcStatsInfo = this.add.text(820, 50, '', {
             fontSize: '16px',
             fill: '#ffffff',
             wordWrap: { width: 350, useAdvancedWrap: true }
         });
 
-        this.add.graphics()
-            .fillStyle(0x000000, 0.6)
-            .fillRoundedRect(1200, 350, 280, 180, 10);
-
+        this.add.graphics().fillStyle(0x000000, 0.6).fillRoundedRect(1200, 350, 280, 180, 10);
         this.npcSpawnInfo = this.add.text(1210, 380, '', {
             fontSize: '16px',
             fill: '#ffffff',
             wordWrap: { width: 250, useAdvancedWrap: true }
         });
 
+        // Compact button layout (2 columns)
+        const buttonWidth = 140;
+        const buttonHeight = 30;
+        const xStart = 100;
+        const yStart = 100;
+        const xSpacing = 160;
+        const ySpacing = 35;
+
         Object.values(this.npcs).forEach((npc, index) => {
             npc['current_location'] = spawn[npc['spawn']];
             npc['current_status'] = npc['current_status'] || {};
-            npc["current_status"]['emoji'] = "💤";
+            npc['current_status']['emoji'] = "💤";
 
-            let text = this.add.text(100, yOffset + 100 + index * 50, `NPC-${index}`, {
-                fontSize: '38px',
+            const col = index % 2;
+            const row = Math.floor(index / 2);
+            const x = xStart + col * xSpacing;
+            const y = yStart + row * ySpacing;
+
+            const text = this.add.text(x, y, `NPC-${index}`, {
+                fontSize: '18px',
                 fill: '#ffffff',
-                backgroundColor: '#000000',
-                padding: { left: 20, right: 20, top: 5, bottom: 5 }
+                backgroundColor: '#333333',
+                padding: { left: 10, right: 10, top: 4, bottom: 4 }
             }).setInteractive({ useHandCursor: true });
 
             text.on('pointerdown', () => {
@@ -93,6 +96,7 @@ export class PlayerMenu extends Scene {
             this.showNpcDetails(this.npcs[firstNpcKey]);
         }
     }
+
 
     /**
      * Sets up the player character, adds it to the menu, and handles selection.
@@ -138,7 +142,8 @@ export class PlayerMenu extends Scene {
             this.selectedNpcText.setStyle({ backgroundColor: '#4444ff' }); // Blue highlight
         }
 
-        const description = this.trimText(npc.description.join(' '), 1000);
+        console.log('Selected NPC:', npc);
+        const description = this.trimText(npc.description, 1000);
         this.npcDetailsText.setText(`Name: ${npc.name} \nBirthday: ${npc.birthday}\n\nDescription: ${description}`);
 
         const personalityTraits = `

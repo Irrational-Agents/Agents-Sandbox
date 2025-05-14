@@ -29,7 +29,6 @@ export const setupSocketRoutes = (socket, scene) => {
             }
 
             const updates = updateData.updates;
-            const response = tick(scene);
 
             // Increment the clock
             processTimeUpdate(scene);

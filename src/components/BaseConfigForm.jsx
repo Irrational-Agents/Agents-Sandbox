@@ -71,24 +71,38 @@ const BaseConfigForm = ({ onSubmit }) => {
         </select>
       </div>
 
-      {isReplay ? (
-        <>
-          <h2 className="text-2xl font-bold mb-2">Select Replay</h2>
-          <div>
-            <label htmlFor="replay_id" className="block font-semibold mb-1">Replay ID</label>
-            <input
-              type="text"
-              name="replay_id"
-              id="replay_id"
-              value={replayId}
-              onChange={(e) => setReplayId(e.target.value)}
-              required
-              placeholder="e.g. replay_001"
-              className="w-full p-2 rounded bg-gray-800 border border-gray-600"
-            />
-          </div>
-        </>
-      ) : (
+{isReplay ? (
+  <>
+    <h2 className="text-2xl font-bold mb-2">Select Replay</h2>
+
+    <div className="mb-4">
+      <label htmlFor="replay_select" className="block font-semibold mb-1">Choose from saved replays</label>
+      <select
+        id="replay_select"
+        className="w-full p-2 rounded bg-gray-800 border border-gray-600"
+        onChange={(e) => setReplayId(e.target.value)}
+        value={replayId}
+      >
+        <option value="">-- Select a Replay --</option>
+        <option value="sample">Book discussion</option>
+        <option value="full_1">A day in town</option>
+      </select>
+    </div>
+
+    <div>
+      <label htmlFor="replay_id" className="block font-semibold mb-1">Or enter Replay ID manually</label>
+      <input
+        type="text"
+        name="replay_id"
+        id="replay_id"
+        value={replayId}
+        onChange={(e) => setReplayId(e.target.value)}
+        placeholder="e.g. custom_replay_001"
+        className="w-full p-2 rounded bg-gray-800 border border-gray-600"
+      />
+    </div>
+  </>
+) : (
         <>
           <div>
             <label htmlFor="map_name" className="block font-semibold mb-1">Map</label>

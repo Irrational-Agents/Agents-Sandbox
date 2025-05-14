@@ -70,19 +70,20 @@ export class NPCStatsUI {
             `Status: ${npc.pronunciation}`,
             `Direction: ${npc.direction}`,
             `Speed: ${npc.move_speed}`,
-            `Path: ${npc.current_path ? npc.current_path.length : 0} points`
+            `Path: ${npc.current_path ? npc.current_path.length : 0} points`,
+            `Thoughts: ${npc.engaging}`,
         ];
 
-        const statText = this.scene.add.text(
-            statConfig.OFFSET_X,
+        this.statText = this.scene.add.text(
+            statConfig.OFFSET_X - 150,
             statConfig.OFFSET_Y,
             stats,
             {
-                fontSize: statConfig.FONT_SIZE,
+                fontSize: '32px',
                 fill: statConfig.COLOR
             }
         );
-        container.add(statText);
+        container.add(this.statText);
 
         // Make content scrollable
         this.scene.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
@@ -99,6 +100,28 @@ export class NPCStatsUI {
             this.isVisible = true;
         }
     }
+
+    updateStats() { 
+        if (this.statText) {
+            const npc = this.scene.npcs[this.scene.getCameraTexture()];
+
+            // Update NPC stats
+            const stats = [
+                `Activity: ${npc.current_activity}`,
+                `Location: (${Math.round(npc.character.x)}, ${Math.round(npc.character.y)})`,
+                `Status: ${npc.pronunciation}`,
+                `Direction: ${npc.direction}`,
+                `Speed: ${npc.move_speed}`,
+                `Path: ${npc.current_path ? npc.current_path.length : 0} points`,
+                `Thoughts: ${npc.processing}`
+
+            ];
+            this.statText.setText(stats);
+
+        }
+
+    }
+
 
     hide() {
         if (this.uiElements.container) {

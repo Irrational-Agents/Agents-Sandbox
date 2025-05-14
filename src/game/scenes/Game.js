@@ -118,6 +118,7 @@ export class Game extends Scene {
 
         // Update clock in overlay
         this.overlayUI.updateClock(this.game_date, this.game_time, this.clock);
+        this.npcStatsUI.updateStats();
 
         if (this.player_enabled) {
             this.handlePlayerInput();

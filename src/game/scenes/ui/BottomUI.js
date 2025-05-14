@@ -49,7 +49,7 @@ export class BottomUI {
         );
 
          // Determine character sprite
-        const charSpriteKey = this.scene.npc_names[this.scene.camara_id];
+        let charSpriteKey = this.scene.npc_names[this.scene.camara_id];
         if (this.scene.player_enabled) {
             charSpriteKey = (this.scene.camara_id === 0 || this.scene.camara_id === -1) 
             ? this.scene.player_name 
