@@ -1,0 +1,22 @@
+[
+    { "id": 32135, "location": "co-living space" },
+    { "id": 32145, "location": "apartment A" },
+    { "id": 32155, "location": "apartment B" },
+    { "id": 32165, "location": "apartment C" },
+    { "id": 32175, "location": "apartment D" },
+    { "id": 32185, "location": "apartment E" },
+    { "id": 32195, "location": "Pub" },
+    { "id": 32136, "location": "Cafe" },
+    { "id": 32146, "location": "College" },
+    { "id": 32156, "location": "Park" },
+    { "id": 32166, "location": "Supply Store" },
+    { "id": 32176, "location": "Market and Pharmacy" },
+    { "id": 32186, "location": "house A" },
+    { "id": 32196, "location": "house B" },
+    { "id": 32137, "location": "house C" },
+    { "id": 32147, "location": "house D" },
+    { "id": 32157, "location": "house E" },
+    { "id": 32167, "location": "house F" },
+    { "id": 32177, "location": "Dorm for College" }
+  ]
+  

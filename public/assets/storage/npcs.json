@@ -1,0 +1,1402 @@
+[
+    {
+        "name": "Ava",
+        "birthday": "1990-01-06",
+        "spawn": "Dorm for College:C room:sp-A",
+        "character": "C001",
+        "description": [
+            "Ava is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 4,
+            "conscientiousness": 9,
+            "extraversion": 3,
+            "agreeableness": 1,
+            "neuroticism": 1
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 10
+            },
+            {
+                "skill": "English",
+                "level": 3
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Ava aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Ava plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ella": {
+                "relationship": "Boyfriend",
+                "closeness": 6
+            }
+        },
+        "important_memories": {
+            "inspiration": "Ava once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Aiden",
+        "birthday": "1990-01-14",
+        "spawn": "co-living space:B room:sp-A",
+        "character": "C002",
+        "description": [
+            "Aiden is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 3,
+            "conscientiousness": 7,
+            "extraversion": 7,
+            "agreeableness": 6,
+            "neuroticism": 4
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 8
+            },
+            {
+                "skill": "English",
+                "level": 3
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Aiden aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Aiden plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Lily": {
+                "relationship": "Community activity partner",
+                "closeness": 6
+            }
+        },
+        "important_memories": {
+            "inspiration": "Aiden once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Grace",
+        "birthday": "1990-01-08",
+        "spawn": "house D:main room:sp-B",
+        "character": "C003",
+        "description": [
+            "Grace is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 8,
+            "conscientiousness": 3,
+            "extraversion": 1,
+            "agreeableness": 1,
+            "neuroticism": 3
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 7
+            },
+            {
+                "skill": "English",
+                "level": 3
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Grace aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Grace plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ethan": {
+                "relationship": "Girlfriend",
+                "closeness": 10
+            }
+        },
+        "important_memories": {
+            "inspiration": "Grace once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Ethan",
+        "birthday": "1990-01-21",
+        "spawn": "Dorm for College:A room:sp-B",
+        "character": "C004",
+        "description": [
+            "Ethan is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 6,
+            "conscientiousness": 5,
+            "extraversion": 3,
+            "agreeableness": 7,
+            "neuroticism": 6
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 5
+            },
+            {
+                "skill": "English",
+                "level": 2
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Ethan aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Ethan plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ella": {
+                "relationship": "Community activity partner",
+                "closeness": 10
+            }
+        },
+        "important_memories": {
+            "inspiration": "Ethan once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Mia",
+        "birthday": "1990-01-12",
+        "spawn": "apartment B:main room:sp-B",
+        "character": "C005",
+        "description": [
+            "Mia is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 9,
+            "conscientiousness": 9,
+            "extraversion": 9,
+            "agreeableness": 8,
+            "neuroticism": 2
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 8
+            },
+            {
+                "skill": "English",
+                "level": 7
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Mia aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Mia plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Jackson": {
+                "relationship": "Boyfriend",
+                "closeness": 1
+            }
+        },
+        "important_memories": {
+            "inspiration": "Mia once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Isabella",
+        "birthday": "1990-01-10",
+        "spawn": "Dorm for College:D room:sp-A",
+        "character": "C006",
+        "description": [
+            "Isabella is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 6,
+            "conscientiousness": 2,
+            "extraversion": 6,
+            "agreeableness": 4,
+            "neuroticism": 8
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 7
+            },
+            {
+                "skill": "English",
+                "level": 9
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Isabella aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Isabella plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ella": {
+                "relationship": "Girlfriend",
+                "closeness": 1
+            }
+        },
+        "important_memories": {
+            "inspiration": "Isabella once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Lily",
+        "birthday": "1990-01-24",
+        "spawn": "house E:empty bedroom:sp-B",
+        "character": "C007",
+        "description": [
+            "Lily is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 1,
+            "conscientiousness": 9,
+            "extraversion": 10,
+            "agreeableness": 2,
+            "neuroticism": 9
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 7
+            },
+            {
+                "skill": "English",
+                "level": 9
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Lily aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Lily plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Alexander": {
+                "relationship": "Girlfriend",
+                "closeness": 8
+            }
+        },
+        "important_memories": {
+            "inspiration": "Lily once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Lucas",
+        "birthday": "1990-01-15",
+        "spawn": "apartment C:main room:sp-B",
+        "character": "C008",
+        "description": [
+            "Lucas is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 5,
+            "conscientiousness": 2,
+            "extraversion": 10,
+            "agreeableness": 5,
+            "neuroticism": 1
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 9
+            },
+            {
+                "skill": "English",
+                "level": 1
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Lucas aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Lucas plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Zoe": {
+                "relationship": "Boyfriend",
+                "closeness": 7
+            }
+        },
+        "important_memories": {
+            "inspiration": "Lucas once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Alexander",
+        "birthday": "1990-01-12",
+        "spawn": "co-living space:A room:sp-A",
+        "character": "C009",
+        "description": [
+            "Alexander is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 4,
+            "conscientiousness": 5,
+            "extraversion": 1,
+            "agreeableness": 7,
+            "neuroticism": 6
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 3
+            },
+            {
+                "skill": "English",
+                "level": 8
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Alexander aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Alexander plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Sophia": {
+                "relationship": "Stranger",
+                "closeness": 5
+            }
+        },
+        "important_memories": {
+            "inspiration": "Alexander once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Benjamin",
+        "birthday": "1990-01-21",
+        "spawn": "Dorm for College:B room:sp-A",
+        "character": "C010",
+        "description": [
+            "Benjamin is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 3,
+            "conscientiousness": 5,
+            "extraversion": 8,
+            "agreeableness": 3,
+            "neuroticism": 9
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 5
+            },
+            {
+                "skill": "English",
+                "level": 6
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Benjamin aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Benjamin plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Benjamin": {
+                "relationship": "Girlfriend",
+                "closeness": 6
+            }
+        },
+        "important_memories": {
+            "inspiration": "Benjamin once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Jackson",
+        "birthday": "1990-01-19",
+        "spawn": "house D:second room:sp-B",
+        "character": "C011",
+        "description": [
+            "Jackson is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 10,
+            "conscientiousness": 3,
+            "extraversion": 10,
+            "agreeableness": 2,
+            "neuroticism": 8
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 3
+            },
+            {
+                "skill": "English",
+                "level": 3
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Jackson aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Jackson plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ethan": {
+                "relationship": "Stranger",
+                "closeness": 5
+            }
+        },
+        "important_memories": {
+            "inspiration": "Jackson once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Emily",
+        "birthday": "1990-01-22",
+        "spawn": "co-living space:B room:sp-B",
+        "character": "C012",
+        "description": [
+            "Emily is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 1,
+            "conscientiousness": 1,
+            "extraversion": 4,
+            "agreeableness": 4,
+            "neuroticism": 9
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 1
+            },
+            {
+                "skill": "English",
+                "level": 6
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Emily aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Emily plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ella": {
+                "relationship": "Language exchange partner",
+                "closeness": 10
+            }
+        },
+        "important_memories": {
+            "inspiration": "Emily once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Sophia",
+        "birthday": "1990-01-04",
+        "spawn": "house F:second bedroom:sp-A",
+        "character": "C013",
+        "description": [
+            "Sophia is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 6,
+            "conscientiousness": 6,
+            "extraversion": 10,
+            "agreeableness": 9,
+            "neuroticism": 7
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 5
+            },
+            {
+                "skill": "English",
+                "level": 8
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Sophia aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Sophia plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Isabella": {
+                "relationship": "Girlfriend",
+                "closeness": 6
+            }
+        },
+        "important_memories": {
+            "inspiration": "Sophia once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Jacob",
+        "birthday": "1990-01-12",
+        "spawn": "house E:main bedroom:sp-B",
+        "character": "C014",
+        "description": [
+            "Jacob is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 9,
+            "conscientiousness": 7,
+            "extraversion": 4,
+            "agreeableness": 8,
+            "neuroticism": 5
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 3
+            },
+            {
+                "skill": "English",
+                "level": 9
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Jacob aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Jacob plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "William": {
+                "relationship": "Stranger",
+                "closeness": 5
+            }
+        },
+        "important_memories": {
+            "inspiration": "Jacob once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Charlotte",
+        "birthday": "1990-01-13",
+        "spawn": "house A:main room:sp-A",
+        "character": "C015",
+        "description": [
+            "Charlotte is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 9,
+            "conscientiousness": 7,
+            "extraversion": 10,
+            "agreeableness": 10,
+            "neuroticism": 1
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 8
+            },
+            {
+                "skill": "English",
+                "level": 1
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Charlotte aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Charlotte plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ethan": {
+                "relationship": "Language exchange partner",
+                "closeness": 10
+            }
+        },
+        "important_memories": {
+            "inspiration": "Charlotte once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Henry",
+        "birthday": "1990-01-04",
+        "spawn": "co-living space:D room:sp-A",
+        "character": "C016",
+        "description": [
+            "Henry is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 2,
+            "conscientiousness": 10,
+            "extraversion": 5,
+            "agreeableness": 7,
+            "neuroticism": 9
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 5
+            },
+            {
+                "skill": "English",
+                "level": 8
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Henry aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Henry plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Zoe": {
+                "relationship": "Community activity partner",
+                "closeness": 5
+            }
+        },
+        "important_memories": {
+            "inspiration": "Henry once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Ella",
+        "birthday": "1990-01-05",
+        "spawn": "house C:main room:sp-A",
+        "character": "C017",
+        "description": [
+            "Ella is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 5,
+            "conscientiousness": 1,
+            "extraversion": 4,
+            "agreeableness": 7,
+            "neuroticism": 10
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 9
+            },
+            {
+                "skill": "English",
+                "level": 6
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Ella aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Ella plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ella": {
+                "relationship": "Community activity partner",
+                "closeness": 4
+            }
+        },
+        "important_memories": {
+            "inspiration": "Ella once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Chloe",
+        "birthday": "1990-01-05",
+        "spawn": "apartment D:main room:sp-B",
+        "character": "C018",
+        "description": [
+            "Chloe is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 10,
+            "conscientiousness": 1,
+            "extraversion": 3,
+            "agreeableness": 5,
+            "neuroticism": 10
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 9
+            },
+            {
+                "skill": "English",
+                "level": 8
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Chloe aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Chloe plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Jack": {
+                "relationship": "Community activity partner",
+                "closeness": 5
+            }
+        },
+        "important_memories": {
+            "inspiration": "Chloe once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Amelia",
+        "birthday": "1990-01-09",
+        "spawn": "Dorm for College:A room:sp-A",
+        "character": "C019",
+        "description": [
+            "Amelia is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 3,
+            "conscientiousness": 2,
+            "extraversion": 1,
+            "agreeableness": 4,
+            "neuroticism": 10
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 10
+            },
+            {
+                "skill": "English",
+                "level": 4
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Amelia aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Amelia plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Jacob": {
+                "relationship": "Girlfriend",
+                "closeness": 10
+            }
+        },
+        "important_memories": {
+            "inspiration": "Amelia once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Daniel",
+        "birthday": "1990-01-10",
+        "spawn": "co-living space:C room:sp-A",
+        "character": "C020",
+        "description": [
+            "Daniel is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 1,
+            "conscientiousness": 1,
+            "extraversion": 6,
+            "agreeableness": 10,
+            "neuroticism": 9
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 9
+            },
+            {
+                "skill": "English",
+                "level": 2
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Daniel aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Daniel plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ava": {
+                "relationship": "Stranger",
+                "closeness": 4
+            }
+        },
+        "important_memories": {
+            "inspiration": "Daniel once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Noah",
+        "birthday": "1990-01-10",
+        "spawn": "apartment D:main room:sp-A",
+        "character": "C021",
+        "description": [
+            "Noah is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 7,
+            "conscientiousness": 1,
+            "extraversion": 9,
+            "agreeableness": 6,
+            "neuroticism": 6
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 7
+            },
+            {
+                "skill": "English",
+                "level": 4
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Noah aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Noah plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Oliver": {
+                "relationship": "Girlfriend",
+                "closeness": 1
+            }
+        },
+        "important_memories": {
+            "inspiration": "Noah once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Olivia",
+        "birthday": "1990-01-05",
+        "spawn": "apartment A:main room:sp-B",
+        "character": "C022",
+        "description": [
+            "Olivia is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 3,
+            "conscientiousness": 3,
+            "extraversion": 4,
+            "agreeableness": 7,
+            "neuroticism": 5
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 3
+            },
+            {
+                "skill": "English",
+                "level": 9
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Olivia aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Olivia plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Alexander": {
+                "relationship": "Language exchange partner",
+                "closeness": 4
+            }
+        },
+        "important_memories": {
+            "inspiration": "Olivia once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Emma",
+        "birthday": "1990-01-21",
+        "spawn": "apartment E:main room:sp-B",
+        "character": "C023",
+        "description": [
+            "Emma is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 3,
+            "conscientiousness": 5,
+            "extraversion": 6,
+            "agreeableness": 1,
+            "neuroticism": 8
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 7
+            },
+            {
+                "skill": "English",
+                "level": 2
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Emma aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Emma plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Zoe": {
+                "relationship": "Language exchange partner",
+                "closeness": 6
+            }
+        },
+        "important_memories": {
+            "inspiration": "Emma once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Oliver",
+        "birthday": "1990-01-25",
+        "spawn": "house E:main bedroom:sp-A",
+        "character": "C024",
+        "description": [
+            "Oliver is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 1,
+            "conscientiousness": 10,
+            "extraversion": 10,
+            "agreeableness": 9,
+            "neuroticism": 2
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 6
+            },
+            {
+                "skill": "English",
+                "level": 4
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Oliver aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Oliver plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Alexander": {
+                "relationship": "Boyfriend",
+                "closeness": 9
+            }
+        },
+        "important_memories": {
+            "inspiration": "Oliver once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "William",
+        "birthday": "1990-01-20",
+        "spawn": "apartment C:main room:sp-A",
+        "character": "C023",
+        "description": [
+            "William is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 5,
+            "conscientiousness": 1,
+            "extraversion": 7,
+            "agreeableness": 6,
+            "neuroticism": 6
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 4
+            },
+            {
+                "skill": "English",
+                "level": 3
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "William aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "William plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ella": {
+                "relationship": "Boyfriend",
+                "closeness": 1
+            }
+        },
+        "important_memories": {
+            "inspiration": "William once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "James",
+        "birthday": "1990-01-03",
+        "spawn": "house D:main room:sp-A",
+        "character": "C017",
+        "description": [
+            "James is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 10,
+            "conscientiousness": 6,
+            "extraversion": 8,
+            "agreeableness": 4,
+            "neuroticism": 8
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 8
+            },
+            {
+                "skill": "English",
+                "level": 5
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "James aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "James plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Noah": {
+                "relationship": "Language exchange partner",
+                "closeness": 4
+            }
+        },
+        "important_memories": {
+            "inspiration": "James once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Jack",
+        "birthday": "1990-01-27",
+        "spawn": "house F:second bedroom:sp-B",
+        "character": "C007",
+        "description": [
+            "Jack is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 1,
+            "conscientiousness": 2,
+            "extraversion": 7,
+            "agreeableness": 10,
+            "neuroticism": 2
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 1
+            },
+            {
+                "skill": "English",
+                "level": 2
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Jack aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Jack plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Ethan": {
+                "relationship": "Stranger",
+                "closeness": 1
+            }
+        },
+        "important_memories": {
+            "inspiration": "Jack once had a life-changing moment in The Ville's community garden."
+        }
+    },
+    {
+        "name": "Zoe",
+        "birthday": "1990-01-18",
+        "spawn": "house C:main room:sp-B",
+        "character": "C008",
+        "description": [
+            "Zoe is a fictional resident of The Ville, pursuing personal goals and community life.",
+            "Engages in daily routines and events around the simulation map.",
+            "Interacts with other NPCs based on personality and goals."
+        ],
+        "personality_traits": {
+            "openness": 3,
+            "conscientiousness": 5,
+            "extraversion": 8,
+            "agreeableness": 5,
+            "neuroticism": 10
+        },
+        "skills": [
+            {
+                "skill": "Art",
+                "level": 3
+            },
+            {
+                "skill": "English",
+                "level": 10
+            }
+        ],
+        "goals": [
+            {
+                "long_term": "Zoe aims to make a positive impact in the virtual world of The Ville."
+            },
+            {
+                "mid_term": [
+                    {
+                        "description": "Zoe plans to complete a major personal project this season.",
+                        "deadline": "2025-08-15"
+                    }
+                ]
+            }
+        ],
+        "social_relationships": {
+            "Oliver": {
+                "relationship": "Girlfriend",
+                "closeness": 9
+            }
+        },
+        "important_memories": {
+            "inspiration": "Zoe once had a life-changing moment in The Ville's community garden."
+        }
+    }
+]
